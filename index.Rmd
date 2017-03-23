@@ -19,6 +19,15 @@ description: "This is a bookdown that stores materials for a UCSC seminar on rep
 This is the home for the lecture notes for a proposed course in 
 data analysis and reproducible research using R, Rstudio, and GitHub. 
 
+The seminar is called, "Case Studies in Reproducible Research," but we utter that
+title with the caveat that, although the organizers have quite a few 
+case studies that they could spin up for this course, the case studies we
+will be studying in this course are going to be actual research projects 
+that the participants are working on.  You're gonna bring 'em, and we are
+going to collectively help you wrassle them into a reasonable and reproducible
+data analysis.  In the process we will touch on a number of elements of data
+analysis with R.
+
 For the interested, these materials were all prepared using RStudio's 
 [bookdown](https://bookdown.org/) package.  
 
