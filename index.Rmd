@@ -31,6 +31,15 @@ analysis with R.
 For the interested, these materials were all prepared using RStudio's 
 [bookdown](https://bookdown.org/) package.  
 
+## Meeting Times, Location, Requirements
+
+Intended to be Friday afternoons, 1:00--2:40 PM, somewhere at Long Marine Lab.   
+
+Students must bring a laptop to do examples during the seminar, and all students 
+are expected to have a data set that they are in the midst of analyzing (or upon
+which they hope to commence analysis soon!) for a research project.  We will 
+
+
 ## The origin of this seminar
 
 The idea for this course
@@ -60,7 +69,7 @@ sets that  seminar participants are actually involved in analyzing.  Together we
 will help students wrestle their data, analyses, and ideas into a single, well-organized
 RStudio project under version control with git.  Therefore, every student should come to
 this course with a data set and an associated analysis project.  This is also not a 
-"first course in R".  Student coming to the course should have at least a little
+"first course in R".  Students coming to the course should have at least a little
 familiarity with using R.  
 
 ## Course Organizers
@@ -71,7 +80,16 @@ Kristen C. Ruegg
 
 Eric C. Anderson
 
-: We can put more description here.
+: Eric is a statistician who specializes in genetic data.  Since 2003 he has worked at the 
+NMFS Southwest Fisheries Science Center in Santa Cruz.  Although much of his statistical 
+research involves the development of computationally intensive methods for specialized 
+analyses of genetic data, he has been involved in a variety of data analysis projects at NMFS
+and with collaborators worldwide.  Eric was an early adherent to reproducible research 
+principles and continues, as such, performing most of his research and data analysis 
+in the open and publicly available on GitHub (find his GitHub page [here](https://github.com/eriqande)).
+In 2014, he taught the ["Reproducible Research Course"](http://eriqande.github.io/rep-res-web/)
+at NMFS, and is excited to provide an updated version, focusing more, this time, on 
+the recently developed "tidyverse".
 
 Tina Cheng
 
@@ -107,18 +125,30 @@ In many fields today, publication of research requires the submission of the ori
 
 ## Weekly Syllabus
 
-Week 1 --- Get Your Workspace Set Up
+### Week 1 --- Introduction and Getting Your Workspace Set Up
 
-: Eric and Kristen will be absent
+- At the end of this session we want to make sure that everyone has R, RStudio, and Git
+installed on their systems, and that they are working as expected. 
+- Additionally, everyoneshould have a free account on GitHub.
+- And finally we need everyone's email address.  
 
-Week 2 --- RStudio project organization tips
+### Week 2 --- RStudio project organization; using git and GitHub; Quick RMarkdown 
 
-: something something
+After this, students are going to have to put their own data into 
+their own repositories and write a README.Rmd and make a README.md out of
+it.
 
-Week 3 --- git down with it!  Interfacing with git and GitHub
+### Week 3 --- Tibbles. Reading data in. Data rectangling
 
-: something something description
+- Reading data into the data frames.
+- read.table and read.csv
+- tibbles
+- The readr package
+- Data types in the different columns and quick data sanity checks.
+- A few different gotcha's
+- Saving and reading data in R formats.  `saveRDS` and `readRDS`.
 
+### Week 4 --- 
 
 
 ```{r include=FALSE}
