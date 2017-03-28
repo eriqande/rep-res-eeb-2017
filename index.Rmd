@@ -45,7 +45,7 @@ library.  They are conducting a Bio 295 seminar, working through
 
 For the interested, these materials were all prepared using RStudio's 
 [bookdown](https://bookdown.org/) package.  The RStudio project in which 
-it lives is hosted on eriq's GitHub page [here]()
+it lives is hosted on eriq's GitHub page [here](https://github.com/eriqande/rep-res-eeb-2017)
 
 ## Meeting Times, Location, Requirements
 
