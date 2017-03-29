@@ -1,0 +1,64 @@
+# Week One Meeting {#week1}
+
+Tina is going to be helping everyone get their systems all set up. After that there
+will be some fun things to do to see what sorts of things are possible.
+
+## Software Installation
+
+1. **RStudio:** We want the latest "development" version of RStudio becuase it has features that we may want
+to use during this course.  Get it from [https://www.rstudio.com/products/rstudio/download/preview/](https://www.rstudio.com/products/rstudio/download/preview/) 
+and install the appropriate one for your OS.
+
+1. **R:**  Let's make sure that we are all using the latest version of R.  On March 7, 2017, version 3.3.3 was released.
+Go to [https://cran.r-project.org/](https://cran.r-project.org/) and find the download link for your computer system.
+Download it and install it.
+
+1. **bookdown:** This package is what I used to create this course notes.  Getting it automatically installs a lot of 
+other packages that are useful for authoring reproducible research.  We want the latest development version, which 
+can be obtained from GitHub by issuing the following commans at the R prompt (i.e. in the console window of RStudio:)
+    ```{r get-bd, eval=FALSE}
+    install.packages("devtools")  
+    devtools::install_github("rstudio/bookdown")
+    ```
+
+1. Install **other packages** that we are going to be needing in the first few weeks.  If you don't know how to 
+install packages, ask Tina and she can show you.  Install: `tidyverse`, and `stringr`.
+
+
+1. Make sure that **git** is up and running on your system. 
+    - If you are using a Mac with a reasonably new OS,
+you should be able to just open the Terminal application (`/Applications/Utilities/Terminal`) and type "git"
+at the command line.  If you have `git` it will say something that starts like:
+        ```{sh, eval=FALSE}
+    usage: git [--version] [--help] [-C <path>] [-c name=value]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           <command> [<args>]
+
+These are common Git commands used in various situations:
+
+start a working area (see also: git help tutorial)
+   clone      Clone a repository into a new directory
+   etc. etc. etc.
+        ```
+        If you do not have `git` then it should pop up a little thing asking if you would like to install
+a reduced set of developer tools.  You do.  Click OK.
+    - If you are using a PC, I can't be as much help, but you can find links with instructions on how to download
+    `git` for a PC [here](https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN).
+    - If you are using Linux then we will assume you know how to get `git` or that you already have it.
+    
+
+## Get an account on GitHub
+
+If you don't already have an account on GitHub, go to [github.com](github.com) and click the "sign up" link near upper right 
+of the page.  It is pretty self-explanatory.  Go ahead and get a **free** account.  There is nothing to pay for here!
+
+### Private repositories
+
+_If you are a graduate student_ and you do not feel comfortable posting your data on a public site like
+GitHub, then you should request some private repositories from GitHub.  GitHub has a great deal for academic
+users like students: free private repositories.  Please go to [https://education.github.com/pack](https://education.github.com/pack)
+to sign up for your free student pack.  
+
+

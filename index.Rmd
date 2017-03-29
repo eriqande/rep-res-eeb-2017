@@ -92,11 +92,17 @@ this course with a data set and an associated analysis project.
 
 Kristen C. Ruegg
 
-: We can put description here
+: Kristen is a conservation geneticist who specializes in the application of genome-wide data to 
+understand population level processes and inform management, with a particular focus on migratory birds.
+She has has been enlightened to the powers of the "tidyverse" over the last couple of years
+(mostly through the constant insistence of her enthusiastic husband Eric Anderson) and is looking
+forward to becoming more fluid in its application over the course of the quarter.  Her main role in this
+course will be to help with the course design and logistics and help reign Eric in when he
+has started to orbit into some obscure realm of statistical nuance.
 
 Eric C. Anderson
 
-: Eric is a statistician who specializes in genetic data.  Since 2003 he has worked at the 
+: Eric trained as a statistician who specializes in genetic data.  Since 2003 he has worked at the 
 NMFS Southwest Fisheries Science Center in Santa Cruz.  Although much of his statistical 
 research involves the development of computationally intensive methods for specialized 
 analyses of genetic data, he has been involved in a variety of data analysis projects at NMFS
@@ -109,7 +115,7 @@ the recently developed "tidyverse".
 
 Tina Cheng
 
-: Tina is going to be leading the session during the first week of the course when Kristen and Eric
+: Tina is a graduate student in EEB.  Shis going to be leading the session during the first week of the course when Kristen and Eric
 are still on spring break, and then she is going to be joining in on the fun with us for the
 remainder of the quarter until she has to travel off to Baja, TA-ing the "supercourse" during the
 last four weeks of the quarter.  

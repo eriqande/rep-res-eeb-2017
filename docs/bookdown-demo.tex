@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-03-28}
+  \date{2017-03-29}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -236,27 +236,36 @@ come to this course with a data set and an associated analysis project.
 
 \begin{description}
 \item[Kristen C. Ruegg]
-We can put description here
+Kristen is a conservation geneticist who specializes in the application
+of genome-wide data to understand population level processes and inform
+management, with a particular focus on migratory birds. She has has been
+enlightened to the powers of the ``tidyverse'' over the last couple of
+years (mostly through the constant insistence of her enthusiastic
+husband Eric Anderson) and is looking forward to becoming more fluid in
+its application over the course of the quarter. Her main role in this
+course will be to help with the course design and logistics and help
+reign Eric in when he has started to orbit into some obscure realm of
+statistical nuance.
 \item[Eric C. Anderson]
-Eric is a statistician who specializes in genetic data. Since 2003 he
-has worked at the NMFS Southwest Fisheries Science Center in Santa Cruz.
-Although much of his statistical research involves the development of
-computationally intensive methods for specialized analyses of genetic
-data, he has been involved in a variety of data analysis projects at
-NMFS and with collaborators worldwide. Eric was an early adherent to
-reproducible research principles and continues, as such, performing most
-of his research and data analysis in the open and publicly available on
-GitHub (find his GitHub page \href{https://github.com/eriqande}{here}).
-In 2014, he taught the
+Eric trained as a statistician who specializes in genetic data. Since
+2003 he has worked at the NMFS Southwest Fisheries Science Center in
+Santa Cruz. Although much of his statistical research involves the
+development of computationally intensive methods for specialized
+analyses of genetic data, he has been involved in a variety of data
+analysis projects at NMFS and with collaborators worldwide. Eric was an
+early adherent to reproducible research principles and continues, as
+such, performing most of his research and data analysis in the open and
+publicly available on GitHub (find his GitHub page
+\href{https://github.com/eriqande}{here}). In 2014, he taught the
 \href{http://eriqande.github.io/rep-res-web/}{``Reproducible Research
 Course''} at NMFS, and is excited to provide an updated version,
 focusing more, this time, on the recently developed ``tidyverse''.
 \item[Tina Cheng]
-Tina is going to be leading the session during the first week of the
-course when Kristen and Eric are still on spring break, and then she is
-going to be joining in on the fun with us for the remainder of the
-quarter until she has to travel off to Baja, TA-ing the ``supercourse''
-during the last four weeks of the quarter.
+Tina is a graduate student in EEB. Shis going to be leading the session
+during the first week of the course when Kristen and Eric are still on
+spring break, and then she is going to be joining in on the fun with us
+for the remainder of the quarter until she has to travel off to Baja,
+TA-ing the ``supercourse'' during the last four weeks of the quarter.
 \end{description}
 
 \section{Course Goals}\label{course-goals}
@@ -400,6 +409,102 @@ rectangling}\label{week-3-tibbles.-reading-data-in.-data-rectangling}
 \end{itemize}
 
 \subsection{Week 4 ---}\label{week-4}
+
+\chapter{Week One Meeting}\label{week1}
+
+Tina is going to be helping everyone get their systems all set up. After
+that there will be some fun things to do to see what sorts of things are
+possible.
+
+\section{Software Installation}\label{software-installation}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{RStudio:} We want the latest ``development'' version of
+  RStudio becuase it has features that we may want to use during this
+  course. Get it from
+  \url{https://www.rstudio.com/products/rstudio/download/preview/} and
+  install the appropriate one for your OS.
+\item
+  \textbf{R:} Let's make sure that we are all using the latest version
+  of R. On March 7, 2017, version 3.3.3 was released. Go to
+  \url{https://cran.r-project.org/} and find the download link for your
+  computer system. Download it and install it.
+\item
+  \textbf{bookdown:} This package is what I used to create this course
+  notes. Getting it automatically installs a lot of other packages that
+  are useful for authoring reproducible research. We want the latest
+  development version, which can be obtained from GitHub by issuing the
+  following commans at the R prompt (i.e.~in the console window of
+  RStudio:)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{install.packages}\NormalTok{(}\StringTok{"devtools"}\NormalTok{)  }
+\NormalTok{devtools::}\KeywordTok{install_github}\NormalTok{(}\StringTok{"rstudio/bookdown"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Install \textbf{other packages} that we are going to be needing in the
+  first few weeks. If you don't know how to install packages, ask Tina
+  and she can show you. Install: \texttt{tidyverse}, and
+  \texttt{stringr}.
+\item
+  Make sure that \textbf{git} is up and running on your system.
+
+  \begin{itemize}
+  \item
+    If you are using a Mac with a reasonably new OS, you should be able
+    to just open the Terminal application
+    (\texttt{/Applications/Utilities/Terminal}) and type ``git'' at the
+    command line. If you have \texttt{git} it will say something that
+    starts like:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{usage}\NormalTok{: git [--version] [--help] [-C }\KeywordTok{<}\NormalTok{path}\KeywordTok{>}\NormalTok{] [-c name=value]}
+   \NormalTok{[}\KeywordTok{--exec-path}\NormalTok{[=}\KeywordTok{<}\NormalTok{path}\KeywordTok{>}\NormalTok{]] [--html-path] [--man-path] [--info-path]}
+   \NormalTok{[}\KeywordTok{-p} \KeywordTok{|} \KeywordTok{--paginate} \KeywordTok{|} \KeywordTok{--no-pager}\NormalTok{] [--no-replace-objects] [--bare]}
+   \NormalTok{[}\KeywordTok{--git-dir}\NormalTok{=}\KeywordTok{<}\NormalTok{path}\KeywordTok{>}\NormalTok{] [--work-tree=}\KeywordTok{<}\NormalTok{path}\KeywordTok{>}\NormalTok{] [--namespace=}\KeywordTok{<}\NormalTok{name}\KeywordTok{>}\NormalTok{]}
+   \KeywordTok{<command>} \NormalTok{[}\KeywordTok{<}\NormalTok{args}\KeywordTok{>}\NormalTok{]}
+
+\KeywordTok{These} \NormalTok{are common Git commands used in various situations:}
+
+\KeywordTok{start} \NormalTok{a working area (see also: git help tutorial)}
+   \KeywordTok{clone}      \NormalTok{Clone a repository into a new directory}
+   \KeywordTok{etc.} \NormalTok{etc. etc.}
+\end{Highlighting}
+\end{Shaded}
+
+    If you do not have \texttt{git} then it should pop up a little thing
+    asking if you would like to install a reduced set of developer
+    tools. You do. Click OK.
+  \item
+    If you are using a PC, I can't be as much help, but you can find
+    links with instructions on how to download \texttt{git} for a PC
+    \href{https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN}{here}.
+  \item
+    If you are using Linux then we will assume you know how to get
+    \texttt{git} or that you already have it.
+  \end{itemize}
+\end{enumerate}
+
+\section{Get an account on GitHub}\label{get-an-account-on-github}
+
+If you don't already have an account on GitHub, go to \url{github.com}
+and click the ``sign up'' link near upper right of the page. It is
+pretty self-explanatory. Go ahead and get a \textbf{free} account. There
+is nothing to pay for here!
+
+\subsection{Private repositories}\label{private-repositories}
+
+\emph{If you are a graduate student} and you do not feel comfortable
+posting your data on a public site like GitHub, then you should request
+some private repositories from GitHub. GitHub has a great deal for
+academic users like students: free private repositories. Please go to
+\url{https://education.github.com/pack} to sign up for your free student
+pack.
 
 \chapter{Applications}\label{applications}
 
