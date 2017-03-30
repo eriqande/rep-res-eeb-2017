@@ -62,3 +62,10 @@ users like students: free private repositories.  Please go to [https://education
 to sign up for your free student pack.  
 
 
+## Create an RStudio Project with Your Own Data
+
+Your mission for the following week---i.e., please have this done (or as done as you can get it) by Friday, April 14, 2017---is
+to prepare an RStudio project with your own data set, and provide some background about the data and
+the ways that you would like to analyze it.
+
+

@@ -49,7 +49,8 @@ it lives is hosted on eriq's GitHub page [here](https://github.com/eriqande/rep-
 
 ## Meeting Times, Location, Requirements
 
-Intended to be Friday afternoons, 1:00--2:40 PM, somewhere at Long Marine Lab.   
+Intended to be Friday afternoons, 1:45--3:15 PM in the library/conference room at
+Long Marine Lab.   
 
 Students must bring a laptop to do examples during the seminar, and all students 
 are expected to have a data set that they are in the midst of analyzing (or upon
@@ -115,7 +116,7 @@ the recently developed "tidyverse".
 
 Tina Cheng
 
-: Tina is a graduate student in EEB.  Shis going to be leading the session during the first week of the course when Kristen and Eric
+: Tina is a graduate student in EEB.  She is going to be leading the session during the first week of the course when Kristen and Eric
 are still on spring break, and then she is going to be joining in on the fun with us for the
 remainder of the quarter until she has to travel off to Baja, TA-ing the "supercourse" during the
 last four weeks of the quarter.  
