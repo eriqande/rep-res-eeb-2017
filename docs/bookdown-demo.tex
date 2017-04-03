@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-03-30}
+  \date{2017-04-03}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -414,8 +414,8 @@ rectangling}\label{week-3-tibbles.-reading-data-in.-data-rectangling}
 \chapter{Week One Meeting}\label{week1}
 
 Tina is going to be helping everyone get their systems all set up. After
-that there will be some fun things to do to see what sorts of things are
-possible.
+that we will have everyone clone an RStudio project from GitHub to see
+how easy that is.
 
 \section{Software Installation}\label{software-installation}
 
@@ -433,7 +433,7 @@ possible.
   \url{https://cran.r-project.org/} and find the download link for your
   computer system. Download it and install it.
 \item
-  \textbf{bookdown:} This package is what I used to create this course
+  \textbf{bookdown:} This package is what I used to create these course
   notes. Getting it automatically installs a lot of other packages that
   are useful for authoring reproducible research. We want the latest
   development version, which can be obtained from GitHub by issuing the
@@ -507,13 +507,115 @@ academic users like students: free private repositories. Please go to
 \url{https://education.github.com/pack} to sign up for your free student
 pack.
 
-\section{Create an RStudio Project with Your Own
-Data}\label{create-an-rstudio-project-with-your-own-data}
+\section{Open an RStudio Project from
+GitHub}\label{open-an-rstudio-project-from-github}
+
+I am going to have everyone use RStudio and GitHub to clone and open an
+RStudio project that I prepared as a template so that people can see how
+I would like them to start putting together their own projects.
+
+To open this project, from RStudio, go to the menu option
+``File-\textgreater{}New Project\ldots{}''. Then from the resulting
+dialog, choose ``Version Control''. Then choose ``Git''. Then it asks
+for a ``repository URL''. Supply this:
+\texttt{https://github.com/eriqande/rep-res-coho-example} and leave the
+``Project Directory Name'' empty. And then choose a directory in which
+to put it and click OK.
+
+Bam! That will pull the RStudio project off of GitHub, make a local
+clone of it on your hard drive and open.
+
+Once you have done that. Open \texttt{README.Rmd} within the project,
+and click the ``knit'' button which should be present near the top left
+of the editor window.
+
+That is how you convert an R Markdown README to README.md which is easy
+to read and see on GitHub.
+
+If you want to see what the project repository looks like on GitHub,
+have a look at \url{https://github.com/eriqande/rep-res-coho-example}.
+
+\section{Assignment for next week: Create an RStudio Project with Your
+Own
+Data}\label{assignment-for-next-week-create-an-rstudio-project-with-your-own-data}
 
 Your mission for the following week---i.e., please have this done (or as
 done as you can get it) by Friday, April 14, 2017---is to prepare an
 RStudio project with your own data set, and provide some background
-about the data and the ways that you would like to analyze it.
+about the data and the ways that you would like to analyze it. The
+``rep-res-coho-example'' is an example of what I have in mind for this.
+You should use the README.Rmd from that project as a template for your
+own README.Rmd. (To do this you can just copy the README.Rmd file into
+the top level of your project directory and then edit it to reflect your
+own data and project.)
+
+To do all this you are going to want to make your own project. Do that
+like this:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  In RStudio, choose ``File-\textgreater{}New Project\ldots{}''
+\item
+  Then choose ``New Directory'' and then choose ``Empty Project''
+\item
+  In the next dialog, choose a name (\emph{it is best to use only
+  letters, numbers, dashes, and underscores, and include no spaces in
+  the name}) for it \textbf{and be sure to click the ``Create a git
+  repository'' button}.\\
+\item
+  Then click ``Create Project''.
+\end{enumerate}
+
+That should give you a new project. Here are some guidelines for putting
+your own data in there
+
+\begin{itemize}
+\tightlist
+\item
+  Put all of your data in a directory named \texttt{data} in your
+  project.
+\item
+  CSV (comma separated values) is probably the best format to use. It is
+  text-readable without proprietary software (unlike an Excel file);
+  however if you need to look at it in a tabular way with Excel, (gasp),
+  you can do that easily. Tab-delimited text works if you have that, but
+  CSV is preferred.
+\item
+  Use only letters, numbers, dashes, and underscores for the file names,
+  (and periods for their extensions, i.e., \texttt{.csv})
+\item
+  Give a brief description of your data in the README.Rmd.
+\end{itemize}
+
+\section{Reading for next week}\label{reading-for-next-week}
+
+This week (before Friday, April 14, 2017), please read the following
+sections of the R for Data Science book
+
+\begin{itemize}
+\tightlist
+\item
+  \href{http://r4ds.had.co.nz/workflow-basics.html}{Workflow basics}:
+  super basic review on how R works.
+\item
+  \href{http://r4ds.had.co.nz/workflow-projects.html}{Workflow:
+  projects}: info about organizing RStudio projects.
+\item
+  \href{http://r4ds.had.co.nz/workflow-scripts.html}{Workflow: scripts}:
+  how to evaluate code in scripts.
+\item
+  \href{http://r4ds.had.co.nz/tibbles.html}{tibbles}: a streamlined data
+  frame format.
+\item
+  \href{http://r4ds.had.co.nz/data-import.html}{data import} This is our
+  key reading for the week.
+\end{itemize}
+
+When you are done with the \emph{Data Import} reading, take a whack at
+writing some code to read the data files in your project into a variable
+(or several variables).
 
 \chapter{Applications}\label{applications}
 

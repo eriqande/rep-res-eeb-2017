@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-03-30">
+<meta name="date" content="2017-04-03">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -120,7 +120,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="2.2" data-path="week1.html"><a href="week1.html#get-an-account-on-github"><i class="fa fa-check"></i><b>2.2</b> Get an account on GitHub</a><ul>
 <li class="chapter" data-level="2.2.1" data-path="week1.html"><a href="week1.html#private-repositories"><i class="fa fa-check"></i><b>2.2.1</b> Private repositories</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="week1.html"><a href="week1.html#create-an-rstudio-project-with-your-own-data"><i class="fa fa-check"></i><b>2.3</b> Create an RStudio Project with Your Own Data</a></li>
+<li class="chapter" data-level="2.3" data-path="week1.html"><a href="week1.html#open-an-rstudio-project-from-github"><i class="fa fa-check"></i><b>2.3</b> Open an RStudio Project from GitHub</a></li>
+<li class="chapter" data-level="2.4" data-path="week1.html"><a href="week1.html#assignment-for-next-week-create-an-rstudio-project-with-your-own-data"><i class="fa fa-check"></i><b>2.4</b> Assignment for next week: Create an RStudio Project with Your Own Data</a></li>
+<li class="chapter" data-level="2.5" data-path="week1.html"><a href="week1.html#reading-for-next-week"><i class="fa fa-check"></i><b>2.5</b> Reading for next week</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>3</b> Applications</a><ul>
 <li class="chapter" data-level="3.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>3.1</b> Example one</a></li>
@@ -149,13 +151,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="week1" class="section level1">
 <h1><span class="header-section-number">Chapter 2</span> Week One Meeting</h1>
-<p>Tina is going to be helping everyone get their systems all set up. After that there will be some fun things to do to see what sorts of things are possible.</p>
+<p>Tina is going to be helping everyone get their systems all set up. After that we will have everyone clone an RStudio project from GitHub to see how easy that is.</p>
 <div id="software-installation" class="section level2">
 <h2><span class="header-section-number">2.1</span> Software Installation</h2>
 <ol style="list-style-type: decimal">
 <li><p><strong>RStudio:</strong> We want the latest “development” version of RStudio becuase it has features that we may want to use during this course. Get it from <a href="https://www.rstudio.com/products/rstudio/download/preview/" class="uri">https://www.rstudio.com/products/rstudio/download/preview/</a> and install the appropriate one for your OS.</p></li>
 <li><p><strong>R:</strong> Let’s make sure that we are all using the latest version of R. On March 7, 2017, version 3.3.3 was released. Go to <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a> and find the download link for your computer system. Download it and install it.</p></li>
-<li><p><strong>bookdown:</strong> This package is what I used to create this course notes. Getting it automatically installs a lot of other packages that are useful for authoring reproducible research. We want the latest development version, which can be obtained from GitHub by issuing the following commans at the R prompt (i.e. in the console window of RStudio:)</p>
+<li><p><strong>bookdown:</strong> This package is what I used to create these course notes. Getting it automatically installs a lot of other packages that are useful for authoring reproducible research. We want the latest development version, which can be obtained from GitHub by issuing the following commans at the R prompt (i.e. in the console window of RStudio:)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)  
 devtools::<span class="kw">install_github</span>(<span class="st">&quot;rstudio/bookdown&quot;</span>)</code></pre></div></li>
 <li><p>Install <strong>other packages</strong> that we are going to be needing in the first few weeks. If you don’t know how to install packages, ask Tina and she can show you. Install: <code>tidyverse</code>, and <code>stringr</code>.</p></li>
@@ -187,9 +189,45 @@ If you do not have <code>git</code> then it should pop up a little thing asking 
 <p><em>If you are a graduate student</em> and you do not feel comfortable posting your data on a public site like GitHub, then you should request some private repositories from GitHub. GitHub has a great deal for academic users like students: free private repositories. Please go to <a href="https://education.github.com/pack" class="uri">https://education.github.com/pack</a> to sign up for your free student pack.</p>
 </div>
 </div>
-<div id="create-an-rstudio-project-with-your-own-data" class="section level2">
-<h2><span class="header-section-number">2.3</span> Create an RStudio Project with Your Own Data</h2>
-<p>Your mission for the following week—i.e., please have this done (or as done as you can get it) by Friday, April 14, 2017—is to prepare an RStudio project with your own data set, and provide some background about the data and the ways that you would like to analyze it.</p>
+<div id="open-an-rstudio-project-from-github" class="section level2">
+<h2><span class="header-section-number">2.3</span> Open an RStudio Project from GitHub</h2>
+<p>I am going to have everyone use RStudio and GitHub to clone and open an RStudio project that I prepared as a template so that people can see how I would like them to start putting together their own projects.</p>
+<p>To open this project, from RStudio, go to the menu option “File-&gt;New Project…”. Then from the resulting dialog, choose “Version Control”. Then choose “Git”. Then it asks for a “repository URL”. Supply this: <code>https://github.com/eriqande/rep-res-coho-example</code> and leave the “Project Directory Name” empty. And then choose a directory in which to put it and click OK.</p>
+<p>Bam! That will pull the RStudio project off of GitHub, make a local clone of it on your hard drive and open.</p>
+<p>Once you have done that. Open <code>README.Rmd</code> within the project, and click the “knit” button which should be present near the top left of the editor window.</p>
+<p>That is how you convert an R Markdown README to README.md which is easy to read and see on GitHub.</p>
+<p>If you want to see what the project repository looks like on GitHub, have a look at <a href="https://github.com/eriqande/rep-res-coho-example" class="uri">https://github.com/eriqande/rep-res-coho-example</a>.</p>
+</div>
+<div id="assignment-for-next-week-create-an-rstudio-project-with-your-own-data" class="section level2">
+<h2><span class="header-section-number">2.4</span> Assignment for next week: Create an RStudio Project with Your Own Data</h2>
+<p>Your mission for the following week—i.e., please have this done (or as done as you can get it) by Friday, April 14, 2017—is to prepare an RStudio project with your own data set, and provide some background about the data and the ways that you would like to analyze it. The “rep-res-coho-example” is an example of what I have in mind for this. You should use the README.Rmd from that project as a template for your own README.Rmd. (To do this you can just copy the README.Rmd file into the top level of your project directory and then edit it to reflect your own data and project.)</p>
+<p>To do all this you are going to want to make your own project. Do that like this:</p>
+<ol style="list-style-type: decimal">
+<li>In RStudio, choose “File-&gt;New Project…”</li>
+<li>Then choose “New Directory” and then choose “Empty Project”</li>
+<li>In the next dialog, choose a name (<em>it is best to use only letters, numbers, dashes, and underscores, and include no spaces in the name</em>) for it <strong>and be sure to click the “Create a git repository” button</strong>.<br />
+</li>
+<li>Then click “Create Project”.</li>
+</ol>
+<p>That should give you a new project. Here are some guidelines for putting your own data in there</p>
+<ul>
+<li>Put all of your data in a directory named <code>data</code> in your project.</li>
+<li>CSV (comma separated values) is probably the best format to use. It is text-readable without proprietary software (unlike an Excel file); however if you need to look at it in a tabular way with Excel, (gasp), you can do that easily. Tab-delimited text works if you have that, but CSV is preferred.</li>
+<li>Use only letters, numbers, dashes, and underscores for the file names, (and periods for their extensions, i.e., <code>.csv</code>)</li>
+<li>Give a brief description of your data in the README.Rmd.</li>
+</ul>
+</div>
+<div id="reading-for-next-week" class="section level2">
+<h2><span class="header-section-number">2.5</span> Reading for next week</h2>
+<p>This week (before Friday, April 14, 2017), please read the following sections of the R for Data Science book</p>
+<ul>
+<li><a href="http://r4ds.had.co.nz/workflow-basics.html">Workflow basics</a>: super basic review on how R works.</li>
+<li><a href="http://r4ds.had.co.nz/workflow-projects.html">Workflow: projects</a>: info about organizing RStudio projects.</li>
+<li><a href="http://r4ds.had.co.nz/workflow-scripts.html">Workflow: scripts</a>: how to evaluate code in scripts.</li>
+<li><a href="http://r4ds.had.co.nz/tibbles.html">tibbles</a>: a streamlined data frame format.</li>
+<li><a href="http://r4ds.had.co.nz/data-import.html">data import</a> This is our key reading for the week.</li>
+</ul>
+<p>When you are done with the <em>Data Import</em> reading, take a whack at writing some code to read the data files in your project into a variable (or several variables).</p>
 
 </div>
 </div>
