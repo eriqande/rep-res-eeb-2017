@@ -43,7 +43,12 @@ start a working area (see also: git help tutorial)
    etc. etc. etc.
         ```
         If you do not have `git` then it should pop up a little thing asking if you would like to install
-a reduced set of developer tools.  You do.  Click OK.
+a reduced set of developer tools.  You do.  Click OK.  **NOTE** Instead of a pop up it might say something
+like, "xcrun Error: invalid active developer path. etc. etc...".  In that case, you can install a fresh set 
+of command line tools by typing this at the command line:
+        ```
+        xcode-select --install
+        ```
     - If you are using a PC, I can't be as much help, but you can find links with instructions on how to download
     `git` for a PC [here](https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN).
     - If you are using Linux then we will assume you know how to get `git` or that you already have it.

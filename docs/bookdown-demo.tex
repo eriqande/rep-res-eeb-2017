@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-04-03}
+  \date{2017-04-07}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -480,7 +480,14 @@ how easy that is.
 
     If you do not have \texttt{git} then it should pop up a little thing
     asking if you would like to install a reduced set of developer
-    tools. You do. Click OK.
+    tools. You do. Click OK. \textbf{NOTE} Instead of a pop up it might
+    say something like, ``xcrun Error: invalid active developer path.
+    etc. etc\ldots{}''. In that case, you can install a fresh set of
+    command line tools by typing this at the command line:
+
+\begin{verbatim}
+xcode-select --install
+\end{verbatim}
   \item
     If you are using a PC, I can't be as much help, but you can find
     links with instructions on how to download \texttt{git} for a PC
