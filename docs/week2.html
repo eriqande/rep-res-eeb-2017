@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-04-12">
+<meta name="date" content="2017-04-13">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -205,20 +205,41 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h4><span class="header-section-number">3.1.2.1</span> Disable saving of workspace for sure!</h4>
 <p>Let’s all walk through this.</p>
 </div>
-<div id="opening-rstudio-projects" class="section level4">
-<h4><span class="header-section-number">3.1.2.2</span> Opening RStudio Projects</h4>
+<div id="another-worthwhile-preference-for-small-screens-like-laptops" class="section level4">
+<h4><span class="header-section-number">3.1.2.2</span> Another worthwhile preference for small-screens (like laptops)</h4>
+Make sure that the RMarkdown preference is set to open in: <strong>Window</strong>. See Figure <a href="week2.html#fig:rmd-window">3.1</a>.
+<div class="figure" style="text-align: center"><span id="fig:rmd-window"></span>
+<img src="images/rmd_window.png" alt="To read RMarkdown output in a separate page (highly recommended for laptops) choose &quot;RMarkdown&quot; on the left and choose &quot;Window&quot; from the dropdown menu, and click OK." width="90%" />
+<p class="caption">
+Figure 3.1: To read RMarkdown output in a separate page (highly recommended for laptops) choose “RMarkdown” on the left and choose “Window” from the dropdown menu, and click OK.
+</p>
+</div>
+</div>
+<div id="opening-rstudio-projects-from-the-os-by-clicking-in-the-finder" class="section level4">
+<h4><span class="header-section-number">3.1.2.3</span> Opening RStudio Projects from the OS (by clicking in the Finder)</h4>
 <ul>
 <li>You can open an RStudio project by double clicking the RStudio Project icon from, for example, a Mac Finder window. It lives in a directory of the same name (but it has a <code>.Rproj</code> exension.)</li>
 <li>Or if you are a command line type, use, for example <code>open my_project.Rproj</code> from the Terminal.</li>
-<li>There is also at “File -&gt; Recent Projects” option.</li>
 <li>You can open as many RStudio projects as you like at a time.</li>
 <li>Each RStudio project launches its own, completely separate R session!</li>
-<li>Interestingly, if you click on the <code>.Rproj</code> file of a project that is open, RStudio will open another instance of that project…not recommended.</li>
+<li>Interestingly, if you click on the <code>.Rproj</code> file of a project that is open, RStudio will open another instance of that project. So, don’t click on the <code>.Rproj</code> file for a project that is already open!
+<ul>
+<li>(In other applications on the Mac that will typically just take you to the currently open docuemnt, but not so with RStudio.)</li>
+</ul></li>
 <li>Use cmd-TAB to switch between open RStudio projects.</li>
 </ul>
 </div>
+<div id="opening-rstudio-projects-from-rstudio" class="section level4">
+<h4><span class="header-section-number">3.1.2.4</span> Opening RStudio Projects from RStudio</h4>
+<ul>
+<li>When you open existing projects using the “File-&gt;Open Project…” menu option or with the “File -&gt; Recent Projects” menu option and you currently have RStudio open “in another project,”&quot; then the new project that you are opening jumps in “on top of” the previous one. It looks like your previous project has vanished into the ether. The OS thinks there is only one RStudio open, an it has the most recently opened project in it. WHERE’S MY OTHER ONE?!</li>
+<li>You can get back to it by clicking the project dropdown in the upper right of the project.</li>
+<li>However, if you switch between projects this way it restarts R each time you switch back to your project so it takes a lot of time and it is super-annoying.</li>
+<li>If you are working concurrently in multiple projects, I recommend opening them from the Finder (or Terminal) and switching between them using <strong>Cmd-TAB</strong>.</li>
+</ul>
+</div>
 <div id="what-is-the-.rproj-file-really" class="section level4">
-<h4><span class="header-section-number">3.1.2.3</span> What is the <code>.Rproj</code> file, really</h4>
+<h4><span class="header-section-number">3.1.2.5</span> What is the <code>.Rproj</code> file, really</h4>
 <p>It is just a text file that stores some information and any project-specific preferences if there are any. Here is what <code>rep-res-eeb-2017.Rproj</code> looks like if you open it with a text editor:</p>
 <div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Version:</span> 1.0
 
@@ -240,7 +261,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="fu">BuildType:</span> Website</code></pre></div>
 </div>
 <div id="r-in-an-rstudio-project-launches-in-the-project-directory" class="section level4">
-<h4><span class="header-section-number">3.1.2.4</span> R in an RStudio project launches in the project directory</h4>
+<h4><span class="header-section-number">3.1.2.6</span> R in an RStudio project launches in the project directory</h4>
 <ul>
 <li>This makes reproducibility much easier. You can find and load files using <em>relative</em> paths.<br />
 </li>
@@ -255,7 +276,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h3><span class="header-section-number">3.1.3</span> Workflow: scripts</h3>
 <ul>
 <li>Script editor window vs console window</li>
-<li>Keyboard shortcuts for evaluating codes in your scripts.</li>
+<li>Keyboard shortcuts for evaluating codes in your scripts:
+<ul>
+<li><strong>Cmd-Return</strong> (sends current line to console and advances cursor to next line)</li>
+<li><strong>Highlight with Cmd-Return</strong> (send highlighted code to console)
+<ul>
+<li>For this, <strong>Shift-up-arrow</strong> and <strong>Shift-down-arrow</strong> are good for highlighting.</li>
+<li>As is <strong>Shift-Command-right-arrow</strong> or <strong>Shift-command-left-arrow</strong>.</li>
+</ul></li>
+</ul></li>
 </ul>
 </div>
 </div>

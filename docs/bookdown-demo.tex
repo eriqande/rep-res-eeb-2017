@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-04-12}
+  \date{2017-04-13}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -702,7 +702,23 @@ sure!}\label{disable-saving-of-workspace-for-sure}
 
 Let's all walk through this.
 
-\subsubsection{Opening RStudio Projects}\label{opening-rstudio-projects}
+\subsubsection{Another worthwhile preference for small-screens (like
+laptops)}\label{another-worthwhile-preference-for-small-screens-like-laptops}
+
+Make sure that the RMarkdown preference is set to open in:
+\textbf{Window}. See Figure \ref{fig:rmd-window}.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.9\linewidth]{images/rmd_window} 
+
+}
+
+\caption{To read RMarkdown output in a separate page (highly recommended for laptops) choose "RMarkdown" on the left and choose "Window" from the dropdown menu, and click OK.}\label{fig:rmd-window}
+\end{figure}
+
+\subsubsection{Opening RStudio Projects from the OS (by clicking in the
+Finder)}\label{opening-rstudio-projects-from-the-os-by-clicking-in-the-finder}
 
 \begin{itemize}
 \tightlist
@@ -714,17 +730,50 @@ Let's all walk through this.
   Or if you are a command line type, use, for example
   \texttt{open\ my\_project.Rproj} from the Terminal.
 \item
-  There is also at ``File -\textgreater{} Recent Projects'' option.
-\item
   You can open as many RStudio projects as you like at a time.
 \item
   Each RStudio project launches its own, completely separate R session!
 \item
   Interestingly, if you click on the \texttt{.Rproj} file of a project
-  that is open, RStudio will open another instance of that
-  project\ldots{}not recommended.
+  that is open, RStudio will open another instance of that project. So,
+  don't click on the \texttt{.Rproj} file for a project that is already
+  open!
+
+  \begin{itemize}
+  \tightlist
+  \item
+    (In other applications on the Mac that will typically just take you
+    to the currently open docuemnt, but not so with RStudio.)
+  \end{itemize}
 \item
   Use cmd-TAB to switch between open RStudio projects.
+\end{itemize}
+
+\subsubsection{Opening RStudio Projects from
+RStudio}\label{opening-rstudio-projects-from-rstudio}
+
+\begin{itemize}
+\tightlist
+\item
+  When you open existing projects using the ``File-\textgreater{}Open
+  Project\ldots{}'' menu option or with the ``File -\textgreater{}
+  Recent Projects'' menu option and you currently have RStudio open ``in
+  another project,''" then the new project that you are opening jumps in
+  ``on top of'' the previous one. It looks like your previous project
+  has vanished into the ether. The OS thinks there is only one RStudio
+  open, an it has the most recently opened project in it. WHERE'S MY
+  OTHER ONE?!
+\item
+  You can get back to it by clicking the project dropdown in the upper
+  right of the project.
+\item
+  However, if you switch between projects this way it restarts R each
+  time you switch back to your project so it takes a lot of time and it
+  is super-annoying.
+\item
+  If you are working concurrently in multiple projects, I recommend
+  opening them from the Finder (or Terminal) and switching between them
+  using \textbf{Cmd-TAB}.
 \end{itemize}
 
 \subsubsection{\texorpdfstring{What is the \texttt{.Rproj} file,
@@ -790,7 +839,27 @@ directory}\label{r-in-an-rstudio-project-launches-in-the-project-directory}
 \item
   Script editor window vs console window
 \item
-  Keyboard shortcuts for evaluating codes in your scripts.
+  Keyboard shortcuts for evaluating codes in your scripts:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Cmd-Return} (sends current line to console and advances
+    cursor to next line)
+  \item
+    \textbf{Highlight with Cmd-Return} (send highlighted code to
+    console)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      For this, \textbf{Shift-up-arrow} and \textbf{Shift-down-arrow}
+      are good for highlighting.
+    \item
+      As is \textbf{Shift-Command-right-arrow} or
+      \textbf{Shift-command-left-arrow}.
+    \end{itemize}
+  \end{itemize}
 \end{itemize}
 
 \section{\texorpdfstring{Let's talk about the pipe

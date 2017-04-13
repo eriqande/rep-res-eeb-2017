@@ -51,19 +51,47 @@ an argument it no longer appears in the list of options.
 
 Let's all walk through this.
 
-#### Opening RStudio Projects
+#### Another worthwhile preference for small-screens (like laptops)
+
+Make sure that the RMarkdown preference is set to open in: __Window__.
+See Figure \@ref(fig:rmd-window).
+```{r rmd-window, fig.cap='To read RMarkdown output in a separate page (highly recommended for laptops) choose "RMarkdown" on the left and choose "Window" from the dropdown menu, and click OK.', out.width="90%", fig.align='center', echo=FALSE}
+knitr::include_graphics("images/rmd_window.png")
+```
+
+
+#### Opening RStudio Projects from the OS (by clicking in the Finder)
 
 - You can open an RStudio project by double clicking the RStudio Project icon
 from, for example, a Mac Finder window.
 It lives in a directory of the same name (but it has a `.Rproj` exension.)
 - Or if you are a command line type,
 use, for example `open my_project.Rproj` from the Terminal.
-- There is also at "File -> Recent Projects" option.
 - You can open as many RStudio projects as you like at a time.
 - Each RStudio project launches its own, completely separate R session!
 - Interestingly, if you click on the `.Rproj` file of a project that is open,
-RStudio will open another instance of that project...not recommended.
+RStudio will open another instance of that project.  So, don't click on the `.Rproj`
+file for a project that is already open!
+    + (In other applications on the Mac that will typically just take you to the currently
+    open docuemnt, but not so with RStudio.)
 - Use cmd-TAB to switch between open  RStudio projects.
+
+
+#### Opening RStudio Projects from RStudio
+
+- When you open existing projects using the "File->Open Project..."  menu option or with
+the "File -> Recent Projects" menu option and you
+currently have RStudio open "in another project,"" then the new project that you are opening
+jumps in "on top of" the previous one.  It looks like your previous project has vanished
+into the ether.  The OS thinks there is only one RStudio open, an it has the most
+recently opened project in it.  WHERE'S MY OTHER ONE?!
+- You can get back to it by clicking the project dropdown in the upper right of the project.
+- However, if you switch between projects this way it restarts R each time you switch back
+to your project so it takes a lot of time and it is super-annoying.
+- If you are working concurrently in multiple projects, I recommend opening 
+them from the Finder (or Terminal) and switching between them using __Cmd-TAB__.
+
+
 
 #### What is the `.Rproj` file, really
 
@@ -93,7 +121,11 @@ let's you find the root of an RStudio project directory.  This can be helpful so
 ### Workflow: scripts
 
 - Script editor window vs console window
-- Keyboard shortcuts for evaluating codes in your scripts.
+- Keyboard shortcuts for evaluating codes in your scripts:
+    + __Cmd-Return__  (sends current line to console and advances cursor to next line)
+    + __Highlight with Cmd-Return__ (send highlighted code to console)
+        + For this, __Shift-up-arrow__ and __Shift-down-arrow__ are good for highlighting.
+        + As is __Shift-Command-right-arrow__ or __Shift-command-left-arrow__.
 
 ## Let's talk about the pipe `%>%`
 
