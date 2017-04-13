@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-04-07}
+  \date{2017-04-12}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -596,7 +596,7 @@ your own data in there
   Give a brief description of your data in the README.Rmd.
 \end{itemize}
 
-\section{Reading for next week}\label{reading-for-next-week}
+\section{Reading for next week}\label{week2reading}
 
 This week (before Friday, April 14, 2017), please read the following
 sections of the R for Data Science book
@@ -624,90 +624,752 @@ When you are done with the \emph{Data Import} reading, take a whack at
 writing some code to read the data files in your project into a variable
 (or several variables).
 
-\chapter{Applications}\label{applications}
+\chapter{Week Two Meeting}\label{week2}
 
-Some \emph{significant} applications are demonstrated in this chapter.
+For this week, everyone should have completed the reading listed in
+Section \ref{week2reading}. And everyone should have at least been
+trying to set up an RStudio Project with their own data in it, and given
+a whack at reading their data into a variable.
 
-\section{Example one}\label{example-one}
+\section{Workflow and Project Recap}\label{workflow-and-project-recap}
 
-\section{Example two}\label{example-two}
+\subsection{Workflow: basics}\label{workflow-basics}
 
-You can label chapter and section titles using \texttt{\{\#label\}}
-after them, e.g., we can reference Chapter \ref{intro}. If you do not
-manually label them, there will be automatic labels anyway, e.g.,
-Chapter \ref{methods}.
+\subsubsection{Style}\label{style}
 
-Figures and tables with captions will be placed in \texttt{figure} and
-\texttt{table} environments, respectively.
+I just want to reiterate a few things that might seem minor, but are
+stylistically important in the long run.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Don't use \texttt{=} for assignment. Use \texttt{\textless{}-}. On a
+  Mac use Option-``-'' to get that more quickly.
+\item
+  Put spaces around both sides of \texttt{=}, and \texttt{\textless{}-},
+  and other mathematical operators like \texttt{+}, \texttt{-},
+  \texttt{*}, etc.
+\item
+  Put spaces after commas.
+\item
+  Use R-Studio's magical \texttt{Cmd-i} keyboard shortcut to
+  automatically indent highlighted code.
+\item
+  If you want to really geek out, Hadley shares his style tips more
+  completely in his \href{http://adv-r.had.co.nz/Style.html}{Advanced R
+  Programming} book.
+\end{enumerate}
+
+This might seem pedantic, but adhering to these conventions makes it
+much easier for people to read your code.
+
+\subsubsection{TAB-completion}\label{tab-completion}
+
+This is HUGE!! Start developing a twitchy left pinky now!
+
+TAB early; TAB often!
+
+Note that that completions of R code in the console or in the source
+window are context dependent:
+
+\begin{itemize}
+\tightlist
+\item
+  variables in global environment
+\item
+  Functions
+\item
+  Quoted strings complete to filenames in directories
+\item
+  Installed packages in \texttt{library()}
+\item
+  Help topics after \texttt{?}
+\item
+  Function arguments within a function's parentheses. This is absolutely
+  huge. If you can't remember all the different arguments a function
+  takes, type the function and hit TAB within the parentheses. Try
+  typing \texttt{read.table()} and his TAB while the cursor is inside
+  the parentheses. Use the up and down arrows to scroll through the
+  options, hit TAB again to insert one. Note that after you have used an
+  argument it no longer appears in the list of options.
+\end{itemize}
+
+\subsection{Workflow: projects}\label{workflow-projects}
+
+\subsubsection{Disable saving of workspace for
+sure!}\label{disable-saving-of-workspace-for-sure}
+
+Let's all walk through this.
+
+\subsubsection{Opening RStudio Projects}\label{opening-rstudio-projects}
+
+\begin{itemize}
+\tightlist
+\item
+  You can open an RStudio project by double clicking the RStudio Project
+  icon from, for example, a Mac Finder window. It lives in a directory
+  of the same name (but it has a \texttt{.Rproj} exension.)
+\item
+  Or if you are a command line type, use, for example
+  \texttt{open\ my\_project.Rproj} from the Terminal.
+\item
+  There is also at ``File -\textgreater{} Recent Projects'' option.
+\item
+  You can open as many RStudio projects as you like at a time.
+\item
+  Each RStudio project launches its own, completely separate R session!
+\item
+  Interestingly, if you click on the \texttt{.Rproj} file of a project
+  that is open, RStudio will open another instance of that
+  project\ldots{}not recommended.
+\item
+  Use cmd-TAB to switch between open RStudio projects.
+\end{itemize}
+
+\subsubsection{\texorpdfstring{What is the \texttt{.Rproj} file,
+really}{What is the .Rproj file, really}}\label{what-is-the-.rproj-file-really}
+
+It is just a text file that stores some information and any
+project-specific preferences if there are any. Here is what
+\texttt{rep-res-eeb-2017.Rproj} looks like if you open it with a text
+editor:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{par}\NormalTok{(}\DataTypeTok{mar =} \KeywordTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{, .}\DecValTok{1}\NormalTok{, .}\DecValTok{1}\NormalTok{))}
-\KeywordTok{plot}\NormalTok{(pressure, }\DataTypeTok{type =} \StringTok{'b'}\NormalTok{, }\DataTypeTok{pch =} \DecValTok{19}\NormalTok{)}
+\FunctionTok{Version:} \NormalTok{1.0}
+
+\FunctionTok{RestoreWorkspace:} \NormalTok{Default}
+\FunctionTok{SaveWorkspace:} \NormalTok{Default}
+\FunctionTok{AlwaysSaveHistory:} \NormalTok{Default}
+
+\FunctionTok{EnableCodeIndexing:} \NormalTok{Yes}
+\FunctionTok{UseSpacesForTab:} \NormalTok{Yes}
+\FunctionTok{NumSpacesForTab:} \NormalTok{2}
+\FunctionTok{Encoding:} \NormalTok{UTF-8}
+
+\FunctionTok{RnwWeave:} \NormalTok{knitr}
+\FunctionTok{LaTeX:} \NormalTok{pdfLaTeX}
+
+\FunctionTok{AutoAppendNewline:} \NormalTok{Yes}
+\FunctionTok{StripTrailingWhitespace:} \NormalTok{Yes}
+
+\FunctionTok{BuildType:} \NormalTok{Website}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{figure}
+\subsubsection{R in an RStudio project launches in the project
+directory}\label{r-in-an-rstudio-project-launches-in-the-project-directory}
 
-{\centering \includegraphics[width=0.8\linewidth]{bookdown-demo_files/figure-latex/nice-fig-1} 
+\begin{itemize}
+\tightlist
+\item
+  This makes reproducibility much easier. You can find and load files
+  using \emph{relative} paths.\\
+\item
+  Everything you might be accessing from R (data, scripts, etc.) or
+  outputting from R will be easy to get to if they are ``in the
+  project''
+\item
+  When we say that a file is ``in the project'' we mean that it is
+  stored on disk somewhere within the project directory.
+\item
+  The project directory (sometimes called the \emph{root} of the project
+  directory) is just the directory that contains the \texttt{.Rproj}
+  file.
+\item
+  Expert user tip: \texttt{rprojroot::find\_rstudio\_root\_file()} (part
+  of the \texttt{rprojroot} package) let's you find the root of an
+  RStudio project directory. This can be helpful sometimes\ldots{}.
+\end{itemize}
 
-}
+\subsection{Workflow: scripts}\label{workflow-scripts}
 
-\caption{Here is a nice figure!}\label{fig:nice-fig}
-\end{figure}
+\begin{itemize}
+\tightlist
+\item
+  Script editor window vs console window
+\item
+  Keyboard shortcuts for evaluating codes in your scripts.
+\end{itemize}
 
-Reference a figure by its code chunk label with the \texttt{fig:}
-prefix, e.g., see Figure \ref{fig:nice-fig}. Similarly, you can
-reference tables generated from \texttt{knitr::kable()}, e.g., see Table
-\ref{tab:nice-tab}.
+\section{\texorpdfstring{Let's talk about the pipe
+\texttt{\%\textgreater{}\%}}{Let's talk about the pipe \%\textgreater{}\%}}\label{lets-talk-about-the-pipe}
+
+For anyone who had ever worked comfortably in Unix for a long time, and
+was used to chaining the output of one utility in as the input for
+another utility using the pipe: \texttt{\textbar{}}, R's syntax for
+composition of functions was always super cumbersome and required all
+sorts of nasty, nested parentheses.
+
+Consider this simple set of operations: imagine we want to
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  simulate 1000 gamma random variables, \(G\), with parameters
+  \(\alpha=5\) and \(\beta = 1\),
+\item
+  for each \(G\) simulate a Poisson random variable with mean
+  (\texttt{lambda}) \(G\).
+\item
+  take the \texttt{sqrt} of each such variable
+\item
+  compute the variance of the result
+\end{enumerate}
+
+This can all be done in one line, but is ugly!
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{knitr::}\KeywordTok{kable}\NormalTok{(}
-  \KeywordTok{head}\NormalTok{(iris, }\DecValTok{20}\NormalTok{), }\DataTypeTok{caption =} \StringTok{'Here is a nice table!'}\NormalTok{,}
-  \DataTypeTok{booktabs =} \OtherTok{TRUE}
+\CommentTok{# set random seed for reproducibility}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+
+\KeywordTok{var}\NormalTok{(}\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{rpois}\NormalTok{(}\DataTypeTok{n =} \DecValTok{1000}\NormalTok{, }\DataTypeTok{lambda =} \KeywordTok{rgamma}\NormalTok{(}\DataTypeTok{n =} \DecValTok{1000}\NormalTok{, }\DataTypeTok{shape =} \DecValTok{5}\NormalTok{, }\DataTypeTok{scale =} \DecValTok{1}\NormalTok{))))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.5828768
+\end{verbatim}
+
+It doesn't matter how stylishly you include spaces in your code, this is
+just Fugly!
+
+You can write it on multiple lines, but it is friggin' ghastly! Maybe
+worse than before.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+
+\KeywordTok{var}\NormalTok{(}
+  \KeywordTok{sqrt}\NormalTok{(}
+    \KeywordTok{rpois}\NormalTok{(}\DataTypeTok{n =} \DecValTok{1000}\NormalTok{, }\DataTypeTok{lambda =} \KeywordTok{rgamma}\NormalTok{(}
+      \DataTypeTok{n =} \DecValTok{1000}\NormalTok{, }\DataTypeTok{shape =} \DecValTok{5}\NormalTok{, }\DataTypeTok{scale =} \DecValTok{1}
+    \NormalTok{)}
+    \NormalTok{)}
+  \NormalTok{)}
 \NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{table}
+\begin{verbatim}
+## [1] 0.5828768
+\end{verbatim}
 
-\caption{\label{tab:nice-tab}Here is a nice table!}
-\centering
-\begin{tabular}[t]{rrrrl}
-\toprule
-Sepal.Length & Sepal.Width & Petal.Length & Petal.Width & Species\\
-\midrule
-5.1 & 3.5 & 1.4 & 0.2 & setosa\\
-4.9 & 3.0 & 1.4 & 0.2 & setosa\\
-4.7 & 3.2 & 1.3 & 0.2 & setosa\\
-4.6 & 3.1 & 1.5 & 0.2 & setosa\\
-5.0 & 3.6 & 1.4 & 0.2 & setosa\\
-\addlinespace
-5.4 & 3.9 & 1.7 & 0.4 & setosa\\
-4.6 & 3.4 & 1.4 & 0.3 & setosa\\
-5.0 & 3.4 & 1.5 & 0.2 & setosa\\
-4.4 & 2.9 & 1.4 & 0.2 & setosa\\
-4.9 & 3.1 & 1.5 & 0.1 & setosa\\
-\addlinespace
-5.4 & 3.7 & 1.5 & 0.2 & setosa\\
-4.8 & 3.4 & 1.6 & 0.2 & setosa\\
-4.8 & 3.0 & 1.4 & 0.1 & setosa\\
-4.3 & 3.0 & 1.1 & 0.1 & setosa\\
-5.8 & 4.0 & 1.2 & 0.2 & setosa\\
-\addlinespace
-5.7 & 4.4 & 1.5 & 0.4 & setosa\\
-5.4 & 3.9 & 1.3 & 0.4 & setosa\\
-5.1 & 3.5 & 1.4 & 0.3 & setosa\\
-5.7 & 3.8 & 1.7 & 0.3 & setosa\\
-5.1 & 3.8 & 1.5 & 0.3 & setosa\\
-\bottomrule
-\end{tabular}
-\end{table}
+The problem is that the order in which the operations are done does not
+match the way things are written: the first thing to get done is the
+call to \texttt{rgamma}, which is nested deeply within the parentheses.
 
-You can write citations, too. For example, we are using the
-\textbf{bookdown} package \citep{R-bookdown} in this sample book, which
-was built on top of R Markdown and \textbf{knitr} \citep{xie2015}.
+Enter the R ``pipe'' symbol. It is not as convenient to type as
+\texttt{\textbar{}}, but you can make it quickly with the keyboard
+shortcut \texttt{cmd-shift-M}: \texttt{\%\textgreater{}\%}. This was
+introduced in the \texttt{magrittr} package, and the \texttt{tidyverse}
+imports the \texttt{\%\textgreater{}\%} symbol from \texttt{magrittr}.
+
+Behold!
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+
+\KeywordTok{rgamma}\NormalTok{(}\DataTypeTok{n =} \DecValTok{1000}\NormalTok{, }\DataTypeTok{shape =} \DecValTok{5}\NormalTok{, }\DataTypeTok{scale =} \DecValTok{1}\NormalTok{) %>%}
+\StringTok{  }\KeywordTok{rpois}\NormalTok{(}\DataTypeTok{n =} \DecValTok{1000}\NormalTok{, }\DataTypeTok{lambda =} \NormalTok{.) %>%}\StringTok{          }\CommentTok{# pass G is as the lambda parameter using the dot: .}
+\StringTok{  }\KeywordTok{sqrt}\NormalTok{() %>%}\StringTok{                               }\CommentTok{# no dot here, so the previous result is just the first argument to sqrt}
+\StringTok{  }\KeywordTok{var}\NormalTok{()                                    }\CommentTok{# same here}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.5828768
+\end{verbatim}
+
+That is a hell of a lot easier to read! It gives me goose bumps it is so
+elegant.
+
+The \texttt{\%\textgreater{}\%} symbol says, ``take the result that
+occurred before the \texttt{\%\textgreater{}\%} and pass it in as the
+\texttt{.} in whatever follows the \texttt{\%\textgreater{}\%}.''
+Furthermore, if there is no \texttt{.} in the expression after the
+\texttt{\%\textgreater{}\%}, simply pass the result that occurred before
+the \texttt{\%\textgreater{}\%} in as the \emph{first argument} in the
+function call that comes after the \texttt{\%\textgreater{}\%}.
+
+This type of ``chaining'' of operations is particularly powerful when
+operating on \texttt{tibbles} using \texttt{dplyr}
+
+\section{\texorpdfstring{Tibbles and ``rectangular''
+data}{Tibbles and rectangular data}}\label{tibbles-and-rectangular-data}
+
+gonna talk about data types too.
+
+\section{Data import}\label{data-import}
+
+\chapter{Week Three Meeting}\label{week3}
+
+\section{Git Basics}\label{git-basics}
+
+Goals for Today:
+
+\begin{itemize}
+\tightlist
+\item
+  Explain what git is (and how it is different than GitHub)
+\item
+  Introduce the sha-1 hash (for fun!)
+\item
+  Get familiar with RStudio's very convenient interface to git
+
+  \begin{itemize}
+  \tightlist
+  \item
+    staging files
+  \item
+    unstaging file
+  \item
+    viewing differences between staged and unstaged files
+  \item
+    committing files
+  \item
+    viewing the commit history
+  \end{itemize}
+\end{itemize}
+
+\subsection{An overview of Version Control Systems (VCS)}\label{vcs}
+
+\begin{itemize}
+\tightlist
+\item
+  Git is a type of VCS
+\item
+  At its crudest, a VCS is a system that provides a way of saving and
+  restoring earlier versions of a file.
+\end{itemize}
+
+\subsubsection{A typical VCS for a non-computer
+programmer}\label{a-typical-vcs-for-a-non-computer-programmer}
+
+\begin{itemize}
+\tightlist
+\item
+  Start writing \texttt{my\_manuscript.doc}.
+\item
+  At some point worry that MS Word is going to eat your file, so,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Make a ``backup'' called \texttt{my\_manuscript\_A.doc}
+  \end{itemize}
+\item
+  Then, before overhauling the discussion, save the current file as
+  \texttt{my\_manuscript\_B.doc}.
+\item
+  Email it to your coauthors and then have a series of files with other
+  extensions such as the initials of their names when they edit them and
+  send them back.
+\item
+  Etc.
+\item
+  Disadvantages:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Hard to find a good record of what is in each version. (Wait! I
+    liked the introduction I wrote three weeks ago\ldots{}where is that
+    now?)
+  \item
+    A terrible system if you have multiple files that are dependent on
+    one another (for example, figures in your document, or scripts and
+    data sets if you have a programming project.)
+  \item
+    If you decide that you want to merge the changes you made to the
+    discussion in version \texttt{\_C} with the edits on the
+    introduction in version \texttt{\_K}, it is hard.
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{Other popular VCS
+systems}\label{other-popular-vcs-systems}
+
+\begin{itemize}
+\tightlist
+\item
+  rcs, cvs, subversion, etc.
+\item
+  These all had a ``Centralized'' model:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You set up a repository on a server that has the full version
+    history,
+  \item
+    then each person working on it gets a copy of the current version,
+    and nothing more.
+  \item
+    They can submit changes back to the central repository which tries
+    to deal with conflicting submissions.
+  \item
+    You need to be online to do most operations.
+  \end{itemize}
+\item
+  I used a few of these, and missed them for a few weeks when I switched
+  to Git, but then never looked back and couldn't imagine using them
+  again.
+\end{itemize}
+
+\subsubsection{The Git model --- Distributed Version
+Control}\label{the-git-model-distributed-version-control}
+
+\begin{itemize}
+\tightlist
+\item
+  Git stores ``snapshots'' of your collection of files in a repository
+\item
+  For our work, the ``collection of files'' will be ``the stuff in your
+  RStudio project''
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Another reason it is nice to keep everything you need for a project
+    together in a ``project directory''
+  \end{itemize}
+\item
+  When you clone or repository, \textbf{you} get the whole version
+  history
+\item
+  When someone else clones that repository, \textbf{they also} get the
+  whole version history.
+\item
+  Git has well-developed features for merging changes made in different
+  repositories
+
+  \begin{itemize}
+  \tightlist
+  \item
+    But, for today, we will talk mostly of a single user interacting
+    with git.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Git versus GitHub}\label{git-versus-github}
+
+\begin{itemize}
+\tightlist
+\item
+  They are not the same thing!
+\item
+  Git is software that you can run on your own machine for doing version
+  on a repository.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It can be \emph{entirely} local. i.e.~only on your hard drive and
+    nowhere else.
+  \item
+    This is super-useful for any project, because solid version control
+    is great to have.
+  \end{itemize}
+\item
+  GitHub is a website, with tools powered by Git (and many that they
+  brewed up themselves) that makes it very, very easy to share git
+  repositories with people all over the place.
+\end{itemize}
+
+\subsubsection{Is everything on GitHub
+public?}\label{is-everything-on-github-public}
+
+\begin{itemize}
+\tightlist
+\item
+  No! Many companies use GitHub to host their proprietary code
+
+  \begin{itemize}
+  \tightlist
+  \item
+    They just have to pay for that\ldots{}
+  \end{itemize}
+\item
+  By default, you can put anything on GitHub for free as long as it is
+  under a fairly free-use (open source type) license and it is available
+  to anyone
+\item
+  If you want a private repository, as an academic affiliate you just
+  have to ask and GitHub will give you unlimited private repos for free.
+\item
+  And if you are a student and you have not yet done so, go to
+  \url{https://education.github.com/pack} to sign up for your free
+  student pack.
+\end{itemize}
+
+\subsection{Using git through RStudio}\label{git-thru-rstudio}
+
+\begin{itemize}
+\tightlist
+\item
+  Now we can do a few things together to see how this works.
+\item
+  Most of the action is in the Git Pane\ldots{}
+\item
+  Today we will talk about:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Staging files (preparing them to be \textbf{committed})
+  \item
+    Committing files (putting them into the repository)
+  \item
+    viewing differences between staged and unstaged files
+  \item
+    committing files
+  \item
+    viewing the commit history
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{One final configuration before
+starting:}\label{one-final-configuration-before-starting}
+
+\begin{itemize}
+\tightlist
+\item
+  Open the shell (Tools-\textgreater{}Shell\ldots{}) and issue these two
+  commands, replacing the name ``John Doe'' with yours, and his email
+  with yours.
+
+  \begin{itemize}
+  \item
+    Use the email address that you gave to GitHub.
+
+\begin{verbatim}
+git config --global user.name "John Doe"
+git config --global user.email johndoe@example.com
+\end{verbatim}
+
+    You only need to do this once.
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{The status/staging panel}\label{the-statusstaging-panel}
+
+\begin{itemize}
+\tightlist
+\item
+  RStudio keeps git constantly scanning the project directory to find
+  any files that have changed or which are new.
+\item
+  By clicking a file's little ``check-box'' you can stage it.\\
+\item
+  Some symbols:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Blue-M}: a file that is already under version control that
+    has been modified.
+  \item
+    \textbf{Yellow-?}: a file that is not under version control
+    (yet\ldots{})
+  \item
+    \textbf{Green-A}: a file that was not under version control, but
+    which has been staged to be committed.
+  \item
+    \textbf{Red-D}: a file under version control has been deleted. To
+    make it really disappear, you have to stage its disappearance and
+    commit. Note that it still lives on, but you have to dig back into
+    your history to find it.
+  \item
+    \textbf{Purple-R} a file that was renamed. (Note that git in Rstudio
+    seems to be figuring this out on its own.)
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{The Diff window}\label{the-diff-window}
+
+\begin{itemize}
+\tightlist
+\item
+  Shows what has changed between the last committed version of a file
+  and its current state.
+\item
+  Holy smokes this is convenient
+\item
+  (Note: all this output is available from the command line, but the
+  Rstudio interface is very nice, IMHO)
+\end{itemize}
+
+\subsubsection{Making a Commit}\label{making-a-commit}
+
+\begin{itemize}
+\tightlist
+\item
+  Super easy:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    After staging the files you want to commit\ldots{}
+  \item
+    Write a brief message (first line short, then as much after that as
+    you want) and hit the commit button.
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{The History window}\label{the-history-window}
+
+\begin{itemize}
+\tightlist
+\item
+  Easy inspection past commits.
+\item
+  See what changes were made at each commit.
+\end{itemize}
+
+\subsection{Go for it everyone!}\label{git-play}
+
+\begin{itemize}
+\tightlist
+\item
+  Make some changes and commit them yourselves.\\
+\item
+  Add some new files to the project, and commit those.
+\item
+  Get familiar with the diff window.
+\item
+  Check the history after a few commits.
+\end{itemize}
+
+\subsection{How does git store and keep track of things}\label{git-how}
+
+\begin{itemize}
+\tightlist
+\item
+  Everything is stored in the .git folder inside the RStudio project.
+\item
+  The ``working copy'' gets checkout out of there
+\item
+  Committed changes are recorded to the directory
+\end{itemize}
+
+\subsubsection{What is inside of the .git
+directory?}\label{what-is-inside-of-the-.git-directory}
+
+We can use R to list the files. My \texttt{rep-res-course} repository
+that hold all the materials for this course looks like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## check out this file-system command in R}
+\KeywordTok{dir}\NormalTok{(}\DataTypeTok{path =} \StringTok{".git"}\NormalTok{, }\DataTypeTok{all.files =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{recursive =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The output from that command looks something like this:
+
+\begin{verbatim}
+  [1] "#MERGE_MSG#"                                       "COMMIT_EDITMSG"                                   
+  [3] "COMMIT_EDITMSG~"                                   "config"                                           
+  [5] "description"                                       "FETCH_HEAD"                                       
+  [7] "HEAD"                                              "hooks/applypatch-msg.sample"                      
+  [9] "hooks/commit-msg.sample"                           "hooks/post-update.sample"                         
+ [11] "hooks/pre-applypatch.sample"                       "hooks/pre-commit.sample"                          
+ [13] "hooks/pre-push.sample"                             "hooks/pre-rebase.sample"                          
+ [15] "hooks/prepare-commit-msg.sample"                   "hooks/update.sample"                              
+ [17] "index"                                             "info/exclude"                                     
+ [19] "logs/HEAD"                                         "logs/refs/heads/gh-pages"                         
+ [21] "logs/refs/heads/master"                            "logs/refs/remotes/origin/gh-pages"                
+ [23] "logs/refs/remotes/origin/master"                   "objects/00/906f99e192ff64b4e9e9a0e5745b0a4f841cbd"
+ [25] "objects/01/ab18d4ce04fb06532bb06ed579218fef89d478" "objects/02/74554e0b574b9beb2144f26ad3925830056870"
+ [27] "objects/03/2d224bf78798e8b9765af6d8768ade14694a9d" "objects/04/03d552ab37b0bcaeebed0ac3068d669261c456"
+ [29] "objects/04/4a12f8ccc12a4a5ba84ab2bf5a1ae751feea6f" "objects/04/9ec3065bb0434ded671fa83af5ade803bc11a1"
+ [31] "objects/04/ea8efb1367727b081dea87e63818be0a4d02f0" "objects/05/b22ecc373d5058e36d7ca773a4475c46daef77"
+ [33] "objects/07/8831b46c9b63e8c2d50b79304ed05de9274c28" "objects/07/b57af2a0cbd0545a6cd3e93f10cc5d768e42ba"
+ [35] "objects/08/674e6e4d534b3424e2629510d20bb6d1b0be94" "objects/08/8b282d5b978dc1ff6eef3871d3fb3a9256246a"
+ [37] "objects/09/565dcd10d7adc0551783b443e8fd71486b3997" "objects/09/6828a0cfb96f30d6e99cfc04a5c1686b9e318c"
+ [39] "objects/0a/30fe678abc342c58daab0ad42163b371babda0" "objects/0a/b71109dae6e5711755feddfb06b81b13766496"
+ [41] "objects/0b/442fdfc183783537985c17151ae3483fa00cf6" "objects/0b/c0451fd0e7081a7db05fdd38b12870bdcabd13"
+ [43] "objects/0c/0f7cf8c73d901795dad4bd5f504c53c3bf2093" "objects/0d/14a7a2a19ffc3b9820f011e3270c965a5fefce"
+ [45] "objects/0e/35cfb4d55e52d27083b8d2eccab9296b920d76" "objects/0e/7bba5882077a8b00a76d3eabe6b23cadc658e6"
+ [47] "objects/0e/8abf4cc0885a727ee2459fdbb272828e267cc4" "objects/0f/1f3f7be7787d5d44dc1155f3b7a44eddc9f0be"
+ [49] "objects/10/54d2e7a9baf61618521c522b15db40855b3431" "objects/11/7d874e1616500b5fba51b9f0ee1e8d0fbe1dc2"
+ [51] "objects/11/c33cc1d5c8de7c7cbf7257b7d32f7ca3d458ef" "objects/14/1ccea514e106e20eef47b791a23e036d1fa1d2"
+ [53] "objects/15/cc3a6f15dadb3446ad0af34a3ecde8d81d65f9" "objects/15/ddaf45bf00c3ef2d8f499ebd6dc3a86bf9c3ab"
+ [55] "objects/16/0c9386dfa9707d81fbbbcc52f0c7638703f9a9" "objects/16/8ee93b6a4612dbd76bc06a49460df9f9f6c41b"
+\end{verbatim}
+
+\textbf{Yikes!}
+
+\subsubsection{How does git know a file has
+changed?}\label{how-does-git-know-a-file-has-changed}
+
+\begin{itemize}
+\tightlist
+\item
+  Does it just look at the modification date?
+\item
+  NO! It ``fingerprints'' every file, so it knows when it has changed
+  from the most recent committed version.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Demonstration. Change a file. Save, then undo the change and save
+    again\ldots{}Git knows the file has been changed back to its
+    ``former self''
+  \end{itemize}
+\item
+  SHA-1 hashes. We will learn more about those later.\\
+\item
+  You will see things like
+  \texttt{ed00c10ae6cf7bcc35d335d2edad7e71bc0f6770} all over in
+  Git-land.
+\item
+  You can treat them as very specific names for different commits.
+\end{itemize}
+
+\subsubsection{What should I keep under version
+control?}\label{what-should-i-keep-under-version-control}
+
+\begin{itemize}
+\tightlist
+\item
+  General rule: don't keep derived products.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    i.e.~If you have and Rmd file that creates an html file, there isn't
+    much need to put the html file under version control with git,
+    because you can just regenerate it by Knitting the Rmd file.
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{How can I make git ignore certain
+files?}\label{how-can-i-make-git-ignore-certain-files}
+
+\begin{itemize}
+\tightlist
+\item
+  The \texttt{.gitignore} file!
+\item
+  File names (and patterns) in the \texttt{.gitignore} file are ignored
+  \emph{recursively} (down into subdirectories), by default.
+\item
+  Files won't be ignored if they are already in the repository.
+\item
+  Example: \texttt{*.html}
+\end{itemize}
+
+\section{Pushing and Pulling With
+GitHub}\label{pushing-and-pulling-with-github}
 
 \bibliography{packages.bib,book.bib}
 

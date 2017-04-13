@@ -121,7 +121,7 @@ Excel, (gasp), you can do that easily.  Tab-delimited text works if you have tha
 * Give a brief description of your data in the README.Rmd.
 
 
-## Reading for next week
+## Reading for next week {#week2reading}
 
 This week (before Friday, April 14, 2017), please read the following sections of the R for Data Science book
 

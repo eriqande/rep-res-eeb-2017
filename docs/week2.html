@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="week3.html">
-
+<link rel="prev" href="week1.html">
+<link rel="next" href="week3.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -165,17 +165,160 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="week2" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Week Two Meeting</h1>
+<p>For this week, everyone should have completed the reading listed in Section <a href="week1.html#week2reading">2.5</a>. And everyone should have at least been trying to set up an RStudio Project with their own data in it, and given a whack at reading their data into a variable.</p>
+<div id="workflow-and-project-recap" class="section level2">
+<h2><span class="header-section-number">3.1</span> Workflow and Project Recap</h2>
+<div id="workflow-basics" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Workflow: basics</h3>
+<div id="style" class="section level4">
+<h4><span class="header-section-number">3.1.1.1</span> Style</h4>
+<p>I just want to reiterate a few things that might seem minor, but are stylistically important in the long run.</p>
+<ol style="list-style-type: decimal">
+<li>Don’t use <code>=</code> for assignment. Use <code>&lt;-</code>. On a Mac use Option-“-” to get that more quickly.</li>
+<li>Put spaces around both sides of <code>=</code>, and <code>&lt;-</code>, and other mathematical operators like <code>+</code>, <code>-</code>, <code>*</code>, etc.</li>
+<li>Put spaces after commas.</li>
+<li>Use R-Studio’s magical <code>Cmd-i</code> keyboard shortcut to automatically indent highlighted code.</li>
+<li>If you want to really geek out, Hadley shares his style tips more completely in his <a href="http://adv-r.had.co.nz/Style.html">Advanced R Programming</a> book.</li>
+</ol>
+<p>This might seem pedantic, but adhering to these conventions makes it much easier for people to read your code.</p>
+</div>
+<div id="tab-completion" class="section level4">
+<h4><span class="header-section-number">3.1.1.2</span> TAB-completion</h4>
+<p>This is HUGE!! Start developing a twitchy left pinky now!</p>
+<p>TAB early; TAB often!</p>
+<p>Note that that completions of R code in the console or in the source window are context dependent:</p>
+<ul>
+<li>variables in global environment</li>
+<li>Functions</li>
+<li>Quoted strings complete to filenames in directories</li>
+<li>Installed packages in <code>library()</code></li>
+<li>Help topics after <code>?</code></li>
+<li>Function arguments within a function’s parentheses. This is absolutely huge. If you can’t remember all the different arguments a function takes, type the function and hit TAB within the parentheses. Try typing <code>read.table()</code> and his TAB while the cursor is inside the parentheses. Use the up and down arrows to scroll through the options, hit TAB again to insert one. Note that after you have used an argument it no longer appears in the list of options.</li>
+</ul>
+</div>
+</div>
+<div id="workflow-projects" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> Workflow: projects</h3>
+<div id="disable-saving-of-workspace-for-sure" class="section level4">
+<h4><span class="header-section-number">3.1.2.1</span> Disable saving of workspace for sure!</h4>
+<p>Let’s all walk through this.</p>
+</div>
+<div id="opening-rstudio-projects" class="section level4">
+<h4><span class="header-section-number">3.1.2.2</span> Opening RStudio Projects</h4>
+<ul>
+<li>You can open an RStudio project by double clicking the RStudio Project icon from, for example, a Mac Finder window. It lives in a directory of the same name (but it has a <code>.Rproj</code> exension.)</li>
+<li>Or if you are a command line type, use, for example <code>open my_project.Rproj</code> from the Terminal.</li>
+<li>There is also at “File -&gt; Recent Projects” option.</li>
+<li>You can open as many RStudio projects as you like at a time.</li>
+<li>Each RStudio project launches its own, completely separate R session!</li>
+<li>Interestingly, if you click on the <code>.Rproj</code> file of a project that is open, RStudio will open another instance of that project…not recommended.</li>
+<li>Use cmd-TAB to switch between open RStudio projects.</li>
+</ul>
+</div>
+<div id="what-is-the-.rproj-file-really" class="section level4">
+<h4><span class="header-section-number">3.1.2.3</span> What is the <code>.Rproj</code> file, really</h4>
+<p>It is just a text file that stores some information and any project-specific preferences if there are any. Here is what <code>rep-res-eeb-2017.Rproj</code> looks like if you open it with a text editor:</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">Version:</span> 1.0
 
+<span class="fu">RestoreWorkspace:</span> Default
+<span class="fu">SaveWorkspace:</span> Default
+<span class="fu">AlwaysSaveHistory:</span> Default
+
+<span class="fu">EnableCodeIndexing:</span> Yes
+<span class="fu">UseSpacesForTab:</span> Yes
+<span class="fu">NumSpacesForTab:</span> 2
+<span class="fu">Encoding:</span> UTF-8
+
+<span class="fu">RnwWeave:</span> knitr
+<span class="fu">LaTeX:</span> pdfLaTeX
+
+<span class="fu">AutoAppendNewline:</span> Yes
+<span class="fu">StripTrailingWhitespace:</span> Yes
+
+<span class="fu">BuildType:</span> Website</code></pre></div>
+</div>
+<div id="r-in-an-rstudio-project-launches-in-the-project-directory" class="section level4">
+<h4><span class="header-section-number">3.1.2.4</span> R in an RStudio project launches in the project directory</h4>
+<ul>
+<li>This makes reproducibility much easier. You can find and load files using <em>relative</em> paths.<br />
+</li>
+<li>Everything you might be accessing from R (data, scripts, etc.) or outputting from R will be easy to get to if they are “in the project”</li>
+<li>When we say that a file is “in the project” we mean that it is stored on disk somewhere within the project directory.</li>
+<li>The project directory (sometimes called the <em>root</em> of the project directory) is just the directory that contains the <code>.Rproj</code> file.</li>
+<li>Expert user tip: <code>rprojroot::find_rstudio_root_file()</code> (part of the <code>rprojroot</code> package) let’s you find the root of an RStudio project directory. This can be helpful sometimes….</li>
+</ul>
+</div>
+</div>
+<div id="workflow-scripts" class="section level3">
+<h3><span class="header-section-number">3.1.3</span> Workflow: scripts</h3>
+<ul>
+<li>Script editor window vs console window</li>
+<li>Keyboard shortcuts for evaluating codes in your scripts.</li>
+</ul>
+</div>
+</div>
+<div id="lets-talk-about-the-pipe" class="section level2">
+<h2><span class="header-section-number">3.2</span> Let’s talk about the pipe <code>%&gt;%</code></h2>
+<p>For anyone who had ever worked comfortably in Unix for a long time, and was used to chaining the output of one utility in as the input for another utility using the pipe: <code>|</code>, R’s syntax for composition of functions was always super cumbersome and required all sorts of nasty, nested parentheses.</p>
+<p>Consider this simple set of operations: imagine we want to</p>
+<ol style="list-style-type: decimal">
+<li>simulate 1000 gamma random variables, <span class="math inline">\(G\)</span>, with parameters <span class="math inline">\(\alpha=5\)</span> and <span class="math inline">\(\beta = 1\)</span>,</li>
+<li>for each <span class="math inline">\(G\)</span> simulate a Poisson random variable with mean (<code>lambda</code>) <span class="math inline">\(G\)</span>.</li>
+<li>take the <code>sqrt</code> of each such variable</li>
+<li>compute the variance of the result</li>
+</ol>
+<p>This can all be done in one line, but is ugly!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># set random seed for reproducibility</span>
+<span class="kw">set.seed</span>(<span class="dv">5</span>)
+
+<span class="kw">var</span>(<span class="kw">sqrt</span>(<span class="kw">rpois</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">lambda =</span> <span class="kw">rgamma</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">shape =</span> <span class="dv">5</span>, <span class="dt">scale =</span> <span class="dv">1</span>))))</code></pre></div>
+<pre><code>## [1] 0.5828768</code></pre>
+<p>It doesn’t matter how stylishly you include spaces in your code, this is just Fugly!</p>
+<p>You can write it on multiple lines, but it is friggin’ ghastly! Maybe worse than before.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">5</span>)
+
+<span class="kw">var</span>(
+  <span class="kw">sqrt</span>(
+    <span class="kw">rpois</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">lambda =</span> <span class="kw">rgamma</span>(
+      <span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">shape =</span> <span class="dv">5</span>, <span class="dt">scale =</span> <span class="dv">1</span>
+    )
+    )
+  )
+)</code></pre></div>
+<pre><code>## [1] 0.5828768</code></pre>
+<p>The problem is that the order in which the operations are done does not match the way things are written: the first thing to get done is the call to <code>rgamma</code>, which is nested deeply within the parentheses.</p>
+<p>Enter the R “pipe” symbol. It is not as convenient to type as <code>|</code>, but you can make it quickly with the keyboard shortcut <code>cmd-shift-M</code>: <code>%&gt;%</code>. This was introduced in the <code>magrittr</code> package, and the <code>tidyverse</code> imports the <code>%&gt;%</code> symbol from <code>magrittr</code>.</p>
+<p>Behold!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">set.seed</span>(<span class="dv">5</span>)
+
+<span class="kw">rgamma</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">shape =</span> <span class="dv">5</span>, <span class="dt">scale =</span> <span class="dv">1</span>) %&gt;%
+<span class="st">  </span><span class="kw">rpois</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">lambda =</span> .) %&gt;%<span class="st">          </span><span class="co"># pass G is as the lambda parameter using the dot: .</span>
+<span class="st">  </span><span class="kw">sqrt</span>() %&gt;%<span class="st">                               </span><span class="co"># no dot here, so the previous result is just the first argument to sqrt</span>
+<span class="st">  </span><span class="kw">var</span>()                                    <span class="co"># same here</span></code></pre></div>
+<pre><code>## [1] 0.5828768</code></pre>
+<p>That is a hell of a lot easier to read! It gives me goose bumps it is so elegant.</p>
+<p>The <code>%&gt;%</code> symbol says, “take the result that occurred before the <code>%&gt;%</code> and pass it in as the <code>.</code> in whatever follows the <code>%&gt;%</code>.” Furthermore, if there is no <code>.</code> in the expression after the <code>%&gt;%</code>, simply pass the result that occurred before the <code>%&gt;%</code> in as the <em>first argument</em> in the function call that comes after the <code>%&gt;%</code>.</p>
+<p>This type of “chaining” of operations is particularly powerful when operating on <code>tibbles</code> using <code>dplyr</code></p>
+</div>
+<div id="tibbles-and-rectangular-data" class="section level2">
+<h2><span class="header-section-number">3.3</span> Tibbles and “rectangular” data</h2>
+<p>gonna talk about data types too.</p>
+</div>
+<div id="data-import" class="section level2">
+<h2><span class="header-section-number">3.4</span> Data import</h2>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="week3.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="week1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="week3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -204,7 +347,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/06-references.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/04-week-2-data-import.Rmd",
 "text": "Edit"
 },
 "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
