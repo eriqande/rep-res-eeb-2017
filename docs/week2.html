@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Case Studies in Reproducible Research: a spring seminar at UCSC</title>
   <meta name="description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook.">
-  <meta name="generator" content="bookdown 0.3.16 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3.14 and GitBook 2.6.7">
 
   <meta property="og:title" content="Case Studies in Reproducible Research: a spring seminar at UCSC" />
   <meta property="og:type" content="book" />
@@ -131,7 +131,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.1.3" data-path="week2.html"><a href="week2.html#workflow-scripts"><i class="fa fa-check"></i><b>3.1.3</b> Workflow: scripts</a></li>
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="week2.html"><a href="week2.html#lets-talk-about-the-pipe"><i class="fa fa-check"></i><b>3.2</b> Let’s talk about the pipe <code>%&gt;%</code></a></li>
-<li class="chapter" data-level="3.3" data-path="week2.html"><a href="week2.html#tibbles-and-rectangular-data"><i class="fa fa-check"></i><b>3.3</b> Tibbles and “rectangular” data</a></li>
+<li class="chapter" data-level="3.3" data-path="week2.html"><a href="week2.html#tibbles-and-rectangular-data"><i class="fa fa-check"></i><b>3.3</b> Tibbles and “rectangular” data</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="week2.html"><a href="week2.html#tibble-excercises"><i class="fa fa-check"></i><b>3.3.1</b> Tibble excercises</a></li>
+</ul></li>
 <li class="chapter" data-level="3.4" data-path="week2.html"><a href="week2.html#data-import"><i class="fa fa-check"></i><b>3.4</b> Data import</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="week3.html"><a href="week3.html"><i class="fa fa-check"></i><b>4</b> Week Three Meeting</a><ul>
@@ -215,6 +217,10 @@ result &lt;-<span class="st"> </span><span class="kw">my_function</span>(arg1 &l
 <li>Help topics after <code>?</code></li>
 <li>Function arguments within a function’s parentheses. This is absolutely huge. If you can’t remember all the different arguments a function takes, type the function and hit TAB within the parentheses. Try typing <code>read.table()</code> and his TAB while the cursor is inside the parentheses. Use the up and down arrows to scroll through the options, hit TAB again to insert one. Note that after you have used an argument it no longer appears in the list of options.</li>
 </ul>
+</div>
+<div id="ctrl-shift-1234-to-turn-one-of-the-panes-to-full-screen" class="section level4">
+<h4><span class="header-section-number">3.1.1.3</span> Ctrl + Shift + 1/2/3/4 to turn one of the panes to full-screen</h4>
+<p>Thanks to Diana for writing about practing that in her homework. Awesome feature that I’ve not used previously!</p>
 </div>
 </div>
 <div id="workflow-projects" class="section level3">
@@ -352,7 +358,152 @@ Figure 3.1: To read RMarkdown output in a separate page (highly recommended for 
 </div>
 <div id="tibbles-and-rectangular-data" class="section level2">
 <h2><span class="header-section-number">3.3</span> Tibbles and “rectangular” data</h2>
-<p>gonna talk about data types too.</p>
+<ul>
+<li>gonna talk a little about data types too.</li>
+<li>Chinook CWT data example.</li>
+<li>Get comfy with the <code>View()</code> function!</li>
+</ul>
+<div id="tibble-excercises" class="section level3">
+<h3><span class="header-section-number">3.3.1</span> Tibble excercises</h3>
+<p>I’m gonna just blast through these here in case people are curious. These are answers I would use.</p>
+<ol style="list-style-type: decimal">
+<li><p>Use <code>class()</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(mtcars)</code></pre></div>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(tibble::<span class="kw">as_tibble</span>(mtcars))</code></pre></div>
+<pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<p>Hey! does everyone see the <code>tibble::as_tibble()</code> there? The <code>::</code> is the “namespace addresser”. It lets you run a function from a library without loading the library. If you already have done <code>library(tidyverse)</code> you would have loaded the <code>tibble</code> library and could just write <code>as_tibble(mtcars)</code> but I wanted to be explicit about where the <code>as_tibble()</code> function comes from. (As an aside, it turns out that this is how you would write it if you were writing code for a package.)</p></li>
+<li><p>Let’s do it first as a <code>data.frame</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">abc =</span> <span class="dv">1</span>, <span class="dt">xyz =</span> <span class="st">&quot;a&quot;</span>)
+df$x</code></pre></div>
+<pre><code>## [1] a
+## Levels: a</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="st">&quot;xyz&quot;</span>]</code></pre></div>
+<pre><code>## [1] a
+## Levels: a</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="kw">c</span>(<span class="st">&quot;abc&quot;</span>, <span class="st">&quot;xyz&quot;</span>)]</code></pre></div>
+<pre><code>##   abc xyz
+## 1   1   a</code></pre>
+<p>And then we can do it again as a <code>tibble</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">abc =</span> <span class="dv">1</span>, <span class="dt">xyz =</span> <span class="st">&quot;a&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">as_tibble</span>()
+df$x</code></pre></div>
+<pre><code>## Warning: Unknown column &#39;x&#39;</code></pre>
+<pre><code>## NULL</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df$xyz</code></pre></div>
+<pre><code>## [1] &quot;a&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="st">&quot;xyz&quot;</span>]</code></pre></div>
+<pre><code>## # A tibble: 1 × 1
+##     xyz
+##   &lt;chr&gt;
+## 1     a</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="kw">c</span>(<span class="st">&quot;abc&quot;</span>, <span class="st">&quot;xyz&quot;</span>)]</code></pre></div>
+<pre><code>## # A tibble: 1 × 2
+##     abc   xyz
+##   &lt;dbl&gt; &lt;chr&gt;
+## 1     1     a</code></pre>
+<p>Aha! Things to notice are:</p>
+<ol style="list-style-type: lower-alpha">
+<li><code>data.frame()</code> coerces to factors.</li>
+<li>tibble doesn’t do partial name matching <code>$x</code><span class="math inline">\(\neq\)</span><code>$xyz</code></li>
+<li>Square bracket extraction of a single column of a tibble retains its tibbleness. Not so with <code>data.frame</code>. With <code>data.frame</code> it gets turned into a vector.</li>
+<li><code>$</code> extraction with <code>tibble</code> returns a vector.</li>
+</ol></li>
+<li><p>Let’s make <code>mtcars</code> a <code>tibble</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars_t &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mtcars)
+var &lt;-<span class="st"> &quot;mpg&quot;</span>
+
+<span class="co"># this will get the &quot;mpg&quot; column out but retain it as a tibble</span>
+mtcars_t[, var]</code></pre></div>
+<pre><code>## # A tibble: 32 × 1
+##      mpg
+##    &lt;dbl&gt;
+## 1   21.0
+## 2   21.0
+## 3   22.8
+## 4   21.4
+## 5   18.7
+## 6   18.1
+## 7   14.3
+## 8   24.4
+## 9   22.8
+## 10  19.2
+## # ... with 22 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># and this will just grab the column as a vector</span>
+mtcars_t[[var]]</code></pre></div>
+<pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2
+## [15] 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4
+## [29] 15.8 19.7 15.0 21.4</code></pre></li>
+<li><p>Remember that non-syntactic names (those that do not start with a letter or underscore and which include characters other than <code>-</code> and “_&quot; and “.”) must be enclosed in backticks. Let’s get our data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">annoying &lt;-<span class="st"> </span><span class="kw">tibble</span>(
+<span class="st">`</span><span class="dt">1</span><span class="st">`</span> =<span class="st"> </span><span class="dv">1</span>:<span class="dv">10</span>,
+<span class="st">`</span><span class="dt">2</span><span class="st">`</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span> *<span class="st"> </span><span class="dv">2</span> +<span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">length</span>(<span class="st">`</span><span class="dt">1</span><span class="st">`</span>))
+)</code></pre></div>
+<p>OK, now let’s do the questions:</p>
+<ol style="list-style-type: decimal">
+<li><p>Use dollar sign with backticks:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">annoying$<span class="st">`</span><span class="dt">1</span><span class="st">`</span></code></pre></div>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre></li>
+<li><p>Use dollar sign with backticks</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(annoying$<span class="st">`</span><span class="dt">1</span><span class="st">`</span>, annoying$<span class="st">`</span><span class="dt">2</span><span class="st">`</span>)</code></pre></div>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-10-1.png" width="672" /></li>
+<li><p>Use <code>mutate</code> (we haven’t talked about this yet) with backticks</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">annoying %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">3</span><span class="st">`</span> =<span class="st"> `</span><span class="dt">2</span><span class="st">`</span> /<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>)</code></pre></div>
+<pre><code>## # A tibble: 10 × 3
+##      `1`       `2`      `3`
+##    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1      1  1.725450 1.725450
+## 2      2  5.182598 2.591299
+## 3      3  5.517888 1.839296
+## 4      4  8.894382 2.223596
+## 5      5  8.740021 1.748004
+## 6      6 12.153600 2.025600
+## 7      7 11.878134 1.696876
+## 8      8 16.885478 2.110685
+## 9      9 19.429848 2.158872
+## 10    10 19.439987 1.943999</code></pre></li>
+<li><p>Use <code>rename</code> (we haven’t talked about this yet) with backticks</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">annoying %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">3</span><span class="st">`</span> =<span class="st"> `</span><span class="dt">2</span><span class="st">`</span> /<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>) %&gt;%
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">one =</span> <span class="st">`</span><span class="dt">1</span><span class="st">`</span>, 
+         <span class="dt">two =</span> <span class="st">`</span><span class="dt">2</span><span class="st">`</span>,
+         <span class="dt">three =</span> <span class="st">`</span><span class="dt">3</span><span class="st">`</span>)</code></pre></div>
+<pre><code>## # A tibble: 10 × 3
+##      one       two    three
+##    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1      1  1.725450 1.725450
+## 2      2  5.182598 2.591299
+## 3      3  5.517888 1.839296
+## 4      4  8.894382 2.223596
+## 5      5  8.740021 1.748004
+## 6      6 12.153600 2.025600
+## 7      7 11.878134 1.696876
+## 8      8 16.885478 2.110685
+## 9      9 19.429848 2.158872
+## 10    10 19.439987 1.943999</code></pre></li>
+</ol></li>
+<li><p>Look it up with <code>?enframe</code>. It turns out that <code>enframe()</code> is super useful.<br />
+Often you will have a vector of values with names associated with it. For example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">v &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">10</span>)
+<span class="kw">names</span>(v) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>)
+v</code></pre></div>
+<pre><code>##  a  b  b  c 
+##  1  3  4 10</code></pre>
+<p>If you want to deal with this type of vector in the tidyverse, you can enframe it into a tibble:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">enframe</span>(v)</code></pre></div>
+<pre><code>## # A tibble: 4 × 2
+##    name value
+##   &lt;chr&gt; &lt;dbl&gt;
+## 1     a     1
+## 2     b     3
+## 3     b     4
+## 4     c    10</code></pre>
+<p>By default it makes columns of “name” and “value”. That is awesome!</p></li>
+<li><p>Do <code>package?tibble</code> and read through it to find that the answer we want is <code>tibble.max_extra_cols</code>.</p></li>
+</ol>
+</div>
 </div>
 <div id="data-import" class="section level2">
 <h2><span class="header-section-number">3.4</span> Data import</h2>

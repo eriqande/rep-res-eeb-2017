@@ -62,6 +62,12 @@ Try typing `read.table()` and his TAB while the cursor is inside the parentheses
 down arrows to scroll through the options, hit TAB again to insert one. Note that after you have used
 an argument it no longer appears in the list of options.
 
+#### Ctrl + Shift + 1/2/3/4 to turn one of the panes to full-screen
+
+Thanks to Diana for writing about practing that in her homework.
+Awesome feature that I've not used previously!
+
+
 
 ### Workflow: projects
 
@@ -213,7 +219,110 @@ This type of "chaining" of operations is particularly powerful when operating on
 
 ## Tibbles and "rectangular" data
 
-gonna talk about data types too.
+- gonna talk a little about data types too.
+- Chinook CWT data example.
+- Get comfy with the `View()` function!
 
+### Tibble excercises
+
+I'm gonna just blast through these here in case people are curious.  These
+are answers I would use.
+
+1. Use `class()`
+    ```{r}
+    class(mtcars)
+    class(tibble::as_tibble(mtcars))
+    ```
+Hey! does everyone see the `tibble::as_tibble()` there?  The `::` is the "namespace addresser".
+It lets you run a function from a library without loading the library.  If you already have done
+`library(tidyverse)` you would have loaded the `tibble` library and could just write `as_tibble(mtcars)`
+but I wanted to be explicit about where the `as_tibble()` function comes from.  (As an aside, it turns out that 
+this is how you would write it if you were writing code for a package.)
+
+2. Let's do it first as a `data.frame`:
+    ```{r}
+    library(tidyverse)
+    df <- data.frame(abc = 1, xyz = "a")
+    df$x
+    df[, "xyz"]
+    df[, c("abc", "xyz")]
+    ```
+    And then we can do it again as a `tibble`
+    ```{r}
+    df <- tibble(abc = 1, xyz = "a") %>%
+      as_tibble()
+    df$x
+    df$xyz
+    df[, "xyz"]
+    df[, c("abc", "xyz")]
+    ```
+    Aha! Things to notice are:
+    
+    a. `data.frame()` coerces to factors.
+    a. tibble doesn't do partial name matching `$x`$\neq$`$xyz`
+    a. Square bracket extraction of a single column of a tibble retains its tibbleness. Not so with
+        `data.frame`. With `data.frame` it gets turned into a vector.
+    a. `$` extraction with `tibble` returns a vector.  
+
+3. Let's make `mtcars` a `tibble`
+    ```{r}
+    mtcars_t <- as_tibble(mtcars)
+    var <- "mpg"
+    
+    # this will get the "mpg" column out but retain it as a tibble
+    mtcars_t[, var]
+    
+    # and this will just grab the column as a vector
+    mtcars_t[[var]]
+    ```
+4. Remember that non-syntactic names (those that do not start with a letter or underscore and
+which include characters other than `-` and "_" and ".") must be enclosed in backticks.
+Let's get our data:
+    ```{r}
+    annoying <- tibble(
+    `1` = 1:10,
+    `2` = `1` * 2 + rnorm(length(`1`))
+    )
+    ```
+    OK, now let's do the questions:
+    
+    1. Use dollar sign with backticks:
+        ```{r}
+        annoying$`1`
+        ```
+    2. Use dollar sign with backticks
+        ```{r}
+        plot(annoying$`1`, annoying$`2`)
+        ```
+    3. Use `mutate` (we haven't talked about this yet) with backticks
+        ```{r}
+        annoying %>%
+          mutate(`3` = `2` / `1`)
+        ```
+    4. Use `rename` (we haven't talked about this yet) with backticks
+        ```{r}
+        annoying %>%
+          mutate(`3` = `2` / `1`) %>%
+          rename(one = `1`, 
+                 two = `2`,
+                 three = `3`)
+        ```
+5. Look it up with `?enframe`.  It turns out that `enframe()` is super useful.  
+Often you will have a vector of values with names
+associated with it.  For example:
+    ```{r}
+    v <- c(1, 3, 4, 10)
+    names(v) <- c("a", "b", "b", "c")
+    v
+    ```
+    If you want to deal with this type of vector in the tidyverse, you can enframe it into a tibble:
+    ```{r}
+    enframe(v)
+    ```
+    By default it makes columns of "name" and "value".  That is awesome!
+
+6. Do `package?tibble` and read through it to find that the answer we want 
+is `tibble.max_extra_cols`.
+    
 ## Data import
 
