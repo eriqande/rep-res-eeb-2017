@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-04-13">
+<meta name="date" content="2017-04-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -176,7 +176,25 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h4><span class="header-section-number">3.1.1.1</span> Style</h4>
 <p>I just want to reiterate a few things that might seem minor, but are stylistically important in the long run.</p>
 <ol style="list-style-type: decimal">
-<li>Don’t use <code>=</code> for assignment. Use <code>&lt;-</code>. On a Mac use Option-“-” to get that more quickly.</li>
+<li>Don’t use <code>=</code> for assignment. Use <code>&lt;-</code>. On a Mac use Option-“-” to get that more quickly.
+<ul>
+<li><p>Hey! Note that you <em>do</em> use <code>=</code> (and <strong>only</strong> <code>=</code>) for <em>passing values to function arguments</em>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># do this:</span>
+my_variable &lt;-<span class="st"> </span><span class="dv">10</span>
+
+<span class="co"># don&#39;t do this (it works but is not good style)</span>
+my_variable =<span class="st"> </span><span class="dv">10</span>
+
+
+<span class="co"># do this</span>
+result &lt;-<span class="st"> </span><span class="kw">my_function</span>(<span class="dt">arg1 =</span> <span class="dv">10</span>, <span class="dt">arg2 =</span> <span class="st">&quot;foo&quot;</span>)
+
+<span class="co"># don&#39;t do this (it might return a results, but will likely be incorrect)</span>
+result &lt;-<span class="st"> </span><span class="kw">my_function</span>(arg1 &lt;-<span class="st"> </span><span class="dv">10</span>, arg2 &lt;-<span class="st"> &quot;foo&quot;</span>)
+
+<span class="co"># for example, figure out how this fails:</span>
+<span class="kw">matrix</span>(data &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="dv">10</span>, nrow &lt;-<span class="st"> </span><span class="dv">5</span>, byrow &lt;-<span class="st"> </span><span class="ot">TRUE</span>)</code></pre></div></li>
+</ul></li>
 <li>Put spaces around both sides of <code>=</code>, and <code>&lt;-</code>, and other mathematical operators like <code>+</code>, <code>-</code>, <code>*</code>, etc.</li>
 <li>Put spaces after commas.</li>
 <li>Use R-Studio’s magical <code>Cmd-i</code> keyboard shortcut to automatically indent highlighted code.</li>

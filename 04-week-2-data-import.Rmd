@@ -15,6 +15,24 @@ I just want to reiterate a few things that might seem minor, but are stylistical
 in the long run.
 
 1. Don't use `=` for assignment.  Use `<-`.  On a Mac use Option-"-" to get that more quickly.
+    - Hey!  Note that you _do_ use `=` (and __only__ `=`) for _passing values to function arguments_.
+        ```{r, eval=FALSE}
+        # do this:
+        my_variable <- 10
+        
+        # don't do this (it works but is not good style)
+        my_variable = 10
+        
+        
+        # do this
+        result <- my_function(arg1 = 10, arg2 = "foo")
+        
+        # don't do this (it might return a results, but will likely be incorrect)
+        result <- my_function(arg1 <- 10, arg2 <- "foo")
+        
+        # for example, figure out how this fails:
+        matrix(data <- 1:10, nrow <- 5, byrow <- TRUE)
+        ```
 1. Put spaces around both sides of `=`, and `<-`, and other mathematical operators like `+`, `-`, `*`, etc.
 1. Put spaces after commas. 
 1. Use R-Studio's magical `Cmd-i` keyboard shortcut to automatically indent highlighted code.

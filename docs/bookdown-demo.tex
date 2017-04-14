@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-04-13}
+  \date{2017-04-14}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -646,6 +646,32 @@ stylistically important in the long run.
 \item
   Don't use \texttt{=} for assignment. Use \texttt{\textless{}-}. On a
   Mac use Option-``-'' to get that more quickly.
+
+  \begin{itemize}
+  \item
+    Hey! Note that you \emph{do} use \texttt{=} (and \textbf{only}
+    \texttt{=}) for \emph{passing values to function arguments}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# do this:}
+\NormalTok{my_variable <-}\StringTok{ }\DecValTok{10}
+
+\CommentTok{# don't do this (it works but is not good style)}
+\NormalTok{my_variable =}\StringTok{ }\DecValTok{10}
+
+
+\CommentTok{# do this}
+\NormalTok{result <-}\StringTok{ }\KeywordTok{my_function}\NormalTok{(}\DataTypeTok{arg1 =} \DecValTok{10}\NormalTok{, }\DataTypeTok{arg2 =} \StringTok{"foo"}\NormalTok{)}
+
+\CommentTok{# don't do this (it might return a results, but will likely be incorrect)}
+\NormalTok{result <-}\StringTok{ }\KeywordTok{my_function}\NormalTok{(arg1 <-}\StringTok{ }\DecValTok{10}\NormalTok{, arg2 <-}\StringTok{ "foo"}\NormalTok{)}
+
+\CommentTok{# for example, figure out how this fails:}
+\KeywordTok{matrix}\NormalTok{(data <-}\StringTok{ }\DecValTok{1}\NormalTok{:}\DecValTok{10}\NormalTok{, nrow <-}\StringTok{ }\DecValTok{5}\NormalTok{, byrow <-}\StringTok{ }\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+  \end{itemize}
 \item
   Put spaces around both sides of \texttt{=}, and \texttt{\textless{}-},
   and other mathematical operators like \texttt{+}, \texttt{-},
