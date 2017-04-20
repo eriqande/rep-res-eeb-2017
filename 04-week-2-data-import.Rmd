@@ -326,3 +326,11 @@ is `tibble.max_extra_cols`.
     
 ## Data import
 
+- Why use `readr` instead of the base-R reading functions? Plenty of reasons.
+- Explicit column specifications if you want to do that.
+
+### RStudio's GUI importer
+
+- This is a great way to start importing CSV files.
+- Don't do it every time! use the code that it creates to make reading your data in reproducible.
+
