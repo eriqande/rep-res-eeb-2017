@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Case Studies in Reproducible Research: a spring seminar at UCSC</title>
   <meta name="description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook.">
-  <meta name="generator" content="bookdown 0.3.14 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3.16 and GitBook 2.6.7">
 
   <meta property="og:title" content="Case Studies in Reproducible Research: a spring seminar at UCSC" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-04-14">
+<meta name="date" content="2017-04-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -134,7 +134,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.3" data-path="week2.html"><a href="week2.html#tibbles-and-rectangular-data"><i class="fa fa-check"></i><b>3.3</b> Tibbles and “rectangular” data</a><ul>
 <li class="chapter" data-level="3.3.1" data-path="week2.html"><a href="week2.html#tibble-excercises"><i class="fa fa-check"></i><b>3.3.1</b> Tibble excercises</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="week2.html"><a href="week2.html#data-import"><i class="fa fa-check"></i><b>3.4</b> Data import</a></li>
+<li class="chapter" data-level="3.4" data-path="week2.html"><a href="week2.html#data-import"><i class="fa fa-check"></i><b>3.4</b> Data import</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="week2.html"><a href="week2.html#rstudios-gui-importer"><i class="fa fa-check"></i><b>3.4.1</b> RStudio’s GUI importer</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="week3.html"><a href="week3.html"><i class="fa fa-check"></i><b>4</b> Week Three Meeting</a><ul>
 <li class="chapter" data-level="4.1" data-path="week3.html"><a href="week3.html#git-basics"><i class="fa fa-check"></i><b>4.1</b> Git Basics</a><ul>
@@ -144,7 +146,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.1.4" data-path="week3.html"><a href="week3.html#git-play"><i class="fa fa-check"></i><b>4.1.4</b> Go for it everyone!</a></li>
 <li class="chapter" data-level="4.1.5" data-path="week3.html"><a href="week3.html#git-how"><i class="fa fa-check"></i><b>4.1.5</b> How does git store and keep track of things</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="week3.html"><a href="week3.html#pushing-and-pulling-with-github"><i class="fa fa-check"></i><b>4.2</b> Pushing and Pulling With GitHub</a></li>
+<li class="chapter" data-level="4.2" data-path="week3.html"><a href="week3.html#pushing-and-pulling-with-github"><i class="fa fa-check"></i><b>4.2</b> Pushing and Pulling With GitHub</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="week3.html"><a href="week3.html#creating-a-repository-on-github-and-the-initial-push"><i class="fa fa-check"></i><b>4.2.1</b> Creating a Repository on GitHub and the initial push</a></li>
+<li class="chapter" data-level="4.2.2" data-path="week3.html"><a href="week3.html#subsequent-pushes"><i class="fa fa-check"></i><b>4.2.2</b> Subsequent pushes</a></li>
+<li class="chapter" data-level="4.2.3" data-path="week3.html"><a href="week3.html#addign-collaborators"><i class="fa fa-check"></i><b>4.2.3</b> Addign collaborators</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -230,8 +236,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>For our work, the “collection of files” will be “the stuff in your RStudio project”
 <ul>
 <li>Another reason it is nice to keep everything you need for a project together in a “project directory”</li>
+<li>Though git scans your project directory for new additions and changes, it will not add a new file, or add new changes, to the repository until you <em>stage</em> and subsequently <em>commit</em> the file.</li>
 </ul></li>
-<li>When you clone or repository, <strong>you</strong> get the whole version history</li>
+<li>When you clone a repository, <strong>you</strong> get the whole version history</li>
 <li>When someone else clones that repository, <strong>they also</strong> get the whole version history.</li>
 <li>Git has well-developed features for merging changes made in different repositories
 <ul>
@@ -244,7 +251,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h3><span class="header-section-number">4.1.2</span> Git versus GitHub</h3>
 <ul>
 <li>They are not the same thing!</li>
-<li>Git is software that you can run on your own machine for doing version on a repository.
+<li>Git is software that you can run on your own machine for doing version control on a repository.
 <ul>
 <li>It can be <em>entirely</em> local. i.e. only on your hard drive and nowhere else.</li>
 <li>This is super-useful for any project, because solid version control is great to have.</li>
@@ -278,16 +285,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>viewing the commit history</li>
 </ul></li>
 </ul>
-<div id="one-final-configuration-before-starting" class="section level4">
-<h4><span class="header-section-number">4.1.3.1</span> One final configuration before starting:</h4>
+<div id="two-final-configurations-before-starting" class="section level4">
+<h4><span class="header-section-number">4.1.3.1</span> Two final configurations before starting:</h4>
 <ul>
 <li>Open the shell (Tools-&gt;Shell…) and issue these two commands, replacing the name “John Doe” with yours, and his email with yours.
 <ul>
-<li><p>Use the email address that you gave to GitHub.</p>
+<li><p>You may as well use the email address that you gave to GitHub, though it doesn’t necessarily have to be</p>
 <pre><code>git config --global user.name &quot;John Doe&quot;
 git config --global user.email johndoe@example.com</code></pre>
-<p>You only need to do this once.</p></li>
+You only need to do this once.</li>
 </ul></li>
+<li><p>Finally, if you are using a Mac, configure it to cache your GitHub credentials so you needn’t give your password every time you push to it:</p>
+<pre><code>git config --global credential.helper osxkeychain</code></pre></li>
 </ul>
 </div>
 <div id="the-statusstaging-panel" class="section level4">
@@ -327,7 +336,7 @@ git config --global user.email johndoe@example.com</code></pre>
 <div id="the-history-window" class="section level4">
 <h4><span class="header-section-number">4.1.3.5</span> The History window</h4>
 <ul>
-<li>Easy inspection past commits.</li>
+<li>Easy inspection of past commits.</li>
 <li>See what changes were made at each commit.</li>
 </ul>
 </div>
@@ -351,7 +360,7 @@ git config --global user.email johndoe@example.com</code></pre>
 </ul>
 <div id="what-is-inside-of-the-.git-directory" class="section level4">
 <h4><span class="header-section-number">4.1.5.1</span> What is inside of the .git directory?</h4>
-<p>We can use R to list the files. My <code>rep-res-course</code> repository that hold all the materials for this course looks like this:</p>
+<p>We can use R to list the files. My <code>rep-res-course</code> repository that hold all the materials for a course like this one looks like:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## check out this file-system command in R
 <span class="kw">dir</span>(<span class="dt">path =</span> <span class="st">&quot;.git&quot;</span>, <span class="dt">all.files =</span> <span class="ot">TRUE</span>, <span class="dt">recursive =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>The output from that command looks something like this:</p>
@@ -404,8 +413,11 @@ git config --global user.email johndoe@example.com</code></pre>
 <ul>
 <li>General rule: don’t keep derived products.
 <ul>
-<li>i.e. If you have and Rmd file that creates an html file, there isn’t much need to put the html file under version control with git, because you can just regenerate it by Knitting the Rmd file.</li>
+<li>i.e. If you have an Rmd file that creates an html file, there isn’t much need to put the html file under version control with git, because you can just regenerate it by Knitting the Rmd file.</li>
 </ul></li>
+<li>Do keep data, source code, etc.</li>
+<li>Sometimes certain outputs and intermediate results from long calculations can be committed so that you don’t have to run a 4 hour analysis to start where you were before.</li>
+<li>For such results, consider <code>readRDS()</code> with the <code>compress = &quot;xz&quot;</code> option.</li>
 </ul>
 </div>
 <div id="how-can-i-make-git-ignore-certain-files" class="section level4">
@@ -421,7 +433,39 @@ git config --global user.email johndoe@example.com</code></pre>
 </div>
 <div id="pushing-and-pulling-with-github" class="section level2">
 <h2><span class="header-section-number">4.2</span> Pushing and Pulling With GitHub</h2>
+<div id="creating-a-repository-on-github-and-the-initial-push" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> Creating a Repository on GitHub and the initial push</h3>
+<p>When you have an RStudio project under git version control on your laptop or desktop computer, creating a remote repository on GitHub is quite easy. A few steps:</p>
+<ol style="list-style-type: decimal">
+<li>Upper right corner: “create new” button (a “+” with a little triangle.) Choose “New Repository”</li>
+<li>Give it a name. It makes most sense to name it the same as the RStudio project you want to push up there. So, for example, if my project file was <code>boing.Rproj</code>, I would name the repository <code>boing</code>.</li>
+<li>Add a 5 or 6 word description if you want.</li>
+<li>Choose <strong>public</strong> or <strong>private</strong></li>
+<li>DO <strong>NOT</strong> choose to “Initialize this repository with a README”. You likely already have a README. Initializing the repository with one will create headaches.</li>
+<li>Also, don’t add a <code>.gitignore</code> or a license (select “none”, which should be the default, for both of those)</li>
+<li>Click the green “Create Repository” button</li>
+</ol>
+<p>That will take you to another screen. In the middle find the code box below the heading, <strong>…or push an existing repository from the command line</strong>.</p>
+<ol style="list-style-type: decimal">
+<li><p>Copy that two lines of code from you web browser. It will look something like this:</p>
+<pre><code>git remote add origin https://github.com/eriqande/boing.git
+git push -u origin master</code></pre>
+but it will be specific to the repository you just made, so the URL and name of the repo will be different than what you see above. Note, you can copy the lines by clicking the “copy this text” icon on the right side of the page.</li>
+<li>Go to RStudio, in the project that you want to push to GitHub, and choose “Tools-Shell”. That will give you a terminal window. Paste the commands you copied into that terminal window and hit return.</li>
+<li><p>It might ask you for your GitHub username and password.</p></li>
+</ol>
+<p>Voila!</p>
+</div>
+<div id="subsequent-pushes" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> Subsequent pushes</h3>
+<p>Once you have pushed the repo up there. Try making some changes on your laptop, committing them, and then hitting the “Push” button on the git panel…</p>
+</div>
+<div id="addign-collaborators" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> Addign collaborators</h3>
+<p>From the repository page on GitHub, choose “Settings” (on the upper right) and find the “collaborators” link (on the left).</p>
+<p>If you have a private repository, you can add GitHub user <code>eriqande</code> (that’s me…) to it and I will be able to view it and give comments and suggestions.</p>
 
+</div>
 </div>
 </div>
             </section>

@@ -57,7 +57,10 @@ then never looked back and couldn't imagine using them again.
 * Git stores "snapshots" of your collection of files in a repository
 * For our work, the "collection of files" will be "the stuff in your RStudio project"
     + Another reason it is nice to keep everything you need for a project together in a "project directory"
-* When you clone or repository, __you__ get the whole version history 
+    + Though git scans your project directory for new additions and changes, it will not
+      add a new file, or add new changes, to the repository until you _stage_ and subsequently 
+      _commit_ the file. 
+* When you clone a repository, __you__ get the whole version history 
 * When someone else clones that repository, __they also__ get the whole version history.
 * Git has well-developed features for merging changes made in different repositories
     + But, for today, we will talk mostly of a single user interacting with git.
@@ -65,7 +68,7 @@ then never looked back and couldn't imagine using them again.
 ### Git versus GitHub
 
 * They are not the same thing!
-* Git is software that you can run on your own machine for doing version on a repository.
+* Git is software that you can run on your own machine for doing version control on a repository.
     + It can be _entirely_ local.  i.e. only on your hard drive and nowhere else.
     + This is super-useful for any project, because solid version control is great to have.
 * GitHub is a website, with tools powered by Git (and many that they brewed up themselves) that
@@ -95,16 +98,21 @@ to sign up for your free student pack.
     + committing files
     + viewing the commit history
     
-#### One final configuration before starting:
+#### Two final configurations before starting:
 
 * Open the shell (Tools->Shell...) and issue these two commands,
 replacing the name "John Doe" with yours, and his email with yours.
-    + Use the email address that you gave to GitHub.
+    + You may as well use the email address that you gave to GitHub, though it doesn't necessarily have to be
 ```
 git config --global user.name "John Doe"
 git config --global user.email johndoe@example.com
 ```
 You only need to do this once.
+- Finally, if you are using a Mac, configure it to cache your GitHub credentials so
+you needn't give your password every time you push to it:
+```
+git config --global credential.helper osxkeychain
+```
 
 #### The status/staging panel
 
@@ -139,7 +147,7 @@ the Rstudio interface is very nice, IMHO)
     
 #### The History window
 
-* Easy inspection past commits.
+* Easy inspection of past commits.
 * See what changes were made at each commit.
 
 ### Go for it everyone! {#git-play}
@@ -157,7 +165,7 @@ the Rstudio interface is very nice, IMHO)
 
 #### What is inside of the .git directory?
 We can use R to list the files.  My `rep-res-course` repository
-that hold all the materials for this course looks like this:
+that hold all the materials for a course like this one looks like:
 ```{r list-git, eval=FALSE}
 ## check out this file-system command in R
 dir(path = ".git", all.files = TRUE, recursive = TRUE)
@@ -209,8 +217,12 @@ committed version.
 #### What should I keep under version control?
 
 * General rule: don't keep derived products.
-    + i.e. If you have and Rmd file that creates an html file, there isn't much need to put the html 
+    + i.e. If you have an Rmd file that creates an html file, there isn't much need to put the html 
     file under version control with git, because you can just regenerate it by Knitting the Rmd file.
+* Do keep data, source code, etc.
+* Sometimes certain outputs and intermediate results from long calculations can be committed
+so that you don't have to run a 4 hour analysis to start where you were before.
+* For such results, consider `readRDS()` with the `compress = "xz"` option.
     
 #### How can I make git ignore certain files?
 
@@ -220,5 +232,53 @@ by default.
 * Files won't be ignored if they are already in the repository.
 * Example: `*.html`
 
+
+
 ## Pushing and Pulling With GitHub
+
+### Creating a Repository on GitHub and the initial push
+
+When you have an RStudio project under git version control on your laptop or desktop computer, 
+creating a remote repository on GitHub is quite easy.  A few steps:
+
+1. Upper right corner: "create new" button (a "+" with a little triangle.)  Choose "New Repository"
+1. Give it a name.  It makes most sense to name it the same as the RStudio project you want to push 
+up there. So, for example, if my project file was `boing.Rproj`, I would name the repository `boing`.
+1. Add a 5 or 6 word description if you want.
+1. Choose __public__ or __private__
+1. DO __NOT__ choose to "Initialize this repository with a README".  You likely already have a README. 
+Initializing the repository with one will create headaches.
+1. Also, don't add a `.gitignore` or a license (select "none", which should be the default, for both of those)
+1. Click the green "Create Repository" button
+
+That will take you to another screen.  In the middle find the code box 
+below the heading, __…or push an existing repository from the command line__.
+
+1. Copy that two lines of code from you web browser.  It will look something like this:
+    ```
+    git remote add origin https://github.com/eriqande/boing.git
+    git push -u origin master
+    ```
+    but it will be specific to the repository you just made, so the URL and name of the repo will
+    be different than what you see above.  Note, you can copy the lines by clicking the
+    "copy this text" icon on the right side of the page.
+1. Go to RStudio, in the project that you want to push to GitHub, and choose "Tools-Shell".  That
+will give you a terminal window.  Paste the commands you copied into that terminal window
+and hit return.
+1. It might ask you for your GitHub username and password.
+
+Voila!
+
+### Subsequent pushes
+
+Once you have pushed the repo up there.  Try making some changes on your laptop,
+committing them, and then hitting the "Push" button on the git panel...
+
+### Addign collaborators
+
+From the repository page on GitHub, choose "Settings" (on the upper right) and find the "collaborators" link (on the left).
+
+If you have a private repository, you can add GitHub user `eriqande` (that's me...) to it and 
+I will be able to view it and give comments and suggestions.
+
 

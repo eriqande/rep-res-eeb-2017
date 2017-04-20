@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-04-14}
+  \date{2017-04-19}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -1348,6 +1348,26 @@ These are answers I would use.
 
 \section{Data import}\label{data-import}
 
+\begin{itemize}
+\tightlist
+\item
+  Why use \texttt{readr} instead of the base-R reading functions? Plenty
+  of reasons.
+\item
+  Explicit column specifications if you want to do that.
+\end{itemize}
+
+\subsection{RStudio's GUI importer}\label{rstudios-gui-importer}
+
+\begin{itemize}
+\tightlist
+\item
+  This is a great way to start importing CSV files.
+\item
+  Don't do it every time! use the code that it creates to make reading
+  your data in reproducible.
+\end{itemize}
+
 \chapter{Week Three Meeting}\label{week3}
 
 \section{Git Basics}\label{git-basics}
@@ -1479,9 +1499,14 @@ Control}\label{the-git-model-distributed-version-control}
   \item
     Another reason it is nice to keep everything you need for a project
     together in a ``project directory''
+  \item
+    Though git scans your project directory for new additions and
+    changes, it will not add a new file, or add new changes, to the
+    repository until you \emph{stage} and subsequently \emph{commit} the
+    file.
   \end{itemize}
 \item
-  When you clone or repository, \textbf{you} get the whole version
+  When you clone a repository, \textbf{you} get the whole version
   history
 \item
   When someone else clones that repository, \textbf{they also} get the
@@ -1506,7 +1531,7 @@ Control}\label{the-git-model-distributed-version-control}
   They are not the same thing!
 \item
   Git is software that you can run on your own machine for doing version
-  on a repository.
+  control on a repository.
 
   \begin{itemize}
   \tightlist
@@ -1575,11 +1600,10 @@ public?}\label{is-everything-on-github-public}
   \end{itemize}
 \end{itemize}
 
-\subsubsection{One final configuration before
-starting:}\label{one-final-configuration-before-starting}
+\subsubsection{Two final configurations before
+starting:}\label{two-final-configurations-before-starting}
 
 \begin{itemize}
-\tightlist
 \item
   Open the shell (Tools-\textgreater{}Shell\ldots{}) and issue these two
   commands, replacing the name ``John Doe'' with yours, and his email
@@ -1587,7 +1611,8 @@ starting:}\label{one-final-configuration-before-starting}
 
   \begin{itemize}
   \item
-    Use the email address that you gave to GitHub.
+    You may as well use the email address that you gave to GitHub,
+    though it doesn't necessarily have to be
 
 \begin{verbatim}
 git config --global user.name "John Doe"
@@ -1596,6 +1621,14 @@ git config --global user.email johndoe@example.com
 
     You only need to do this once.
   \end{itemize}
+\item
+  Finally, if you are using a Mac, configure it to cache your GitHub
+  credentials so you needn't give your password every time you push to
+  it:
+
+\begin{verbatim}
+git config --global credential.helper osxkeychain
+\end{verbatim}
 \end{itemize}
 
 \subsubsection{The status/staging panel}\label{the-statusstaging-panel}
@@ -1668,7 +1701,7 @@ git config --global user.email johndoe@example.com
 \begin{itemize}
 \tightlist
 \item
-  Easy inspection past commits.
+  Easy inspection of past commits.
 \item
   See what changes were made at each commit.
 \end{itemize}
@@ -1703,7 +1736,7 @@ git config --global user.email johndoe@example.com
 directory?}\label{what-is-inside-of-the-.git-directory}
 
 We can use R to list the files. My \texttt{rep-res-course} repository
-that hold all the materials for this course looks like this:
+that hold all the materials for a course like this one looks like:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1786,10 +1819,19 @@ control?}\label{what-should-i-keep-under-version-control}
   \begin{itemize}
   \tightlist
   \item
-    i.e.~If you have and Rmd file that creates an html file, there isn't
+    i.e.~If you have an Rmd file that creates an html file, there isn't
     much need to put the html file under version control with git,
     because you can just regenerate it by Knitting the Rmd file.
   \end{itemize}
+\item
+  Do keep data, source code, etc.
+\item
+  Sometimes certain outputs and intermediate results from long
+  calculations can be committed so that you don't have to run a 4 hour
+  analysis to start where you were before.
+\item
+  For such results, consider \texttt{readRDS()} with the
+  \texttt{compress\ =\ "xz"} option.
 \end{itemize}
 
 \subsubsection{How can I make git ignore certain
@@ -1810,6 +1852,82 @@ files?}\label{how-can-i-make-git-ignore-certain-files}
 
 \section{Pushing and Pulling With
 GitHub}\label{pushing-and-pulling-with-github}
+
+\subsection{Creating a Repository on GitHub and the initial
+push}\label{creating-a-repository-on-github-and-the-initial-push}
+
+When you have an RStudio project under git version control on your
+laptop or desktop computer, creating a remote repository on GitHub is
+quite easy. A few steps:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Upper right corner: ``create new'' button (a ``+'' with a little
+  triangle.) Choose ``New Repository''
+\item
+  Give it a name. It makes most sense to name it the same as the RStudio
+  project you want to push up there. So, for example, if my project file
+  was \texttt{boing.Rproj}, I would name the repository \texttt{boing}.
+\item
+  Add a 5 or 6 word description if you want.
+\item
+  Choose \textbf{public} or \textbf{private}
+\item
+  DO \textbf{NOT} choose to ``Initialize this repository with a
+  README''. You likely already have a README. Initializing the
+  repository with one will create headaches.
+\item
+  Also, don't add a \texttt{.gitignore} or a license (select ``none'',
+  which should be the default, for both of those)
+\item
+  Click the green ``Create Repository'' button
+\end{enumerate}
+
+That will take you to another screen. In the middle find the code box
+below the heading, \textbf{\ldots{}or push an existing repository from
+the command line}.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Copy that two lines of code from you web browser. It will look
+  something like this:
+
+\begin{verbatim}
+git remote add origin https://github.com/eriqande/boing.git
+git push -u origin master
+\end{verbatim}
+
+  but it will be specific to the repository you just made, so the URL
+  and name of the repo will be different than what you see above. Note,
+  you can copy the lines by clicking the ``copy this text'' icon on the
+  right side of the page.
+\item
+  Go to RStudio, in the project that you want to push to GitHub, and
+  choose ``Tools-Shell''. That will give you a terminal window. Paste
+  the commands you copied into that terminal window and hit return.
+\item
+  It might ask you for your GitHub username and password.
+\end{enumerate}
+
+Voila!
+
+\subsection{Subsequent pushes}\label{subsequent-pushes}
+
+Once you have pushed the repo up there. Try making some changes on your
+laptop, committing them, and then hitting the ``Push'' button on the git
+panel\ldots{}
+
+\subsection{Addign collaborators}\label{addign-collaborators}
+
+From the repository page on GitHub, choose ``Settings'' (on the upper
+right) and find the ``collaborators'' link (on the left).
+
+If you have a private repository, you can add GitHub user
+\texttt{eriqande} (that's me\ldots{}) to it and I will be able to view
+it and give comments and suggestions.
 
 \bibliography{packages.bib,book.bib}
 
