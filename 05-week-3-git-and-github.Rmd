@@ -222,7 +222,7 @@ committed version.
 * Do keep data, source code, etc.
 * Sometimes certain outputs and intermediate results from long calculations can be committed
 so that you don't have to run a 4 hour analysis to start where you were before.
-* For such results, consider `readRDS()` with the `compress = "xz"` option.
+* For such results, consider `saveRDS()` with the `compress = "xz"` option (and its companion `readRDS()`.
     
 #### How can I make git ignore certain files?
 
@@ -292,3 +292,4 @@ The chapter goes through what you need to
 know to leverage all the `dplyr` goodness.  Please work all the examples, and do the exercises.
 In fact, when you are working through the examples with the `nycflights` data set, you should, after
 each example, try to do the same type of operation on your own data set.
+ 

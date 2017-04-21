@@ -1830,8 +1830,9 @@ control?}\label{what-should-i-keep-under-version-control}
   calculations can be committed so that you don't have to run a 4 hour
   analysis to start where you were before.
 \item
-  For such results, consider \texttt{readRDS()} with the
-  \texttt{compress\ =\ "xz"} option.
+  For such results, consider \texttt{saveRDS()} with the
+  \texttt{compress\ =\ "xz"} option (and its companion
+  \texttt{readRDS()}.
 \end{itemize}
 
 \subsubsection{How can I make git ignore certain
