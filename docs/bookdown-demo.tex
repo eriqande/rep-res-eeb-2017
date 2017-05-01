@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-04-21}
+  \date{2017-05-01}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -1948,6 +1948,237 @@ it and give comments and suggestions.
   you should, after each example, try to do the same type of operation
   on your own data set.
 \end{itemize}
+
+\chapter{Week Four Meeting}\label{week4}
+
+This was a bit of a free-form discussion on a variety of topics.
+
+\section{Knit your README.Rmd files}\label{knit-your-readme.rmd-files}
+
+First thing we talked about was the fact that GitHub will render a
+\texttt{README.md} file to an html web page that is nice and easy to
+read. It will sort of render a README.Rmd file, but it won't do
+everything to it. Namely:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The YAML header block comes out as a table.
+\item
+  It will \textbf{not} evaluate all the R code and deliver the results.
+\end{enumerate}
+
+Rather, it is necessary to locally \emph{knit} the \texttt{README.Rmd}
+file to create a \texttt{README.md}, then this \texttt{README.md} file
+must be committed to the repository and pushed. This needs to happen
+each time you have updated the \texttt{README.Rmd} file.
+
+Note that your \texttt{README.Rmd} file should start with the following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cat}\NormalTok{(}\KeywordTok{readLines}\NormalTok{(}\StringTok{"inputs/readme-header.txt"}\NormalTok{), }\DataTypeTok{sep =} \StringTok{'}\CharTok{\textbackslash{}n}\StringTok{'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+---
+title: "NameOfPackage"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  github_document:
+    toc: true
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "readme-figs/"
+)
+```
+
+Then start adding your text here...
+\end{verbatim}
+
+\section{Changing to factors}\label{changing-to-factors}
+
+Mikki had a question: she wanted to have a column that contained 1's and
+2's as factors. her data set had several entries that were ``1,2''. She
+wanted to convert those to 2's and then make them all factors. We
+discussed how this could be done with dplyr. The important message was
+that dplyr does not change the original input variable, but in the
+output, you can ``mutate over the top of an existing variable''.\\
+(i.e.~in the output the column will have been changed, but not in the
+original input data frame.)
+
+\section{\texorpdfstring{The \texttt{group\_by()}
+function}{The group\_by() function}}\label{the-group_by-function}
+
+We spent a bit of time going over how to think about what the
+\texttt{group\_by()} function does. Eric likes to think of it as
+breaking your original tibble up into a lot of different tibbles,
+according to the grouping variables, after which, each little tibble
+gets sent to the following verb (\texttt{summarise()},
+\texttt{mutate()}, \texttt{filter()}, etc.)
+
+We talked about that fact that while it is quite natural to think about
+using the \texttt{group\_by()} function in conjunction with
+\texttt{summarise()}, it is also very powerful to be able to use it in
+conjuntion with \texttt{mutate()}.
+
+When you do a summarise, only the grouping variables and the
+newly-created summary variables get returned in the output tibble, and
+the rows are arranged by the grouping variables. When you do a
+\texttt{group\_by()} and then \texttt{mutate()} all of the columns get
+returned and there is no automatic arranging that goes on.
+
+\chapter{Week Five Meeting}\label{week5}
+
+\section{Some things regarding people's
+repositories}\label{some-things-regarding-peoples-repositories}
+
+\subsection{Data Compression}\label{data-compression}
+
+We have been endorsing \texttt{.csv} as a good format for data, and
+\emph{it is}, because it is human-readable and easily parsed into
+tibbles. However, when you have very long tibbles, it is not necessarily
+the most space-efficient format. Large \texttt{.csv} files can take up
+much more space on your hard drive \emph{than they should}.
+
+What do we mean by ``\emph{than they should?}'' in that context? This
+has to do with how much \emph{information} is in the file, where
+information is used in the context of \emph{information theory}. Often
+tibbles will have columns that have fairly ``redundant''
+information---for example, in a mutlispecies salmon data set, one column
+might have entries that are either ``Chinook'', ``coho'', or
+``steelhead''. It takes a few bytes to store each one of those words,
+and if they are used in a column that has millions of rows, that can add
+up to a lot of space on your hard drive. Colloquially, \emph{data
+compression} is the art of finding ways of using short ``code-names''
+for things or patterns that occur frequently in a file, and in so doing,
+reducing the overall file size.
+
+The consequences of data compression can be profound and wonderful. You
+can reduce the size of a file, sometimes by an order or magnitude or
+more. There are a few good choices available for compressing your data
+(making it smaller.). Note that doing so often makes it a little harder
+to edit your data set; however, if your data set is not going to change,
+and it is large, then it makes sense to compress it---especially if it
+is so big you would rather not (or can't) put it on GitHub.
+
+\subsubsection{gzip}\label{gzip}
+
+If you are working on a Mac, you have the Unix utility \texttt{gzip}. We
+will illustrate its use on Katie's big salmon data set,
+\texttt{ASL\_merged.csv}. Let's see how big that is. We can use the Unix
+utility \texttt{du} (stands for ``disk usage'').
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# give this command on the Terminal in the directory where the file lives:}
+\KeywordTok{du} \NormalTok{-h ASL_merged.csv }
+\end{Highlighting}
+\end{Shaded}
+
+The results comes back:
+
+\begin{verbatim}
+322M    ASL_merged.csv
+\end{verbatim}
+
+Whoa! This file is 332 Megabytes. That is quite large!
+
+However, we can compress it like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{gzip} \NormalTok{ASL_merged.csv }
+\end{Highlighting}
+\end{Shaded}
+
+When we do that, it compresses the file and renames it to have a
+\texttt{.gz} extension on it: \texttt{ASL\_merged.csv.gz}. We can then
+see how big that file is:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{du} \NormalTok{-h ASL_merged.csv.gz }
+\end{Highlighting}
+\end{Shaded}
+
+tells us:
+
+\begin{verbatim}
+11M ASL_merged.csv.gz
+\end{verbatim}
+
+Whoa! We went from 332 Megabytes to 11. It is just 3\% of its original
+size (and small enough that you can safely put it on GitHub).
+
+One very nice feature is that gzipped files can be read in directly by
+the functions of the \texttt{readr} package. So, for example,
+\texttt{read\_csv()} works just fine on the gzipped version of Katie's
+massive salmon data set:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# this works the same as it would on the ungzipped file}
+\NormalTok{salmon <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"data/ASL_merged.csv.gz"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{\texorpdfstring{\texttt{xz} comression with
+\texttt{saveRDS()}}{xz comression with saveRDS()}}\label{xz-comression-with-saverds}
+
+Another method that can be even more efficient with tibbles is to store
+them as R objects using the \texttt{saveRDS()} function with the
+\texttt{xz} compression option. This has the nice advantage that all the
+data types of the variables (for example, if you had made factors out of
+some) will be preserved \emph{exactly} as they are in the tibble when
+you save it.
+
+Let's imagine we have read the tibble into the variable \texttt{salmon},
+and all the column types were as we wanted. Then, we could save that
+tibble directly to a compressed file like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{saveRDS}\NormalTok{(salmon, }\DataTypeTok{file =} \StringTok{"ASL_xz.rds"}\NormalTok{, }\DataTypeTok{compress =} \StringTok{"xz"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Note that \texttt{compress\ =\ "xz"} option. Let's see how that did
+using \texttt{du} on the Unix terminal:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{du} \NormalTok{-h ASL_xz.rds}
+\end{Highlighting}
+\end{Shaded}
+
+tells us:
+
+\begin{verbatim}
+3.7M    ASL_xz.rds
+\end{verbatim}
+
+Holy Smokes! Only 3.7 Megabytes. That is only 1.1\% of its original
+size. Lovely!
+
+In order to read that tibble back into a variable (named
+\texttt{my\_var}, say) in R, you would use \texttt{readRDS()} like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my_var <-}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\DataTypeTok{file =} \StringTok{"ASL_xz.rds"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Voila!
 
 \bibliography{packages.bib,book.bib}
 

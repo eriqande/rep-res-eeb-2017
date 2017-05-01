@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="week5.html">
-
+<link rel="prev" href="week4.html">
+<link rel="next" href="references.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -184,17 +184,59 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="week5" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Week Five Meeting</h1>
+<div id="some-things-regarding-peoples-repositories" class="section level2">
+<h2><span class="header-section-number">6.1</span> Some things regarding people’s repositories</h2>
+<div id="data-compression" class="section level3">
+<h3><span class="header-section-number">6.1.1</span> Data Compression</h3>
+<p>We have been endorsing <code>.csv</code> as a good format for data, and <em>it is</em>, because it is human-readable and easily parsed into tibbles. However, when you have very long tibbles, it is not necessarily the most space-efficient format. Large <code>.csv</code> files can take up much more space on your hard drive <em>than they should</em>.</p>
+<p>What do we mean by “<em>than they should?</em>” in that context? This has to do with how much <em>information</em> is in the file, where information is used in the context of <em>information theory</em>. Often tibbles will have columns that have fairly “redundant” information—for example, in a mutlispecies salmon data set, one column might have entries that are either “Chinook”, “coho”, or “steelhead”. It takes a few bytes to store each one of those words, and if they are used in a column that has millions of rows, that can add up to a lot of space on your hard drive. Colloquially, <em>data compression</em> is the art of finding ways of using short “code-names” for things or patterns that occur frequently in a file, and in so doing, reducing the overall file size.</p>
+<p>The consequences of data compression can be profound and wonderful. You can reduce the size of a file, sometimes by an order or magnitude or more. There are a few good choices available for compressing your data (making it smaller.). Note that doing so often makes it a little harder to edit your data set; however, if your data set is not going to change, and it is large, then it makes sense to compress it—especially if it is so big you would rather not (or can’t) put it on GitHub.</p>
+<div id="gzip" class="section level4">
+<h4><span class="header-section-number">6.1.1.1</span> gzip</h4>
+<p>If you are working on a Mac, you have the Unix utility <code>gzip</code>. We will illustrate its use on Katie’s big salmon data set, <code>ASL_merged.csv</code>. Let’s see how big that is. We can use the Unix utility <code>du</code> (stands for “disk usage”).</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="co"># give this command on the Terminal in the directory where the file lives:</span>
+<span class="kw">du</span> -h ASL_merged.csv </code></pre></div>
+<p>The results comes back:</p>
+<pre><code>322M    ASL_merged.csv</code></pre>
+<p>Whoa! This file is 332 Megabytes. That is quite large!</p>
+<p>However, we can compress it like this:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">gzip</span> ASL_merged.csv </code></pre></div>
+<p>When we do that, it compresses the file and renames it to have a <code>.gz</code> extension on it: <code>ASL_merged.csv.gz</code>. We can then see how big that file is:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">du</span> -h ASL_merged.csv.gz </code></pre></div>
+<p>tells us:</p>
+<pre><code>11M ASL_merged.csv.gz</code></pre>
+<p>Whoa! We went from 332 Megabytes to 11. It is just 3% of its original size (and small enough that you can safely put it on GitHub).</p>
+<p>One very nice feature is that gzipped files can be read in directly by the functions of the <code>readr</code> package. So, for example, <code>read_csv()</code> works just fine on the gzipped version of Katie’s massive salmon data set:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this works the same as it would on the ungzipped file</span>
+salmon &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/ASL_merged.csv.gz&quot;</span>)</code></pre></div>
+</div>
+<div id="xz-comression-with-saverds" class="section level4">
+<h4><span class="header-section-number">6.1.1.2</span> <code>xz</code> comression with <code>saveRDS()</code></h4>
+<p>Another method that can be even more efficient with tibbles is to store them as R objects using the <code>saveRDS()</code> function with the <code>xz</code> compression option. This has the nice advantage that all the data types of the variables (for example, if you had made factors out of some) will be preserved <em>exactly</em> as they are in the tibble when you save it.</p>
+<p>Let’s imagine we have read the tibble into the variable <code>salmon</code>, and all the column types were as we wanted. Then, we could save that tibble directly to a compressed file like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saveRDS</span>(salmon, <span class="dt">file =</span> <span class="st">&quot;ASL_xz.rds&quot;</span>, <span class="dt">compress =</span> <span class="st">&quot;xz&quot;</span>)</code></pre></div>
+<p>Note that <code>compress = &quot;xz&quot;</code> option. Let’s see how that did using <code>du</code> on the Unix terminal:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">du</span> -h ASL_xz.rds</code></pre></div>
+<p>tells us:</p>
+<pre><code>3.7M    ASL_xz.rds</code></pre>
+<p>Holy Smokes! Only 3.7 Megabytes. That is only 1.1% of its original size. Lovely!</p>
+<p>In order to read that tibble back into a variable (named <code>my_var</code>, say) in R, you would use <code>readRDS()</code> like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_var &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;ASL_xz.rds&quot;</span>)</code></pre></div>
+<p>Voila!</p>
 
+</div>
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="week5.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="week4.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -223,7 +265,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/20-references.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/07-week-5-meeting-joins-etc.Rmd",
 "text": "Edit"
 },
 "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],

@@ -1,0 +1,95 @@
+# Week Five Meeting {#week5}
+
+## Some things regarding people's repositories
+
+### Data Compression
+
+We have been endorsing `.csv` as a good format for data, and _it is_, because it 
+is human-readable and easily parsed into tibbles.  However, when you have very long
+tibbles, it is not necessarily the most space-efficient format.  Large `.csv` files can
+take up much more space on your hard drive _than they should_.  
+
+What do we mean by "_than they should?_" in that context?  This has to do with 
+how much _information_ is in the file, where information is used in the context 
+of _information theory_.  Often tibbles will have columns that have fairly "redundant"
+information---for example, in a mutlispecies salmon data set, one column might have entries
+that are either "Chinook", "coho", or "steelhead".  It takes a few bytes to store
+each one of those words, and if they are used in a column that has millions of rows, that
+can add up to a lot of space on your hard drive.  Colloquially, _data compression_ is the art 
+of finding ways of using short "code-names" for things or patterns that occur frequently
+in a file, and in so doing, reducing the overall file size.
+
+The consequences of data compression can be profound and wonderful.  You can reduce the size of 
+a file, sometimes by an order or magnitude or more.  There are a few good choices available for
+compressing your data (making it smaller.).  Note that doing so often makes it a little harder 
+to edit your data set; however, if your data set is not going to change, and it is large, 
+then it makes sense to compress it---especially if it is so big you would rather not (or can't) put it
+on GitHub.  
+
+#### gzip
+
+If you are working on a Mac, you have the Unix utility `gzip`.  We will illustrate its use on 
+Katie's big salmon data set, `ASL_merged.csv`.  Let's see how big that is.  We can use the
+Unix utility `du` (stands for "disk usage").
+
+```sh
+# give this command on the Terminal in the directory where the file lives:
+du -h ASL_merged.csv 
+```
+The results comes back:
+```
+322M	ASL_merged.csv
+```
+Whoa!  This file is 332 Megabytes.  That is quite large!
+
+However, we can compress it like this:
+```sh
+gzip ASL_merged.csv 
+```
+When we do that, it compresses the file and renames it to have a `.gz` extension on it:  `ASL_merged.csv.gz`.
+We can then see how big that file is:
+```sh
+du -h ASL_merged.csv.gz 
+```
+tells us:
+```
+11M	ASL_merged.csv.gz
+```
+Whoa!  We went from 332 Megabytes to 11.  It is just 3% of its original size (and small enough that you
+can safely put it on GitHub).
+
+One very nice feature is that gzipped files can be read in directly by the functions of the `readr` package.
+So, for example, `read_csv()` works just fine on the gzipped version of Katie's massive salmon data set:
+```{r eval=FALSE}
+# this works the same as it would on the ungzipped file
+salmon <- read_csv("data/ASL_merged.csv.gz")
+```
+
+#### `xz` comression with `saveRDS()`
+
+Another method that can be even more efficient with tibbles is to store them as R objects
+using the `saveRDS()` function with the `xz` compression option.  This has the nice advantage
+that all the data types of the variables (for example, if you had made factors out of some)
+will be preserved _exactly_ as they are in the tibble when you save it.  
+
+Let's imagine we have read the tibble into 
+the variable `salmon`, and all the column types were as we wanted.  Then,
+we could save that tibble directly to a compressed file like this:
+```r
+saveRDS(salmon, file = "ASL_xz.rds", compress = "xz")
+```
+Note that `compress = "xz"` option. Let's see how that did using `du` on the Unix terminal:
+```sh
+du -h ASL_xz.rds
+```
+tells us:
+```
+3.7M	ASL_xz.rds
+```
+Holy Smokes!  Only 3.7 Megabytes.  That is only 1.1% of its original size.  Lovely!
+
+In order to read that tibble back into a variable (named `my_var`, say) in R, you would use `readRDS()` like this:
+```r
+my_var <- readRDS(file = "ASL_xz.rds")
+```
+Voila!

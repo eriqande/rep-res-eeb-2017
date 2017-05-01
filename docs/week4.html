@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="week5.html">
-
+<link rel="prev" href="week3.html">
+<link rel="next" href="week5.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -184,17 +184,59 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="week4" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Week Four Meeting</h1>
+<p>This was a bit of a free-form discussion on a variety of topics.</p>
+<div id="knit-your-readme.rmd-files" class="section level2">
+<h2><span class="header-section-number">5.1</span> Knit your README.Rmd files</h2>
+<p>First thing we talked about was the fact that GitHub will render a <code>README.md</code> file to an html web page that is nice and easy to read. It will sort of render a README.Rmd file, but it won’t do everything to it. Namely:</p>
+<ol style="list-style-type: decimal">
+<li>The YAML header block comes out as a table.</li>
+<li>It will <strong>not</strong> evaluate all the R code and deliver the results.</li>
+</ol>
+<p>Rather, it is necessary to locally <em>knit</em> the <code>README.Rmd</code> file to create a <code>README.md</code>, then this <code>README.md</code> file must be committed to the repository and pushed. This needs to happen each time you have updated the <code>README.Rmd</code> file.</p>
+<p>Note that your <code>README.Rmd</code> file should start with the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cat</span>(<span class="kw">readLines</span>(<span class="st">&quot;inputs/readme-header.txt&quot;</span>), <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</code></pre></div>
+<pre><code>---
+title: &quot;NameOfPackage&quot;
+date: &quot;`r format(Sys.time(), &#39;%d %B, %Y&#39;)`&quot;
+output: 
+  github_document:
+    toc: true
+---
 
+&lt;!-- README.md is generated from README.Rmd. Please edit that file --&gt;
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = &quot;#&gt;&quot;,
+  fig.path = &quot;readme-figs/&quot;
+)
+```
+
+Then start adding your text here...</code></pre>
+</div>
+<div id="changing-to-factors" class="section level2">
+<h2><span class="header-section-number">5.2</span> Changing to factors</h2>
+<p>Mikki had a question: she wanted to have a column that contained 1’s and 2’s as factors. her data set had several entries that were “1,2”. She wanted to convert those to 2’s and then make them all factors. We discussed how this could be done with dplyr. The important message was that dplyr does not change the original input variable, but in the output, you can “mutate over the top of an existing variable”.<br />
+(i.e. in the output the column will have been changed, but not in the original input data frame.)</p>
+</div>
+<div id="the-group_by-function" class="section level2">
+<h2><span class="header-section-number">5.3</span> The <code>group_by()</code> function</h2>
+<p>We spent a bit of time going over how to think about what the <code>group_by()</code> function does. Eric likes to think of it as breaking your original tibble up into a lot of different tibbles, according to the grouping variables, after which, each little tibble gets sent to the following verb (<code>summarise()</code>, <code>mutate()</code>, <code>filter()</code>, etc.)</p>
+<p>We talked about that fact that while it is quite natural to think about using the <code>group_by()</code> function in conjunction with <code>summarise()</code>, it is also very powerful to be able to use it in conjuntion with <code>mutate()</code>.</p>
+<p>When you do a summarise, only the grouping variables and the newly-created summary variables get returned in the output tibble, and the rows are arranged by the grouping variables. When you do a <code>group_by()</code> and then <code>mutate()</code> all of the columns get returned and there is no automatic arranging that goes on.</p>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="week5.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="week3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="week5.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -223,7 +265,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/20-references.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/06-week-4-dplyr-discussion.Rmd",
 "text": "Edit"
 },
 "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
