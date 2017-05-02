@@ -26,8 +26,8 @@ cat(readLines("inputs/readme-header.txt"), sep = '\n')
 Mikki had a question:  she wanted to have a column that contained 1's and 2's as factors.  her
 data set had several entries that were "1,2".  She wanted to convert those to 2's and then make them
 all factors.  We discussed how this could be done with dplyr.  The important message was that dplyr does not
-change the original input variable, but in the output, you can "mutate over the top of an existing variable".  
-(i.e. in the output the column will have been changed, but not in the original input data frame.)
+change the original input variable, but in the output, you can "mutate over the top of an existing variable"
+(i.e. in the output the column will have been changed, but not in the original input data frame).
 
 ## The `group_by()` function
 
@@ -41,3 +41,16 @@ in conjunction with `summarise()`, it is also very powerful to be able to use it
 When you do a summarise, only the grouping variables and the newly-created summary variables get returned in
 the output tibble, and the rows are arranged by the grouping variables.  When you do a `group_by()` and then `mutate()`
 all of the columns get returned and there is no automatic arranging that goes on.  
+
+## Next Week's Assignment
+
+For Week 5, we are going to talk about __joins__.  This is a very important topic
+for combining data from different data sets.  Thus, everyone should read
+[Chapter 13: Relational Data](http://r4ds.had.co.nz/relational-data.html) in the
+R for Data Science Book.  This is an amazing chapter, and will go a long way in
+helping people understand how to make their lives easier when it comes to combining
+multiple tibbles of information (for example, a tibble of metadata for each individual
+and a tibble of genotype information, for the same individauls, etc.).  Try to work through 
+all the examples and do the exercises.
+
+

@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-05-01}
+  \date{2017-05-02}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -2011,9 +2011,9 @@ Mikki had a question: she wanted to have a column that contained 1's and
 wanted to convert those to 2's and then make them all factors. We
 discussed how this could be done with dplyr. The important message was
 that dplyr does not change the original input variable, but in the
-output, you can ``mutate over the top of an existing variable''.\\
-(i.e.~in the output the column will have been changed, but not in the
-original input data frame.)
+output, you can ``mutate over the top of an existing variable'' (i.e.~in
+the output the column will have been changed, but not in the original
+input data frame).
 
 \section{\texorpdfstring{The \texttt{group\_by()}
 function}{The group\_by() function}}\label{the-group_by-function}
@@ -2035,6 +2035,19 @@ newly-created summary variables get returned in the output tibble, and
 the rows are arranged by the grouping variables. When you do a
 \texttt{group\_by()} and then \texttt{mutate()} all of the columns get
 returned and there is no automatic arranging that goes on.
+
+\section{Next Week's Assignment}\label{next-weeks-assignment-1}
+
+For Week 5, we are going to talk about \textbf{joins}. This is a very
+important topic for combining data from different data sets. Thus,
+everyone should read
+\href{http://r4ds.had.co.nz/relational-data.html}{Chapter 13: Relational
+Data} in the R for Data Science Book. This is an amazing chapter, and
+will go a long way in helping people understand how to make their lives
+easier when it comes to combining multiple tibbles of information (for
+example, a tibble of metadata for each individual and a tibble of
+genotype information, for the same individauls, etc.). Try to work
+through all the examples and do the exercises.
 
 \chapter{Week Five Meeting}\label{week5}
 

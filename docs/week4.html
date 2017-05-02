@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Case Studies in Reproducible Research: a spring seminar at UCSC</title>
   <meta name="description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook.">
-  <meta name="generator" content="bookdown 0.3.16 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3.14 and GitBook 2.6.7">
 
   <meta property="og:title" content="Case Studies in Reproducible Research: a spring seminar at UCSC" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-05-01">
+<meta name="date" content="2017-05-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -157,6 +157,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.1" data-path="week4.html"><a href="week4.html#knit-your-readme.rmd-files"><i class="fa fa-check"></i><b>5.1</b> Knit your README.Rmd files</a></li>
 <li class="chapter" data-level="5.2" data-path="week4.html"><a href="week4.html#changing-to-factors"><i class="fa fa-check"></i><b>5.2</b> Changing to factors</a></li>
 <li class="chapter" data-level="5.3" data-path="week4.html"><a href="week4.html#the-group_by-function"><i class="fa fa-check"></i><b>5.3</b> The <code>group_by()</code> function</a></li>
+<li class="chapter" data-level="5.4" data-path="week4.html"><a href="week4.html#next-weeks-assignment-1"><i class="fa fa-check"></i><b>5.4</b> Next Week’s Assignment</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="week5.html"><a href="week5.html"><i class="fa fa-check"></i><b>6</b> Week Five Meeting</a><ul>
 <li class="chapter" data-level="6.1" data-path="week5.html"><a href="week5.html#some-things-regarding-peoples-repositories"><i class="fa fa-check"></i><b>6.1</b> Some things regarding people’s repositories</a><ul>
@@ -219,14 +220,17 @@ Then start adding your text here...</code></pre>
 </div>
 <div id="changing-to-factors" class="section level2">
 <h2><span class="header-section-number">5.2</span> Changing to factors</h2>
-<p>Mikki had a question: she wanted to have a column that contained 1’s and 2’s as factors. her data set had several entries that were “1,2”. She wanted to convert those to 2’s and then make them all factors. We discussed how this could be done with dplyr. The important message was that dplyr does not change the original input variable, but in the output, you can “mutate over the top of an existing variable”.<br />
-(i.e. in the output the column will have been changed, but not in the original input data frame.)</p>
+<p>Mikki had a question: she wanted to have a column that contained 1’s and 2’s as factors. her data set had several entries that were “1,2”. She wanted to convert those to 2’s and then make them all factors. We discussed how this could be done with dplyr. The important message was that dplyr does not change the original input variable, but in the output, you can “mutate over the top of an existing variable” (i.e. in the output the column will have been changed, but not in the original input data frame).</p>
 </div>
 <div id="the-group_by-function" class="section level2">
 <h2><span class="header-section-number">5.3</span> The <code>group_by()</code> function</h2>
 <p>We spent a bit of time going over how to think about what the <code>group_by()</code> function does. Eric likes to think of it as breaking your original tibble up into a lot of different tibbles, according to the grouping variables, after which, each little tibble gets sent to the following verb (<code>summarise()</code>, <code>mutate()</code>, <code>filter()</code>, etc.)</p>
 <p>We talked about that fact that while it is quite natural to think about using the <code>group_by()</code> function in conjunction with <code>summarise()</code>, it is also very powerful to be able to use it in conjuntion with <code>mutate()</code>.</p>
 <p>When you do a summarise, only the grouping variables and the newly-created summary variables get returned in the output tibble, and the rows are arranged by the grouping variables. When you do a <code>group_by()</code> and then <code>mutate()</code> all of the columns get returned and there is no automatic arranging that goes on.</p>
+</div>
+<div id="next-weeks-assignment-1" class="section level2">
+<h2><span class="header-section-number">5.4</span> Next Week’s Assignment</h2>
+<p>For Week 5, we are going to talk about <strong>joins</strong>. This is a very important topic for combining data from different data sets. Thus, everyone should read <a href="http://r4ds.had.co.nz/relational-data.html">Chapter 13: Relational Data</a> in the R for Data Science Book. This is an amazing chapter, and will go a long way in helping people understand how to make their lives easier when it comes to combining multiple tibbles of information (for example, a tibble of metadata for each individual and a tibble of genotype information, for the same individauls, etc.). Try to work through all the examples and do the exercises.</p>
 
 </div>
 </div>
