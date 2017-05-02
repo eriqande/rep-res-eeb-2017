@@ -42,6 +42,25 @@ When you do a summarise, only the grouping variables and the newly-created summa
 the output tibble, and the rows are arranged by the grouping variables.  When you do a `group_by()` and then `mutate()`
 all of the columns get returned and there is no automatic arranging that goes on.  
 
+## How do I learn about all the vectorized functions I can use in `mutate()` and `summarize()`?
+
+There was consensus in the class that even once we have learned the mechanics of using `mutate()` and
+`summarise()`, we might still be at a loss as to _how_ to use them, or with which functions.
+Admittedly, there are many, many vectorized functions in R that you might apply within a `mutate()`
+or `summarise()`
+function, and learning about all of those, and having them at your fingertips when you need
+them is part of the never-ending journey of gaining experience with R.
+
+However, there are a few things that can help with that journey.  Here are my two
+favorite suggestions:
+
+1. Get the RStudio _dplyr cheatsheet_.  In RStudio, Go to Help-->Cheatsheets-->Data Manipulation-with-dplyr,-tidyr.
+While you are at it.  Check out their other cheatsheets.
+1. Review Hadley's Advanced R [recommended vocabulary](http://adv-r.had.co.nz/Vocabulary.html).  
+This is a nice, compact list of R functions that you 
+should be familiar with, or at least aware of. 
+
+
 ## Next Week's Assignment
 
 For Week 5, we are going to talk about __joins__.  This is a very important topic

@@ -2036,6 +2036,38 @@ the rows are arranged by the grouping variables. When you do a
 \texttt{group\_by()} and then \texttt{mutate()} all of the columns get
 returned and there is no automatic arranging that goes on.
 
+\section{\texorpdfstring{How do I learn about all the vectorized
+functions I can use in \texttt{mutate()} and
+\texttt{summarize()}?}{How do I learn about all the vectorized functions I can use in mutate() and summarize()?}}\label{how-do-i-learn-about-all-the-vectorized-functions-i-can-use-in-mutate-and-summarize}
+
+There was consensus in the class that even once we have learned the
+mechanics of using \texttt{mutate()} and \texttt{summarise()}, we might
+still be at a loss as to \emph{how} to use them, or with which
+functions. Admittedly, there are many, many vectorized functions in R
+that you might apply within a \texttt{mutate()} or \texttt{summarise()}
+function, and learning about all of those, and having them at your
+fingertips when you need them is part of the never-ending journey of
+gaining experience with R.
+
+However, there are a few things that can help with that journey. Here
+are my two favorite suggestions:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Get the RStudio \emph{dplyr cheatsheet}. In RStudio, Go to
+  Help--\textgreater{}Cheatsheets--\textgreater{}Data
+  Manipulation-with-dplyr,-tidyr. While you are at it. Check out their
+  other cheatsheets.
+\item
+  Review Hadley's Advanced R
+  \href{http://adv-r.had.co.nz/Vocabulary.html}{recommended
+  vocabulary}.\\
+  This is a nice, compact list of R functions that you should be
+  familiar with, or at least aware of.
+\end{enumerate}
+
 \section{Next Week's Assignment}\label{next-weeks-assignment-1}
 
 For Week 5, we are going to talk about \textbf{joins}. This is a very
@@ -2192,6 +2224,11 @@ In order to read that tibble back into a variable (named
 \end{Shaded}
 
 Voila!
+
+\section{Brief Highlights About
+Joins}\label{brief-highlights-about-joins}
+
+\section{Working with R Notebooks}\label{working-with-r-notebooks}
 
 \bibliography{packages.bib,book.bib}
 

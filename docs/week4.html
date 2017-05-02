@@ -157,12 +157,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.1" data-path="week4.html"><a href="week4.html#knit-your-readme.rmd-files"><i class="fa fa-check"></i><b>5.1</b> Knit your README.Rmd files</a></li>
 <li class="chapter" data-level="5.2" data-path="week4.html"><a href="week4.html#changing-to-factors"><i class="fa fa-check"></i><b>5.2</b> Changing to factors</a></li>
 <li class="chapter" data-level="5.3" data-path="week4.html"><a href="week4.html#the-group_by-function"><i class="fa fa-check"></i><b>5.3</b> The <code>group_by()</code> function</a></li>
-<li class="chapter" data-level="5.4" data-path="week4.html"><a href="week4.html#next-weeks-assignment-1"><i class="fa fa-check"></i><b>5.4</b> Next Week’s Assignment</a></li>
+<li class="chapter" data-level="5.4" data-path="week4.html"><a href="week4.html#how-do-i-learn-about-all-the-vectorized-functions-i-can-use-in-mutate-and-summarize"><i class="fa fa-check"></i><b>5.4</b> How do I learn about all the vectorized functions I can use in <code>mutate()</code> and <code>summarize()</code>?</a></li>
+<li class="chapter" data-level="5.5" data-path="week4.html"><a href="week4.html#next-weeks-assignment-1"><i class="fa fa-check"></i><b>5.5</b> Next Week’s Assignment</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="week5.html"><a href="week5.html"><i class="fa fa-check"></i><b>6</b> Week Five Meeting</a><ul>
 <li class="chapter" data-level="6.1" data-path="week5.html"><a href="week5.html#some-things-regarding-peoples-repositories"><i class="fa fa-check"></i><b>6.1</b> Some things regarding people’s repositories</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="week5.html"><a href="week5.html#data-compression"><i class="fa fa-check"></i><b>6.1.1</b> Data Compression</a></li>
 </ul></li>
+<li class="chapter" data-level="6.2" data-path="week5.html"><a href="week5.html#brief-highlights-about-joins"><i class="fa fa-check"></i><b>6.2</b> Brief Highlights About Joins</a></li>
+<li class="chapter" data-level="6.3" data-path="week5.html"><a href="week5.html#working-with-r-notebooks"><i class="fa fa-check"></i><b>6.3</b> Working with R Notebooks</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -228,8 +231,18 @@ Then start adding your text here...</code></pre>
 <p>We talked about that fact that while it is quite natural to think about using the <code>group_by()</code> function in conjunction with <code>summarise()</code>, it is also very powerful to be able to use it in conjuntion with <code>mutate()</code>.</p>
 <p>When you do a summarise, only the grouping variables and the newly-created summary variables get returned in the output tibble, and the rows are arranged by the grouping variables. When you do a <code>group_by()</code> and then <code>mutate()</code> all of the columns get returned and there is no automatic arranging that goes on.</p>
 </div>
+<div id="how-do-i-learn-about-all-the-vectorized-functions-i-can-use-in-mutate-and-summarize" class="section level2">
+<h2><span class="header-section-number">5.4</span> How do I learn about all the vectorized functions I can use in <code>mutate()</code> and <code>summarize()</code>?</h2>
+<p>There was consensus in the class that even once we have learned the mechanics of using <code>mutate()</code> and <code>summarise()</code>, we might still be at a loss as to <em>how</em> to use them, or with which functions. Admittedly, there are many, many vectorized functions in R that you might apply within a <code>mutate()</code> or <code>summarise()</code> function, and learning about all of those, and having them at your fingertips when you need them is part of the never-ending journey of gaining experience with R.</p>
+<p>However, there are a few things that can help with that journey. Here are my two favorite suggestions:</p>
+<ol style="list-style-type: decimal">
+<li>Get the RStudio <em>dplyr cheatsheet</em>. In RStudio, Go to Help–&gt;Cheatsheets–&gt;Data Manipulation-with-dplyr,-tidyr. While you are at it. Check out their other cheatsheets.</li>
+<li>Review Hadley’s Advanced R <a href="http://adv-r.had.co.nz/Vocabulary.html">recommended vocabulary</a>.<br />
+This is a nice, compact list of R functions that you should be familiar with, or at least aware of.</li>
+</ol>
+</div>
 <div id="next-weeks-assignment-1" class="section level2">
-<h2><span class="header-section-number">5.4</span> Next Week’s Assignment</h2>
+<h2><span class="header-section-number">5.5</span> Next Week’s Assignment</h2>
 <p>For Week 5, we are going to talk about <strong>joins</strong>. This is a very important topic for combining data from different data sets. Thus, everyone should read <a href="http://r4ds.had.co.nz/relational-data.html">Chapter 13: Relational Data</a> in the R for Data Science Book. This is an amazing chapter, and will go a long way in helping people understand how to make their lives easier when it comes to combining multiple tibbles of information (for example, a tibble of metadata for each individual and a tibble of genotype information, for the same individauls, etc.). Try to work through all the examples and do the exercises.</p>
 
 </div>
