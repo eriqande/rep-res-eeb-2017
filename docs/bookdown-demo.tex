@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-05-02}
+  \date{2017-05-05}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -2225,10 +2225,549 @@ In order to read that tibble back into a variable (named
 
 Voila!
 
-\section{Brief Highlights About
-Joins}\label{brief-highlights-about-joins}
+\section{A quick aside about missing
+data}\label{a-quick-aside-about-missing-data}
+
+Garrett and Hadley note that ``missing values are `contagious': almost
+any operation involving an unknown value will also be unknown.'' This is
+true for the most part, but there is a vexing inconsistency. Observe
+
+This gives us NA as we would hope it would
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OtherTok{NA} \NormalTok{==}\StringTok{ }\DecValTok{0} \NormalTok{|}\StringTok{ }\OtherTok{NA} \NormalTok{==}\StringTok{ }\DecValTok{1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] NA
+\end{verbatim}
+
+However, this one returns FALSE. What gives?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OtherTok{NA} \NormalTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] FALSE
+\end{verbatim}
+
+\section{Brief Highlights of the Joins
+Chapter}\label{brief-highlights-of-the-joins-chapter}
+
+You will likely end up using joins all the time. As noted in the book,
+the \texttt{left\_join()} is what you will likely use all the time. In
+this case you have a ``focal'' data frame with all the rows (``cases''
+or ``observations'') in the \texttt{x} table that you are going to be
+wanting to add some columns to. Those columns live in the \texttt{y}
+table (along with the matching keys).
+
+``\emph{The left join should be your default join: use it unless you
+have a strong reason to prefer one of the others.}''
+
+You an do the same things with base R's \texttt{merge()} function, but
+it is slower and somewhat harder to express your intent with it. (I've
+always really disliked the \texttt{merge()} function\ldots{})
+
+\subsection{A few thoughts on keys}\label{a-few-thoughts-on-keys}
+
+It is always a worthwhile exercise to go through and figure out what the
+\emph{primary key} is in a tibble you are working with. It might be that
+the primary key is a compound key: it defines unique observations by a
+combination of several variables. Sometimes there is no explicit primary
+key! It is worthwhile to add a \emph{surrogate key} in that case.
+
+On the flip side of these issues: when you are compiling your own data
+set, you might want to spend some time making sure that units that might
+be relevant to an analysis are explicitly identified in a single column.
+Here is an example: the NOAA Observer program takes tissue samples from
+bycatch for genetic analysis. There is a primary key
+\texttt{tissue\_sample} for every tissue sample. However, under some
+circumstances they take multiple tissue samples from the same
+individual. But they don't have a column in the data set with an
+indvividual ID. So, when the send their samples to people who will
+genotype them, a lot of individuals are unwittingly genotyped twice.
+Their response: ``Well, isn't it obvious that if a tissue sample is
+taken from a fish that was caught on the same \texttt{vessel} on the
+same \texttt{day} and in the same \texttt{haul}, and is of the same
+\texttt{species} and has the same recorded \texttt{length} is the same
+individual?'' My response: ``\textbf{NO! It isn't!}. Don't make people
+use a whole lot of columns to identify things that should be identified
+in a single column!''
+
+\section{An example of using some
+joins}\label{an-example-of-using-some-joins}
+
+Let's walk through a simple case that should be familiar to those in the
+group who have worked with genetic data and have had to deal with the
+problem of attaching meta data to genetic data coming off a genotyping
+instrument.
+
+Typically those data come out in a form that can be made into a tibble.
+Let's read in a toy example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\NormalTok{genos <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"inputs/toy_geno.csv"}\NormalTok{)}
+\NormalTok{genos}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 8 × 5
+##     bird locus1_a locus1_b locus2_a locus2_b
+##    <chr>    <int>    <int>    <int>    <int>
+## 1 wiwa01        1        2        3        3
+## 2 wiwa02        2        2        4        4
+## 3 wiwa03        2        2        3        4
+## 4 wiwa04        1        1        4        4
+## 5 wiwa05        2        2        3        4
+## 6 wiwa06        1        1        4        4
+## 7 wiwa07        1        2        3        4
+## 8 wiwa08        1        1        3        4
+\end{verbatim}
+
+There is a single column (\texttt{bird} in this case) that is the
+primary key that uniquely identifies individuals. Then each locus gets
+two columns of data (one for each gene copy in a diploid).
+
+That is all well and good. But now, consider this problem: for a
+particular analysis we are going to do, we need to have the latitude and
+longitude coordinates where each bird was sampled. Let's say that we got
+these samples from friendly collectors who provided a meta data file
+that gave us the collection location and the name of the collector.
+Let's look at that:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{meta <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"inputs/toy_meta.csv"}\NormalTok{)}
+\NormalTok{meta}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 10 × 3
+##    field_id location collector
+##       <chr>    <chr>     <chr>
+## 1    wiwa01     swAZ       joe
+## 2    wiwa02     nwAZ      mary
+## 3    wiwa03     soCA       ted
+## 4    wiwa05     soCA       ted
+## 5    wiwa06     swAZ       joe
+## 6    wiwa08     noCA      erin
+## 7    wiwa09     noCA      erin
+## 8    wiwa10     noCA      erin
+## 9    wiwa11     noCA      erin
+## 10   wiwa12     noCA      erin
+\end{verbatim}
+
+\textbf{Notice:} there are some birds in this data set that we don't
+have in the \texttt{genos} tibble. Not only that, but if you look
+closely, it is missing some birds in \texttt{genos}: they are ``wiwa04''
+and ``wiwa07''. Also, note that the column that holds the ID of each
+bird is called \texttt{field\_id} not \texttt{bird}.
+
+Finally, the network of bird sample collectors maintains a data base of
+all their location codes that looks like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{locations <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"inputs/toy_locations.csv"}\NormalTok{)}
+\NormalTok{locations}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 × 3
+##   location   lat   long
+##      <chr> <dbl>  <dbl>
+## 1     swAZ  32.1 -112.8
+## 2     nwAZ  36.8 -113.5
+## 3     soCA  33.2 -117.1
+## 4     noCA  40.6 -123.9
+## 5     soOR  42.9 -123.7
+## 6     noOR  45.9 -123.1
+\end{verbatim}
+
+Aha! So, what we need to do is associate with each \texttt{bird} a
+\texttt{location}, and then once we have done with that, we need to
+associate a \texttt{lat} and a \texttt{long} with those locations. This
+is the perfect job for a join (two of them, actually).
+
+Note that we are focused on our birds, here, so we want to keep them all
+around and not add any information where we don't have a bird. Hence
+\texttt{left\_join()} is our go-to friend there (as it almost always
+will be).
+
+Here is what the first step looks like:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genos %>%}
+\StringTok{  }\KeywordTok{left_join}\NormalTok{(., meta, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"bird"} \NormalTok{=}\StringTok{ "field_id"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 8 × 7
+##     bird locus1_a locus1_b locus2_a locus2_b location collector
+##    <chr>    <int>    <int>    <int>    <int>    <chr>     <chr>
+## 1 wiwa01        1        2        3        3     swAZ       joe
+## 2 wiwa02        2        2        4        4     nwAZ      mary
+## 3 wiwa03        2        2        3        4     soCA       ted
+## 4 wiwa04        1        1        4        4     <NA>      <NA>
+## 5 wiwa05        2        2        3        4     soCA       ted
+## 6 wiwa06        1        1        4        4     swAZ       joe
+## 7 wiwa07        1        2        3        4     <NA>      <NA>
+## 8 wiwa08        1        1        3        4     noCA      erin
+\end{verbatim}
+
+Notice that we have some NAs for birds that are not in the meta data.
+That is the behavior we expect from \texttt{left\_join()}: it is not
+going to discard some of your birds, just because they don't appear in
+the meta data.
+
+Note also that when we explicitly give the names of the keys (which
+differ in the different tibbles) the one on the left corresponds to the
+\texttt{x} argument to \texttt{left\_join()}. Also, notice that these
+key names \emph{must be quoted}!! (It is easy to forget that, because
+you so seldom need quotation marks around things in the tidyverse.)
+
+Now, we can add the lat-longs on there. We will show how that is done by
+chaining onto the previous command:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genos %>%}
+\StringTok{  }\KeywordTok{left_join}\NormalTok{(., meta, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"bird"} \NormalTok{=}\StringTok{ "field_id"}\NormalTok{)) %>%}
+\StringTok{  }\KeywordTok{left_join}\NormalTok{(., locations)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = "location"
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 8 × 9
+##     bird locus1_a locus1_b locus2_a locus2_b location collector   lat
+##    <chr>    <int>    <int>    <int>    <int>    <chr>     <chr> <dbl>
+## 1 wiwa01        1        2        3        3     swAZ       joe  32.1
+## 2 wiwa02        2        2        4        4     nwAZ      mary  36.8
+## 3 wiwa03        2        2        3        4     soCA       ted  33.2
+## 4 wiwa04        1        1        4        4     <NA>      <NA>    NA
+## 5 wiwa05        2        2        3        4     soCA       ted  33.2
+## 6 wiwa06        1        1        4        4     swAZ       joe  32.1
+## 7 wiwa07        1        2        3        4     <NA>      <NA>    NA
+## 8 wiwa08        1        1        3        4     noCA      erin  40.6
+## # ... with 1 more variables: long <dbl>
+\end{verbatim}
+
+Voila! That is what we wanted. Now, we could filter out those NAs and
+drop the \texttt{collector} column, if desired.
+
+Notice that, since the \texttt{location} column was named
+\texttt{location} in tibble, \texttt{left\_join()} just used that.
+
+\subsection{\texorpdfstring{When would I use
+\texttt{right\_join()}?}{When would I use right\_join()?}}\label{when-would-i-use-right_join}
+
+The only time I use this is when I want to add columns to the beginning
+of a tibble, but I want to preserve all the keys in the table that is
+going to end up with its columns on the right hand side of the table.
+And even then I usually just use \texttt{select} after a
+\texttt{left\_join()}. Perhaps an example will be best: for some
+purposes it is best to keep the genotype data all together on the right
+hand side of the tibble (often genotype data can take up lots of columns
+and you might want to be able to see the columns you have joined on
+without using View() and scrolling way over). In this case you can do
+this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genos %>%}
+\StringTok{  }\KeywordTok{right_join}\NormalTok{(meta, ., }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"field_id"} \NormalTok{=}\StringTok{ "bird"}\NormalTok{)) %>%}
+\StringTok{  }\KeywordTok{right_join}\NormalTok{(locations, .) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = "location"
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 8 × 9
+##   location   lat   long field_id collector locus1_a locus1_b locus2_a
+##      <chr> <dbl>  <dbl>    <chr>     <chr>    <int>    <int>    <int>
+## 1     swAZ  32.1 -112.8   wiwa01       joe        1        2        3
+## 2     nwAZ  36.8 -113.5   wiwa02      mary        2        2        4
+## 3     soCA  33.2 -117.1   wiwa03       ted        2        2        3
+## 4     <NA>    NA     NA   wiwa04      <NA>        1        1        4
+## 5     soCA  33.2 -117.1   wiwa05       ted        2        2        3
+## 6     swAZ  32.1 -112.8   wiwa06       joe        1        1        4
+## 7     <NA>    NA     NA   wiwa07      <NA>        1        2        3
+## 8     noCA  40.6 -123.9   wiwa08      erin        1        1        3
+## # ... with 1 more variables: locus2_b <int>
+\end{verbatim}
+
+Notice that when you do this, the column name of the \texttt{x}
+variable, \texttt{field\_id} is the one that gets retained.
+
+\subsection{\texorpdfstring{What about that
+\texttt{inner\_join()}}{What about that inner\_join()}}\label{what-about-that-inner_join}
+
+If you knew ahead of time that you couldn't use any birds that you
+didn't have lat-longs for, you could start with an
+\texttt{inner\_join()}, because that would discard birds that don't have
+an entry in the meta data:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genos %>%}
+\StringTok{  }\KeywordTok{inner_join}\NormalTok{(., meta, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"bird"} \NormalTok{=}\StringTok{ "field_id"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 × 7
+##     bird locus1_a locus1_b locus2_a locus2_b location collector
+##    <chr>    <int>    <int>    <int>    <int>    <chr>     <chr>
+## 1 wiwa01        1        2        3        3     swAZ       joe
+## 2 wiwa02        2        2        4        4     nwAZ      mary
+## 3 wiwa03        2        2        3        4     soCA       ted
+## 4 wiwa05        2        2        3        4     soCA       ted
+## 5 wiwa06        1        1        4        4     swAZ       joe
+## 6 wiwa08        1        1        3        4     noCA      erin
+\end{verbatim}
+
+But, it will probably be easier to follow if you \emph{explicitly
+discard those birds} using \texttt{filter()} or by doing a filtering
+join.
+
+\subsection{An anti\_join example}\label{an-anti_join-example}
+
+If you want to get all the genotype data for birds that don't occur in
+the meta data you can use the filtering \texttt{anti\_join()}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genos %>%}
+\StringTok{  }\KeywordTok{anti_join}\NormalTok{(., meta, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"bird"} \NormalTok{=}\StringTok{ "field_id"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 × 5
+##     bird locus1_a locus1_b locus2_a locus2_b
+##    <chr>    <int>    <int>    <int>    <int>
+## 1 wiwa07        1        2        3        4
+## 2 wiwa04        1        1        4        4
+\end{verbatim}
+
+And to return only those rows for birds that are in the meta data, you
+could use \texttt{semi\_join()}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genos %>%}
+\StringTok{  }\KeywordTok{semi_join}\NormalTok{(., meta, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"bird"} \NormalTok{=}\StringTok{ "field_id"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 × 5
+##     bird locus1_a locus1_b locus2_a locus2_b
+##    <chr>    <int>    <int>    <int>    <int>
+## 1 wiwa01        1        2        3        3
+## 2 wiwa02        2        2        4        4
+## 3 wiwa03        2        2        3        4
+## 4 wiwa05        2        2        3        4
+## 5 wiwa06        1        1        4        4
+## 6 wiwa08        1        1        3        4
+\end{verbatim}
+
+Note that we could turn it around in order to see which birds are in the
+meta data, but which don't occur in the genos:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genos %>%}
+\StringTok{  }\KeywordTok{anti_join}\NormalTok{(meta, ., }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"field_id"} \NormalTok{=}\StringTok{ "bird"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 × 3
+##   field_id location collector
+##      <chr>    <chr>     <chr>
+## 1   wiwa12     noCA      erin
+## 2   wiwa11     noCA      erin
+## 3   wiwa10     noCA      erin
+## 4   wiwa09     noCA      erin
+\end{verbatim}
+
+Dammit Erin! You always forget to send us the friggin' samples! Clearly
+smokin' too much of the kind green there in noCA. (Note. These names
+really are totally fictitious.)
+
+Quick quiz: why would this not work:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genos %>%}
+\StringTok{   }\KeywordTok{anti_join}\NormalTok{(meta, ., }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"bird"} \NormalTok{=}\StringTok{ "field_id"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Just for fun, let's see a
+full\_join()}\label{just-for-fun-lets-see-a-full_join}
+
+This bad boy makes a row with NAs for values in \emph{either} tibble
+that are not matched in the other:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{genos %>%}
+\StringTok{  }\KeywordTok{full_join}\NormalTok{(., meta, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"bird"} \NormalTok{=}\StringTok{ "field_id"}\NormalTok{)) %>%}
+\StringTok{  }\KeywordTok{full_join}\NormalTok{(., locations) %>%}
+\StringTok{  }\KeywordTok{print}\NormalTok{(}\DataTypeTok{n =} \DecValTok{20}\NormalTok{) }\CommentTok{# so all rows print}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = "location"
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 14 × 9
+##      bird locus1_a locus1_b locus2_a locus2_b location collector   lat
+##     <chr>    <int>    <int>    <int>    <int>    <chr>     <chr> <dbl>
+## 1  wiwa01        1        2        3        3     swAZ       joe  32.1
+## 2  wiwa02        2        2        4        4     nwAZ      mary  36.8
+## 3  wiwa03        2        2        3        4     soCA       ted  33.2
+## 4  wiwa04        1        1        4        4     <NA>      <NA>    NA
+## 5  wiwa05        2        2        3        4     soCA       ted  33.2
+## 6  wiwa06        1        1        4        4     swAZ       joe  32.1
+## 7  wiwa07        1        2        3        4     <NA>      <NA>    NA
+## 8  wiwa08        1        1        3        4     noCA      erin  40.6
+## 9  wiwa09       NA       NA       NA       NA     noCA      erin  40.6
+## 10 wiwa10       NA       NA       NA       NA     noCA      erin  40.6
+## 11 wiwa11       NA       NA       NA       NA     noCA      erin  40.6
+## 12 wiwa12       NA       NA       NA       NA     noCA      erin  40.6
+## 13   <NA>       NA       NA       NA       NA     soOR      <NA>  42.9
+## 14   <NA>       NA       NA       NA       NA     noOR      <NA>  45.9
+## # ... with 1 more variables: long <dbl>
+\end{verbatim}
+
+This is not typically what we want! Sometimes it is\ldots{}but usually
+you will be using \texttt{left\_join()}.
 
 \section{Working with R Notebooks}\label{working-with-r-notebooks}
+
+R Notebooks are totally awesome! They combine the nice features of
+working at the R console (namely having access to variables that remain
+in your .GlobalEnvironment), with the beauty of being able to document
+things in an easy to read and digest RMarkdown format.
+
+Here, you can download an example of a short Notebook from one of the
+projects that Kristen and Eric are working on:
+\href{https://www.dropbox.com/s/buq39n64m8524ff/02-choosing-96-SNPs.nb.html?dl=1}{choosing-snps}
+
+R notebooks are RMarkdown documents using the \texttt{html\_document}
+option. They are great for doing and explaining analyses. This is where
+I end up doing most of my analyses these days. Typically I put them in a
+directory called \texttt{R-main} in my project. This is a more
+appropriate place to put long analyses than in README.Rmd. The
+README.Rmd file should be reserved for describing your data and giving
+people instructions on how to conduct the analysis, e.g. ``Open
+./R-main/01-clean-data.Rmd and run it all. Then run all the code in
+02-compute-statistics.Rmd, etc.''
+
+\subsection{Open your own R Notebook}\label{open-your-own-r-notebook}
+
+This is easy in RStudio: File -\textgreater{} New File -\textgreater{} R
+Notebook. This gives you a simple template that lets you see how things
+work and into which you can insert your own thoughts and writings.
+
+For quick help with formatting: Help -\textgreater{} Markdown Quick
+Reference
+
+For more Markdown info: Help -\textgreater{} Cheatsheets -\textgreater{}
+R Markdown Cheat Sheet
+
+\subsection{Working with R Notebooks}\label{working-with-r-notebooks-1}
+
+Big difference from ``regular'' R Markdown documents: there is no
+``Knit'' button.
+
+Instead, to get results from the code, you must evaluate it, then
+``Preview''.
+
+Ways of evaluating code blocks:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  right-facing triangle -- evaluate current block
+\item
+  down-facing gray triangle -- evaluate all the blocks \emph{above} this
+  one.
+\end{enumerate}
+
+Or you can use keyboard shortcuts, or use the ``Run'' button in the
+upper right of the document.
+
+Results from code blocks get presented in the Notebook.
+
+To get something like ``Knit'': do this:
+
+Run -\textgreater{} Restart R and Run All Chunks
+
+\subsection{Some caveats about
+notebooks}\label{some-caveats-about-notebooks}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  You should restart and Run All occasionally to make sure it is
+  reproducible.
+\item
+  When evaluating code within an R notebook, by default the working
+  directory for R is set to the directory that the R notebook live in,
+  not the root directory of the project. So, it can give different
+  results (for example when doing file acess) than the R Console. This
+  can be hugely frustrating.
+\item
+  your variables all live in the GlobalEnvironment, so they are at risk
+  of getting overwritten if you use the same variable name in another
+  Notebook that you are working on at the moment. For this reason, to
+  check reproducibility, occasionaly check that Run -\textgreater{}
+  Restart R and Run All Chunks works for you.
+\end{enumerate}
+
+The .nb.html files don't play very well with GitHub. If you want to
+share them, they are great for emailing to people (but tell them to
+download it and view it as a file---the gmail viewer does a crappy job
+of rendering it.)
+
+\subsection{Opening a .nb.html file in
+Rstudio}\label{opening-a-.nb.html-file-in-rstudio}
+
+Doing this ``reconstitutes'' the .Rmd file that made it (along with the
+results that are saved in it). Which is sort of cool. However, it does
+not reconstitute all the data, etc. that went into it. So, y'all
+wouldn't be able to run 02-choosing-96-SNPs.Rmd.
+
+\section{For Next Week:}\label{for-next-week}
+
+Read Chapter 3: Data Visualization
 
 \bibliography{packages.bib,book.bib}
 

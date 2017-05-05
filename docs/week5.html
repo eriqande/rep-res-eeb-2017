@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-05-02">
+<meta name="date" content="2017-05-05">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -164,8 +164,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.1" data-path="week5.html"><a href="week5.html#some-things-regarding-peoples-repositories"><i class="fa fa-check"></i><b>6.1</b> Some things regarding people’s repositories</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="week5.html"><a href="week5.html#data-compression"><i class="fa fa-check"></i><b>6.1.1</b> Data Compression</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="week5.html"><a href="week5.html#brief-highlights-about-joins"><i class="fa fa-check"></i><b>6.2</b> Brief Highlights About Joins</a></li>
-<li class="chapter" data-level="6.3" data-path="week5.html"><a href="week5.html#working-with-r-notebooks"><i class="fa fa-check"></i><b>6.3</b> Working with R Notebooks</a></li>
+<li class="chapter" data-level="6.2" data-path="week5.html"><a href="week5.html#a-quick-aside-about-missing-data"><i class="fa fa-check"></i><b>6.2</b> A quick aside about missing data</a></li>
+<li class="chapter" data-level="6.3" data-path="week5.html"><a href="week5.html#brief-highlights-of-the-joins-chapter"><i class="fa fa-check"></i><b>6.3</b> Brief Highlights of the Joins Chapter</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="week5.html"><a href="week5.html#a-few-thoughts-on-keys"><i class="fa fa-check"></i><b>6.3.1</b> A few thoughts on keys</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="week5.html"><a href="week5.html#an-example-of-using-some-joins"><i class="fa fa-check"></i><b>6.4</b> An example of using some joins</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="week5.html"><a href="week5.html#when-would-i-use-right_join"><i class="fa fa-check"></i><b>6.4.1</b> When would I use <code>right_join()</code>?</a></li>
+<li class="chapter" data-level="6.4.2" data-path="week5.html"><a href="week5.html#what-about-that-inner_join"><i class="fa fa-check"></i><b>6.4.2</b> What about that <code>inner_join()</code></a></li>
+<li class="chapter" data-level="6.4.3" data-path="week5.html"><a href="week5.html#an-anti_join-example"><i class="fa fa-check"></i><b>6.4.3</b> An anti_join example</a></li>
+<li class="chapter" data-level="6.4.4" data-path="week5.html"><a href="week5.html#just-for-fun-lets-see-a-full_join"><i class="fa fa-check"></i><b>6.4.4</b> Just for fun, let’s see a full_join()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="week5.html"><a href="week5.html#working-with-r-notebooks"><i class="fa fa-check"></i><b>6.5</b> Working with R Notebooks</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="week5.html"><a href="week5.html#open-your-own-r-notebook"><i class="fa fa-check"></i><b>6.5.1</b> Open your own R Notebook</a></li>
+<li class="chapter" data-level="6.5.2" data-path="week5.html"><a href="week5.html#working-with-r-notebooks-1"><i class="fa fa-check"></i><b>6.5.2</b> Working with R Notebooks</a></li>
+<li class="chapter" data-level="6.5.3" data-path="week5.html"><a href="week5.html#some-caveats-about-notebooks"><i class="fa fa-check"></i><b>6.5.3</b> Some caveats about notebooks</a></li>
+<li class="chapter" data-level="6.5.4" data-path="week5.html"><a href="week5.html#opening-a-.nb.html-file-in-rstudio"><i class="fa fa-check"></i><b>6.5.4</b> Opening a .nb.html file in Rstudio</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="week5.html"><a href="week5.html#for-next-week"><i class="fa fa-check"></i><b>6.6</b> For Next Week:</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -232,11 +247,257 @@ salmon &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span clas
 </div>
 </div>
 </div>
-<div id="brief-highlights-about-joins" class="section level2">
-<h2><span class="header-section-number">6.2</span> Brief Highlights About Joins</h2>
+<div id="a-quick-aside-about-missing-data" class="section level2">
+<h2><span class="header-section-number">6.2</span> A quick aside about missing data</h2>
+<p>Garrett and Hadley note that “missing values are ‘contagious’: almost any operation involving an unknown value will also be unknown.” This is true for the most part, but there is a vexing inconsistency. Observe</p>
+<p>This gives us NA as we would hope it would</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="ot">NA</span> ==<span class="st"> </span><span class="dv">0</span> |<span class="st"> </span><span class="ot">NA</span> ==<span class="st"> </span><span class="dv">1</span></code></pre></div>
+<pre><code>## [1] NA</code></pre>
+<p>However, this one returns FALSE. What gives?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="ot">NA</span> %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="brief-highlights-of-the-joins-chapter" class="section level2">
+<h2><span class="header-section-number">6.3</span> Brief Highlights of the Joins Chapter</h2>
+<p>You will likely end up using joins all the time. As noted in the book, the <code>left_join()</code> is what you will likely use all the time. In this case you have a “focal” data frame with all the rows (“cases” or “observations”) in the <code>x</code> table that you are going to be wanting to add some columns to. Those columns live in the <code>y</code> table (along with the matching keys).</p>
+<p>“<em>The left join should be your default join: use it unless you have a strong reason to prefer one of the others.</em>”</p>
+<p>You an do the same things with base R’s <code>merge()</code> function, but it is slower and somewhat harder to express your intent with it. (I’ve always really disliked the <code>merge()</code> function…)</p>
+<div id="a-few-thoughts-on-keys" class="section level3">
+<h3><span class="header-section-number">6.3.1</span> A few thoughts on keys</h3>
+<p>It is always a worthwhile exercise to go through and figure out what the <em>primary key</em> is in a tibble you are working with. It might be that the primary key is a compound key: it defines unique observations by a combination of several variables. Sometimes there is no explicit primary key! It is worthwhile to add a <em>surrogate key</em> in that case.</p>
+<p>On the flip side of these issues: when you are compiling your own data set, you might want to spend some time making sure that units that might be relevant to an analysis are explicitly identified in a single column. Here is an example: the NOAA Observer program takes tissue samples from bycatch for genetic analysis. There is a primary key <code>tissue_sample</code> for every tissue sample. However, under some circumstances they take multiple tissue samples from the same individual. But they don’t have a column in the data set with an indvividual ID. So, when the send their samples to people who will genotype them, a lot of individuals are unwittingly genotyped twice. Their response: “Well, isn’t it obvious that if a tissue sample is taken from a fish that was caught on the same <code>vessel</code> on the same <code>day</code> and in the same <code>haul</code>, and is of the same <code>species</code> and has the same recorded <code>length</code> is the same individual?” My response: “<strong>NO! It isn’t!</strong>. Don’t make people use a whole lot of columns to identify things that should be identified in a single column!”</p>
+</div>
+</div>
+<div id="an-example-of-using-some-joins" class="section level2">
+<h2><span class="header-section-number">6.4</span> An example of using some joins</h2>
+<p>Let’s walk through a simple case that should be familiar to those in the group who have worked with genetic data and have had to deal with the problem of attaching meta data to genetic data coming off a genotyping instrument.</p>
+<p>Typically those data come out in a form that can be made into a tibble. Let’s read in a toy example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+genos &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;inputs/toy_geno.csv&quot;</span>)
+genos</code></pre></div>
+<pre><code>## # A tibble: 8 × 5
+##     bird locus1_a locus1_b locus2_a locus2_b
+##    &lt;chr&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1 wiwa01        1        2        3        3
+## 2 wiwa02        2        2        4        4
+## 3 wiwa03        2        2        3        4
+## 4 wiwa04        1        1        4        4
+## 5 wiwa05        2        2        3        4
+## 6 wiwa06        1        1        4        4
+## 7 wiwa07        1        2        3        4
+## 8 wiwa08        1        1        3        4</code></pre>
+<p>There is a single column (<code>bird</code> in this case) that is the primary key that uniquely identifies individuals. Then each locus gets two columns of data (one for each gene copy in a diploid).</p>
+<p>That is all well and good. But now, consider this problem: for a particular analysis we are going to do, we need to have the latitude and longitude coordinates where each bird was sampled. Let’s say that we got these samples from friendly collectors who provided a meta data file that gave us the collection location and the name of the collector. Let’s look at that:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meta &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;inputs/toy_meta.csv&quot;</span>)
+meta</code></pre></div>
+<pre><code>## # A tibble: 10 × 3
+##    field_id location collector
+##       &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;
+## 1    wiwa01     swAZ       joe
+## 2    wiwa02     nwAZ      mary
+## 3    wiwa03     soCA       ted
+## 4    wiwa05     soCA       ted
+## 5    wiwa06     swAZ       joe
+## 6    wiwa08     noCA      erin
+## 7    wiwa09     noCA      erin
+## 8    wiwa10     noCA      erin
+## 9    wiwa11     noCA      erin
+## 10   wiwa12     noCA      erin</code></pre>
+<p><strong>Notice:</strong> there are some birds in this data set that we don’t have in the <code>genos</code> tibble. Not only that, but if you look closely, it is missing some birds in <code>genos</code>: they are “wiwa04” and “wiwa07”. Also, note that the column that holds the ID of each bird is called <code>field_id</code> not <code>bird</code>.</p>
+<p>Finally, the network of bird sample collectors maintains a data base of all their location codes that looks like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">locations &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;inputs/toy_locations.csv&quot;</span>)
+locations</code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   location   lat   long
+##      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1     swAZ  32.1 -112.8
+## 2     nwAZ  36.8 -113.5
+## 3     soCA  33.2 -117.1
+## 4     noCA  40.6 -123.9
+## 5     soOR  42.9 -123.7
+## 6     noOR  45.9 -123.1</code></pre>
+<p>Aha! So, what we need to do is associate with each <code>bird</code> a <code>location</code>, and then once we have done with that, we need to associate a <code>lat</code> and a <code>long</code> with those locations. This is the perfect job for a join (two of them, actually).</p>
+<p>Note that we are focused on our birds, here, so we want to keep them all around and not add any information where we don’t have a bird. Hence <code>left_join()</code> is our go-to friend there (as it almost always will be).</p>
+<p>Here is what the first step looks like:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genos %&gt;%
+<span class="st">  </span><span class="kw">left_join</span>(., meta, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;bird&quot;</span> =<span class="st"> &quot;field_id&quot;</span>))</code></pre></div>
+<pre><code>## # A tibble: 8 × 7
+##     bird locus1_a locus1_b locus2_a locus2_b location collector
+##    &lt;chr&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;chr&gt;     &lt;chr&gt;
+## 1 wiwa01        1        2        3        3     swAZ       joe
+## 2 wiwa02        2        2        4        4     nwAZ      mary
+## 3 wiwa03        2        2        3        4     soCA       ted
+## 4 wiwa04        1        1        4        4     &lt;NA&gt;      &lt;NA&gt;
+## 5 wiwa05        2        2        3        4     soCA       ted
+## 6 wiwa06        1        1        4        4     swAZ       joe
+## 7 wiwa07        1        2        3        4     &lt;NA&gt;      &lt;NA&gt;
+## 8 wiwa08        1        1        3        4     noCA      erin</code></pre>
+<p>Notice that we have some NAs for birds that are not in the meta data. That is the behavior we expect from <code>left_join()</code>: it is not going to discard some of your birds, just because they don’t appear in the meta data.</p>
+<p>Note also that when we explicitly give the names of the keys (which differ in the different tibbles) the one on the left corresponds to the <code>x</code> argument to <code>left_join()</code>. Also, notice that these key names <em>must be quoted</em>!! (It is easy to forget that, because you so seldom need quotation marks around things in the tidyverse.)</p>
+<p>Now, we can add the lat-longs on there. We will show how that is done by chaining onto the previous command:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genos %&gt;%
+<span class="st">  </span><span class="kw">left_join</span>(., meta, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;bird&quot;</span> =<span class="st"> &quot;field_id&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">left_join</span>(., locations)</code></pre></div>
+<pre><code>## Joining, by = &quot;location&quot;</code></pre>
+<pre><code>## # A tibble: 8 × 9
+##     bird locus1_a locus1_b locus2_a locus2_b location collector   lat
+##    &lt;chr&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;chr&gt;     &lt;chr&gt; &lt;dbl&gt;
+## 1 wiwa01        1        2        3        3     swAZ       joe  32.1
+## 2 wiwa02        2        2        4        4     nwAZ      mary  36.8
+## 3 wiwa03        2        2        3        4     soCA       ted  33.2
+## 4 wiwa04        1        1        4        4     &lt;NA&gt;      &lt;NA&gt;    NA
+## 5 wiwa05        2        2        3        4     soCA       ted  33.2
+## 6 wiwa06        1        1        4        4     swAZ       joe  32.1
+## 7 wiwa07        1        2        3        4     &lt;NA&gt;      &lt;NA&gt;    NA
+## 8 wiwa08        1        1        3        4     noCA      erin  40.6
+## # ... with 1 more variables: long &lt;dbl&gt;</code></pre>
+<p>Voila! That is what we wanted. Now, we could filter out those NAs and drop the <code>collector</code> column, if desired.</p>
+<p>Notice that, since the <code>location</code> column was named <code>location</code> in tibble, <code>left_join()</code> just used that.</p>
+<div id="when-would-i-use-right_join" class="section level3">
+<h3><span class="header-section-number">6.4.1</span> When would I use <code>right_join()</code>?</h3>
+<p>The only time I use this is when I want to add columns to the beginning of a tibble, but I want to preserve all the keys in the table that is going to end up with its columns on the right hand side of the table. And even then I usually just use <code>select</code> after a <code>left_join()</code>. Perhaps an example will be best: for some purposes it is best to keep the genotype data all together on the right hand side of the tibble (often genotype data can take up lots of columns and you might want to be able to see the columns you have joined on without using View() and scrolling way over). In this case you can do this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genos %&gt;%
+<span class="st">  </span><span class="kw">right_join</span>(meta, ., <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;field_id&quot;</span> =<span class="st"> &quot;bird&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">right_join</span>(locations, .) </code></pre></div>
+<pre><code>## Joining, by = &quot;location&quot;</code></pre>
+<pre><code>## # A tibble: 8 × 9
+##   location   lat   long field_id collector locus1_a locus1_b locus2_a
+##      &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;chr&gt;     &lt;chr&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1     swAZ  32.1 -112.8   wiwa01       joe        1        2        3
+## 2     nwAZ  36.8 -113.5   wiwa02      mary        2        2        4
+## 3     soCA  33.2 -117.1   wiwa03       ted        2        2        3
+## 4     &lt;NA&gt;    NA     NA   wiwa04      &lt;NA&gt;        1        1        4
+## 5     soCA  33.2 -117.1   wiwa05       ted        2        2        3
+## 6     swAZ  32.1 -112.8   wiwa06       joe        1        1        4
+## 7     &lt;NA&gt;    NA     NA   wiwa07      &lt;NA&gt;        1        2        3
+## 8     noCA  40.6 -123.9   wiwa08      erin        1        1        3
+## # ... with 1 more variables: locus2_b &lt;int&gt;</code></pre>
+<p>Notice that when you do this, the column name of the <code>x</code> variable, <code>field_id</code> is the one that gets retained.</p>
+</div>
+<div id="what-about-that-inner_join" class="section level3">
+<h3><span class="header-section-number">6.4.2</span> What about that <code>inner_join()</code></h3>
+<p>If you knew ahead of time that you couldn’t use any birds that you didn’t have lat-longs for, you could start with an <code>inner_join()</code>, because that would discard birds that don’t have an entry in the meta data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genos %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(., meta, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;bird&quot;</span> =<span class="st"> &quot;field_id&quot;</span>))</code></pre></div>
+<pre><code>## # A tibble: 6 × 7
+##     bird locus1_a locus1_b locus2_a locus2_b location collector
+##    &lt;chr&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;chr&gt;     &lt;chr&gt;
+## 1 wiwa01        1        2        3        3     swAZ       joe
+## 2 wiwa02        2        2        4        4     nwAZ      mary
+## 3 wiwa03        2        2        3        4     soCA       ted
+## 4 wiwa05        2        2        3        4     soCA       ted
+## 5 wiwa06        1        1        4        4     swAZ       joe
+## 6 wiwa08        1        1        3        4     noCA      erin</code></pre>
+<p>But, it will probably be easier to follow if you <em>explicitly discard those birds</em> using <code>filter()</code> or by doing a filtering join.</p>
+</div>
+<div id="an-anti_join-example" class="section level3">
+<h3><span class="header-section-number">6.4.3</span> An anti_join example</h3>
+<p>If you want to get all the genotype data for birds that don’t occur in the meta data you can use the filtering <code>anti_join()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genos %&gt;%
+<span class="st">  </span><span class="kw">anti_join</span>(., meta, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;bird&quot;</span> =<span class="st"> &quot;field_id&quot;</span>))</code></pre></div>
+<pre><code>## # A tibble: 2 × 5
+##     bird locus1_a locus1_b locus2_a locus2_b
+##    &lt;chr&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1 wiwa07        1        2        3        4
+## 2 wiwa04        1        1        4        4</code></pre>
+<p>And to return only those rows for birds that are in the meta data, you could use <code>semi_join()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genos %&gt;%
+<span class="st">  </span><span class="kw">semi_join</span>(., meta, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;bird&quot;</span> =<span class="st"> &quot;field_id&quot;</span>))</code></pre></div>
+<pre><code>## # A tibble: 6 × 5
+##     bird locus1_a locus1_b locus2_a locus2_b
+##    &lt;chr&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
+## 1 wiwa01        1        2        3        3
+## 2 wiwa02        2        2        4        4
+## 3 wiwa03        2        2        3        4
+## 4 wiwa05        2        2        3        4
+## 5 wiwa06        1        1        4        4
+## 6 wiwa08        1        1        3        4</code></pre>
+<p>Note that we could turn it around in order to see which birds are in the meta data, but which don’t occur in the genos:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genos %&gt;%
+<span class="st">  </span><span class="kw">anti_join</span>(meta, ., <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;field_id&quot;</span> =<span class="st"> &quot;bird&quot;</span>))</code></pre></div>
+<pre><code>## # A tibble: 4 × 3
+##   field_id location collector
+##      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;
+## 1   wiwa12     noCA      erin
+## 2   wiwa11     noCA      erin
+## 3   wiwa10     noCA      erin
+## 4   wiwa09     noCA      erin</code></pre>
+<p>Dammit Erin! You always forget to send us the friggin’ samples! Clearly smokin’ too much of the kind green there in noCA. (Note. These names really are totally fictitious.)</p>
+<p>Quick quiz: why would this not work:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genos %&gt;%
+<span class="st">   </span><span class="kw">anti_join</span>(meta, ., <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;bird&quot;</span> =<span class="st"> &quot;field_id&quot;</span>))</code></pre></div>
+</div>
+<div id="just-for-fun-lets-see-a-full_join" class="section level3">
+<h3><span class="header-section-number">6.4.4</span> Just for fun, let’s see a full_join()</h3>
+<p>This bad boy makes a row with NAs for values in <em>either</em> tibble that are not matched in the other:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genos %&gt;%
+<span class="st">  </span><span class="kw">full_join</span>(., meta, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;bird&quot;</span> =<span class="st"> &quot;field_id&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">full_join</span>(., locations) %&gt;%
+<span class="st">  </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">20</span>) <span class="co"># so all rows print</span></code></pre></div>
+<pre><code>## Joining, by = &quot;location&quot;</code></pre>
+<pre><code>## # A tibble: 14 × 9
+##      bird locus1_a locus1_b locus2_a locus2_b location collector   lat
+##     &lt;chr&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;chr&gt;     &lt;chr&gt; &lt;dbl&gt;
+## 1  wiwa01        1        2        3        3     swAZ       joe  32.1
+## 2  wiwa02        2        2        4        4     nwAZ      mary  36.8
+## 3  wiwa03        2        2        3        4     soCA       ted  33.2
+## 4  wiwa04        1        1        4        4     &lt;NA&gt;      &lt;NA&gt;    NA
+## 5  wiwa05        2        2        3        4     soCA       ted  33.2
+## 6  wiwa06        1        1        4        4     swAZ       joe  32.1
+## 7  wiwa07        1        2        3        4     &lt;NA&gt;      &lt;NA&gt;    NA
+## 8  wiwa08        1        1        3        4     noCA      erin  40.6
+## 9  wiwa09       NA       NA       NA       NA     noCA      erin  40.6
+## 10 wiwa10       NA       NA       NA       NA     noCA      erin  40.6
+## 11 wiwa11       NA       NA       NA       NA     noCA      erin  40.6
+## 12 wiwa12       NA       NA       NA       NA     noCA      erin  40.6
+## 13   &lt;NA&gt;       NA       NA       NA       NA     soOR      &lt;NA&gt;  42.9
+## 14   &lt;NA&gt;       NA       NA       NA       NA     noOR      &lt;NA&gt;  45.9
+## # ... with 1 more variables: long &lt;dbl&gt;</code></pre>
+<p>This is not typically what we want! Sometimes it is…but usually you will be using <code>left_join()</code>.</p>
+</div>
 </div>
 <div id="working-with-r-notebooks" class="section level2">
-<h2><span class="header-section-number">6.3</span> Working with R Notebooks</h2>
+<h2><span class="header-section-number">6.5</span> Working with R Notebooks</h2>
+<p>R Notebooks are totally awesome! They combine the nice features of working at the R console (namely having access to variables that remain in your .GlobalEnvironment), with the beauty of being able to document things in an easy to read and digest RMarkdown format.</p>
+<p>Here, you can download an example of a short Notebook from one of the projects that Kristen and Eric are working on: <a href="https://www.dropbox.com/s/buq39n64m8524ff/02-choosing-96-SNPs.nb.html?dl=1">choosing-snps</a></p>
+<p>R notebooks are RMarkdown documents using the <code>html_document</code> option. They are great for doing and explaining analyses. This is where I end up doing most of my analyses these days. Typically I put them in a directory called <code>R-main</code> in my project. This is a more appropriate place to put long analyses than in README.Rmd. The README.Rmd file should be reserved for describing your data and giving people instructions on how to conduct the analysis, e.g. “Open ./R-main/01-clean-data.Rmd and run it all. Then run all the code in 02-compute-statistics.Rmd, etc.”</p>
+<div id="open-your-own-r-notebook" class="section level3">
+<h3><span class="header-section-number">6.5.1</span> Open your own R Notebook</h3>
+<p>This is easy in RStudio: File -&gt; New File -&gt; R Notebook. This gives you a simple template that lets you see how things work and into which you can insert your own thoughts and writings.</p>
+<p>For quick help with formatting: Help -&gt; Markdown Quick Reference</p>
+<p>For more Markdown info: Help -&gt; Cheatsheets -&gt; R Markdown Cheat Sheet</p>
+</div>
+<div id="working-with-r-notebooks-1" class="section level3">
+<h3><span class="header-section-number">6.5.2</span> Working with R Notebooks</h3>
+<p>Big difference from “regular” R Markdown documents: there is no “Knit” button.</p>
+<p>Instead, to get results from the code, you must evaluate it, then “Preview”.</p>
+<p>Ways of evaluating code blocks:</p>
+<ol style="list-style-type: decimal">
+<li>right-facing triangle – evaluate current block</li>
+<li>down-facing gray triangle – evaluate all the blocks <em>above</em> this one.</li>
+</ol>
+<p>Or you can use keyboard shortcuts, or use the “Run” button in the upper right of the document.</p>
+<p>Results from code blocks get presented in the Notebook.</p>
+<p>To get something like “Knit”: do this:</p>
+<p>Run -&gt; Restart R and Run All Chunks</p>
+</div>
+<div id="some-caveats-about-notebooks" class="section level3">
+<h3><span class="header-section-number">6.5.3</span> Some caveats about notebooks</h3>
+<ol style="list-style-type: decimal">
+<li>You should restart and Run All occasionally to make sure it is reproducible.</li>
+<li>When evaluating code within an R notebook, by default the working directory for R is set to the directory that the R notebook live in, not the root directory of the project. So, it can give different results (for example when doing file acess) than the R Console. This can be hugely frustrating.</li>
+<li>your variables all live in the GlobalEnvironment, so they are at risk of getting overwritten if you use the same variable name in another Notebook that you are working on at the moment. For this reason, to check reproducibility, occasionaly check that Run -&gt; Restart R and Run All Chunks works for you.</li>
+</ol>
+<p>The .nb.html files don’t play very well with GitHub. If you want to share them, they are great for emailing to people (but tell them to download it and view it as a file—the gmail viewer does a crappy job of rendering it.)</p>
+</div>
+<div id="opening-a-.nb.html-file-in-rstudio" class="section level3">
+<h3><span class="header-section-number">6.5.4</span> Opening a .nb.html file in Rstudio</h3>
+<p>Doing this “reconstitutes” the .Rmd file that made it (along with the results that are saved in it). Which is sort of cool. However, it does not reconstitute all the data, etc. that went into it. So, y’all wouldn’t be able to run 02-choosing-96-SNPs.Rmd.</p>
+</div>
+</div>
+<div id="for-next-week" class="section level2">
+<h2><span class="header-section-number">6.6</span> For Next Week:</h2>
+<p>Read Chapter 3: Data Visualization</p>
 
 </div>
 </div>

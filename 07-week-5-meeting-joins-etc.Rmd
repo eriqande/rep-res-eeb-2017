@@ -94,11 +94,281 @@ my_var <- readRDS(file = "ASL_xz.rds")
 ```
 Voila!
 
+## A quick aside about missing data
 
-## Brief Highlights About Joins
+Garrett and Hadley note that "missing values are 'contagious':
+almost any operation involving an unknown value will also be unknown."  This is true
+for the most part, but there is a vexing inconsistency.  Observe
+
+This gives us NA as we would hope it would
+```{r demo-NA}
+NA == 0 | NA == 1
+```
+
+However, this one returns FALSE.  What gives?
+```{r}
+NA %in% c(0, 1)
+```
+
+## Brief Highlights of the Joins Chapter
+
+You will likely end up using joins all the time.  As noted in the book, the `left_join()` is
+what you will likely use all the time.  In this case you have a "focal" data frame with all the 
+rows ("cases" or "observations") in the `x` table that you are going to be wanting to add some columns
+to. Those columns live in the `y` table (along with the matching keys).
+
+"_The left join should be your default join: use it unless you have a strong reason to prefer one of the others._"
+
+You an do the same things with base R's `merge()` function, but it is slower and somewhat harder to 
+express your intent with it.  (I've always really disliked the `merge()` function...)
+
+###  A few thoughts on keys
+
+It is always a worthwhile exercise to go through and figure out what the _primary key_ is 
+in a tibble you are working with.  It might be that the primary key is a compound key: it 
+defines unique observations by a combination of several variables.  Sometimes there is no
+explicit primary key!  It is worthwhile to add a _surrogate key_ in that case.
+
+On the flip side of these issues: when you are compiling your own data set, you might
+want to spend some time making sure that units that might be relevant to an analysis are 
+explicitly identified in a single column.  Here is an example: the NOAA Observer program
+takes tissue samples from bycatch for genetic analysis.  There is a primary key `tissue_sample`
+for every tissue sample.  However, under some circumstances they take multiple tissue samples
+from the same individual.  But they don't have a column in the data set with an indvividual
+ID.  So, when the send their samples to people who will genotype them, a lot of individuals are
+unwittingly genotyped twice.  Their response: "Well, isn't it obvious that if a tissue sample
+is taken from a fish that was caught on the same `vessel` on the same `day` and in the same
+`haul`, and is of the same `species` and has the same recorded `length` is the same individual?"
+My response: "**NO! It isn't!**.  Don't make people use a whole lot of columns to identify things
+that should be identified in a single column!"
+
+## An example of using some joins
+
+
+Let's walk through a simple case that should be familiar to those in the group
+who have worked with genetic data and have had to deal with the problem of attaching
+meta data to genetic data coming off a genotyping instrument.
+
+
+Typically those data come out in a form that can be made into a tibble.
+Let's read in a toy example:
+```{r, message=FALSE}
+library(tidyverse)
+genos <- read_csv("inputs/toy_geno.csv")
+genos
+```
+There is a single column (`bird` in this case) that is the primary key that uniquely
+identifies individuals.  Then each locus gets two columns of data (one for each
+gene copy in a diploid).
+
+That is all well and good. But now, consider this problem: for a particular
+analysis we are going to do, we need to have the latitude and longitude coordinates
+where each bird was sampled.  Let's say that we got these samples from friendly collectors
+who provided a meta data file that gave us the collection location and the name of the 
+collector.  Let's look at that:
+```{r, message=FALSE}
+meta <- read_csv("inputs/toy_meta.csv")
+meta
+```
+**Notice:** there are some birds in this data set that we don't have in the 
+`genos` tibble.  Not only that, but if you look closely, it is missing some
+birds in `genos`: they are "wiwa04" and "wiwa07".  Also, note that the column
+that holds the ID of each bird is called `field_id` not `bird`.  
+
+Finally, the network of bird sample collectors maintains a data base of 
+all their location codes that looks like this:
+```{r, message=FALSE}
+locations <- read_csv("inputs/toy_locations.csv")
+locations
+```
+
+Aha! So, what we need to do is associate with each `bird` a `location`, and then once
+we have done with that, we need to associate a `lat` and a `long` with those locations.
+This is the perfect job for a join (two of them, actually).  
+
+Note that we are focused on our birds, here, so we want to keep them all around and not
+add any information where we don't have a bird.  Hence `left_join()` is our go-to friend
+there (as it almost always will be).
+
+Here is what the first step looks like:
+```{r}
+genos %>%
+  left_join(., meta, by = c("bird" = "field_id"))
+```
+
+Notice that we have some NAs for birds that are not in the meta data.  That is the behavior 
+we expect from `left_join()`: it is not going to discard some of your birds, just because 
+they don't appear in the meta data.
+
+Note also that when we explicitly give the names of the keys (which differ in the different
+tibbles) the one on the left corresponds to the `x` argument to `left_join()`.  Also, notice
+that these key names _must be quoted_!! (It is easy to forget that, because you so seldom need
+quotation marks around things in the tidyverse.)
+
+Now, we can add the lat-longs on there.  We will show how that is done by chaining onto the 
+previous command:
+```{r}
+genos %>%
+  left_join(., meta, by = c("bird" = "field_id")) %>%
+  left_join(., locations)
+```
+Voila! That is what we wanted.  Now, we could filter out those NAs and drop the `collector` column, if desired.
+
+Notice that, since the `location` column was named `location` in tibble, `left_join()` just used that.
+
+
+
+### When would I use `right_join()`?
+The only time I use this is when I want to add columns to the beginning of a tibble,
+but I want to preserve all the keys in the table that is going to end up with its columns
+on the right hand side of the table. And even then I usually just use `select` after a `left_join()`.
+Perhaps an example will be best: for some purposes
+it is best to keep the genotype data all together on the right hand side of the tibble (often
+genotype data can take up lots of columns and you might want to be able to see the columns you
+have joined on without using View() and scrolling way over).  In this case you can do this:
+```{r}
+genos %>%
+  right_join(meta, ., by = c("field_id" = "bird")) %>%
+  right_join(locations, .) 
+```
+Notice that when you do this, the column name of the `x` variable, `field_id` is the one that gets retained.  
+
+
+### What about that `inner_join()`
+If you knew ahead of time that you couldn't use any birds that you didn't have lat-longs
+for, you could start with an `inner_join()`, because that would discard birds that don't
+have an entry in the meta data:
+```{r}
+genos %>%
+  inner_join(., meta, by = c("bird" = "field_id"))
+```
+But, it will probably be easier to follow if you _explicitly discard those birds_ using 
+`filter()` or by doing a filtering join.
+
+### An anti_join example
+
+If you want to get all the genotype data for birds that don't occur in the meta data
+you can use the filtering `anti_join()`:
+```{r}
+genos %>%
+  anti_join(., meta, by = c("bird" = "field_id"))
+```
+
+And to return only those rows for birds that are in the meta data, you could use `semi_join()`:
+```{r}
+genos %>%
+  semi_join(., meta, by = c("bird" = "field_id"))
+```
+
+Note that we could turn it around in order to see which birds are in 
+the meta data, but which don't occur in the genos:
+```{r}
+genos %>%
+  anti_join(meta, ., by = c("field_id" = "bird"))
+```
+Dammit Erin!  You always forget to send us the friggin' samples!
+Clearly smokin' too much of the kind green there in noCA.
+(Note. These names really are totally fictitious.)
+
+Quick quiz: why would this not work:
+```{r, eval=FALSE}
+genos %>%
+   anti_join(meta, ., by = c("bird" = "field_id"))
+```
+
+### Just for fun, let's see a full_join()
+
+This bad boy makes a row with NAs for values in _either_ tibble that are not
+matched in the other:
+```{r}
+genos %>%
+  full_join(., meta, by = c("bird" = "field_id")) %>%
+  full_join(., locations) %>%
+  print(n = 20) # so all rows print
+```
+This is not typically what we want! Sometimes it is...but usually you will
+be using `left_join()`.
+
 
 ## Working with R Notebooks
 
+R Notebooks are totally awesome!  They combine the nice features of working 
+at the R console (namely having access to variables that remain in your .GlobalEnvironment),
+with the beauty of being able to document things in an easy to read and digest 
+RMarkdown format.
+
+Here, you can download an example of a short Notebook from one of the projects
+that Kristen and Eric are working on: [choosing-snps](https://www.dropbox.com/s/buq39n64m8524ff/02-choosing-96-SNPs.nb.html?dl=1)
+
+R notebooks are RMarkdown documents using the `html_document` option.
+They are great for doing and explaining analyses.  This is where I end up doing most of my analyses these
+days.  Typically I put them in a directory called `R-main` in my project. This is a more
+appropriate place to put long analyses than in README.Rmd.  The README.Rmd file should
+be reserved for describing your data and giving people instructions on how to conduct
+the analysis, e.g. "Open ./R-main/01-clean-data.Rmd and run it all.  Then run all the code in
+02-compute-statistics.Rmd, etc."
+
+### Open your own R Notebook
+
+This is easy in RStudio:  File -> New File -> R Notebook.  This gives
+you a simple template that lets you see how things work and into which
+you can insert your own thoughts and writings.
+
+For quick help with formatting:  Help -> Markdown Quick Reference
+
+For more Markdown info: Help -> Cheatsheets -> R Markdown Cheat Sheet
+
+### Working with R Notebooks
+
+Big difference from "regular" R Markdown documents:  there is no "Knit" button.
+
+Instead, to get results from the code, you must evaluate it, then "Preview".
+
+Ways of evaluating code blocks:  
+
+1. right-facing triangle -- evaluate current block
+1. down-facing gray triangle -- evaluate all the blocks _above_ this one.
+
+Or you can use keyboard shortcuts, or use the "Run" button in the upper right 
+of the document.
+
+Results from code blocks get presented in the Notebook.
+
+To get something like "Knit": do this:
+
+Run -> Restart R and Run All Chunks
+
+
+
+
+### Some caveats about notebooks
+
+1. You should restart and Run All occasionally to make sure it is reproducible.
+1. When evaluating code within an R notebook, by default the working directory for R is set
+to the directory that the R notebook live in, not the root directory of the project.  So, it can
+give different results (for example when doing file acess) than the R Console.  This can
+be hugely frustrating.
+1. your variables all live in the GlobalEnvironment, so they are at risk of getting overwritten
+if you use the same variable name in another Notebook that you are working on at the moment.
+For this reason, to check reproducibility, occasionaly check that Run -> Restart R and Run All Chunks
+works for you.
+
+The .nb.html files don't play very well with GitHub.  If you want to share them, they
+are great for emailing to people (but tell them to download it and view it as a file---the
+gmail viewer does a crappy job of rendering it.)
+
+
+
+### Opening a .nb.html file in Rstudio
+
+Doing this "reconstitutes" the .Rmd file that made it (along with the results that are saved in it).  Which is sort of cool.  However, it does not reconstitute all the data, etc. that went into it.  So, y'all wouldn't be
+able to run 02-choosing-96-SNPs.Rmd.
+
+
+
+## For Next Week:
+
+Read Chapter 3: Data Visualization
 
 
 
