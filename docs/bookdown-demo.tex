@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-05-05}
+  \date{2017-05-12}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -685,6 +685,9 @@ stylistically important in the long run.
   If you want to really geek out, Hadley shares his style tips more
   completely in his \href{http://adv-r.had.co.nz/Style.html}{Advanced R
   Programming} book.
+\item
+  In fact, he now has updated those edicts for the tidyverse
+  \href{http://style.tidyverse.org/index.html}{here}.
 \end{enumerate}
 
 This might seem pedantic, but adhering to these conventions makes it
@@ -1102,7 +1105,7 @@ These are answers I would use.
 \end{Shaded}
 
 \begin{verbatim}
-## Warning: Unknown column 'x'
+## Warning: Unknown or uninitialised column: 'x'.
 \end{verbatim}
 
 \begin{verbatim}
@@ -2768,6 +2771,2236 @@ wouldn't be able to run 02-choosing-96-SNPs.Rmd.
 \section{For Next Week:}\label{for-next-week}
 
 Read Chapter 3: Data Visualization
+
+\chapter{Week 6 meeting: using ggplot2}\label{ggplot2-intro-lecture}
+
+Today we are going to do a super brief review of the book chapter,
+namely just this template:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{<DATA>) +}\StringTok{         }\CommentTok{# DATA is a tibble of data *in long (tidy) format*}
+\StringTok{  }\ErrorTok{<}\NormalTok{GEOM_FUNCTION>(              }\CommentTok{# geom_point(), geom_bar(), geom_histogram(), etc. }
+                                \CommentTok{# each geom_function output gets layered on top of the last!}
+     \DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(<MAPPINGS>), }\CommentTok{# mappings wrapped up in the aes() function}
+     \DataTypeTok{stat =} \NormalTok{<STAT>,             }\CommentTok{# usually can be avoided if the default is used}
+     \DataTypeTok{position =} \NormalTok{<POSITION>}\StringTok{      }\CommentTok{# dodge, stack, jitter...}
+\StringTok{  }\NormalTok{) +}
+\StringTok{  }\ErrorTok{<}\NormalTok{COORDINATE_FUNCTION>}\StringTok{ }\NormalTok{+}\StringTok{       }\CommentTok{# coord_flip(), or coord_quickmap(), or other things to set scales. }
+\StringTok{  }\ErrorTok{<}\NormalTok{FACET_FUNCTION>}\StringTok{              }\CommentTok{# facet_grid() or facet_wrap()}
+\end{Highlighting}
+\end{Shaded}
+
+And now we are going to launch directly into having everyone try this
+out on their own.
+
+Here is a data set of simulation results:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\NormalTok{sims <-}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\StringTok{"inputs/alewife_snps_100_of_200.rds"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+That looks like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sims}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 700 × 6
+##     iter     repunit   true_rho   rho_mcmc     rho_bh     rho_pb
+##    <int>      <fctr>      <dbl>      <dbl>      <dbl>      <dbl>
+## 1      1         CAN 0.04573827 0.06489907 0.04550360 0.06226238
+## 2      1         NNE 0.06962820 0.07385272 0.05886538 0.06360804
+## 3      1          MB 0.14588315 0.21344097 0.21242781 0.22291767
+## 4      1         NUN 0.46891013 0.14646259 0.35338886 0.24710874
+## 5      1         BIS 0.06644381 0.09336929 0.15767998 0.08005169
+## 6      1         LIS 0.15719031 0.35012560 0.11664560 0.27002139
+## 7      1 MidAtlantic 0.04620614 0.05784975 0.05548877 0.05403009
+## 8      2         CAN 0.02751659 0.02866411 0.02224521 0.02645824
+## 9      2         NNE 0.23190134 0.27633524 0.20446014 0.26219858
+## 10     2          MB 0.16320168 0.07701908 0.17914736 0.11657221
+## # ... with 690 more rows
+\end{verbatim}
+
+What we have here is a true proportion (\texttt{true\_rho}) that was
+simulated (100 iterations for each of 7 \texttt{repunit}s), and then we
+have estimates of that proportion using different methods
+(\texttt{rho\_mcmc}, \texttt{rho\_bh}, and \texttt{rho\_pb}).
+
+We want to compare the different types of estimated rho's to the
+\texttt{true\_rho} for each repunit.
+
+But before we do this, there is one more thing we need to know about
+ggplot: like most of the tidyverse tools, it doesn't like having
+multiple columns \emph{of the same variable}. What do we mean by that?
+Well, \texttt{rho\_mcmc}, \texttt{rho\_bh}, and \texttt{rho\_pb} are all
+just different flavors of a variable we might call
+\texttt{estimated\_rho}.
+
+We won't get to it this quarter, but everyone should read the
+\href{http://r4ds.had.co.nz/tidy-data.html}{Tidy Data} chapter. It will
+show how and why we would want to tidy our data to look like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tidy_sims <-}\StringTok{ }\NormalTok{sims %>%}
+\StringTok{  }\NormalTok{tidyr::}\KeywordTok{gather}\NormalTok{(}\DataTypeTok{data =} \NormalTok{., }\DataTypeTok{key =} \StringTok{"estimation_method"}\NormalTok{, }\DataTypeTok{value =} \StringTok{"estimated_rho"}\NormalTok{, rho_mcmc:rho_pb)}
+
+\CommentTok{# see what that looks like:}
+\NormalTok{tidy_sims %>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(iter, repunit, estimation_method)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2,100 × 5
+##     iter repunit   true_rho estimation_method estimated_rho
+##    <int>  <fctr>      <dbl>             <chr>         <dbl>
+## 1      1     CAN 0.04573827            rho_bh    0.04550360
+## 2      1     CAN 0.04573827          rho_mcmc    0.06489907
+## 3      1     CAN 0.04573827            rho_pb    0.06226238
+## 4      1     NNE 0.06962820            rho_bh    0.05886538
+## 5      1     NNE 0.06962820          rho_mcmc    0.07385272
+## 6      1     NNE 0.06962820            rho_pb    0.06360804
+## 7      1      MB 0.14588315            rho_bh    0.21242781
+## 8      1      MB 0.14588315          rho_mcmc    0.21344097
+## 9      1      MB 0.14588315            rho_pb    0.22291767
+## 10     1     NUN 0.46891013            rho_bh    0.35338886
+## # ... with 2,090 more rows
+\end{verbatim}
+
+See that we have taken the three columns of estimates and put them int
+he \texttt{estimated\_rho} column, and we are using the
+\texttt{estimation\_method} column to say which method was used for each
+row of values in \texttt{estimated\_rho}.
+
+You can download that \texttt{tidy\_sims} tibble from
+\href{https://www.dropbox.com/s/4uniolfszui6av7/tidy_sims.rds?dl=1}{here}.
+
+Now, we could start by making a scatter plot of estimated versus true
+rho with ggplot. That would look like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(tidy_sims, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{true_rho, }\DataTypeTok{y =} \NormalTok{estimated_rho)) +}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-34-1.pdf}
+
+OK, that is relatively uninformative. How about we spice it up a bit to
+make this:
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-35-1.pdf}
+
+\subsection{Your Mission}\label{your-mission}
+
+OK Class! Here is your mission.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Download \texttt{tidy\_sims} and figure out during our class time how
+  to make the above plot.\\
+  Hints: you will be using the \texttt{colour} aesthetic, a
+  \texttt{geom\_abline()} geom, and also \texttt{facet\_grid()}
+\item
+  When you have finished that, use your newly-acquired ggplot skills to
+  make an informative plot from your own data set.
+\end{enumerate}
+
+I will be here in class to help with this and field any questions.
+
+\section{Some lecture notes from a few years
+ago}\label{some-lecture-notes-from-a-few-years-ago}
+
+This is just a rewrite of some playing with ggplot that I did for the
+reproducible research course a few years ago, updated to the tidyverse.
+
+It might be worth a reading through to see more examples \#\#\#
+Prerequisites \{\#ggplot-prereq\} * To work through the examples you
+will need another package that you might not have yet. * Please
+download/install these before coming to class: 1. install necessary
+packages:
+
+\begin{verbatim}
+    ```r
+    install.packages("lubridate")
+    ```
+2. Pull the most recent version of the rep-res-course repo just before coming to class.
+\end{verbatim}
+
+\subsection{Goals for this hour:}\label{goals-for-this-hour}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Describe (briefly) \texttt{ggplot2}s underlying philosophy and how to
+  work with it.
+\item
+  Quickly overview the \_geom\_s available in \texttt{ggplot2}
+\item
+  Develop an example plot together
+\item
+  Turn you all loose with the \texttt{mosaic} package to experiment with
+  different plots
+\end{enumerate}
+
+\section{About ggplot2}\label{about-ggplot2}
+
+\subsection{Basics}\label{basics}
+
+\begin{itemize}
+\tightlist
+\item
+  A package created by Hadley Wickham in 2005
+\item
+  Implements Wilkinson's ``grammar of graphics''
+\item
+  Unified way of thinking about 2-D statistical graphics
+\item
+  Not entirely easy to learn
+
+  \begin{itemize}
+  \tightlist
+  \item
+    if you already know R's base graphics system, it is painful to
+    re-learn a different way of doing things
+  \item
+    if you don't already know how to do graphics in R, be glad.
+  \item
+    regardless it is worth learning ggplot
+  \item
+    I am not even going to teach R's base graphics system
+  \end{itemize}
+\item
+  Amazing for quick data exploration and also produces publication
+  quality graphics
+\item
+  Support for legends etc., considerably better/easier than R base
+  graphics
+\end{itemize}
+
+\subsection{What is this grammar of
+graphics?}\label{what-is-this-grammar-of-graphics}
+
+\begin{itemize}
+\tightlist
+\item
+  Traditionally, people have referred to plots by \emph{name}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    i.e., scatterplot, histogram, bar chart, bubble plot, etc.
+  \end{itemize}
+\item
+  Disadvantages:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Lots of possible graphics = way too many names
+  \item
+    Fails to acknowledge the common elements / similarities /
+    dissimilarities between different plots
+  \end{itemize}
+\item
+  Wilkinson's \emph{Grammar of Graphics} (a book) describes a few
+  building blocks which when assembled together in particular ways can
+  generate all these named graphics (and more)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Provides a nice way of thinking about and describing graphics
+  \end{itemize}
+\end{itemize}
+
+\subsection{ggplot2}\label{ggplot2}
+
+\begin{itemize}
+\tightlist
+\item
+  Hadley Wickham's R implementation of a modified (\emph{layered})
+  grammar of graphics
+\item
+  \texttt{ggplot} and \texttt{ggplot2} are similar. `\texttt{ggplot2} is
+  just more recent (and recommended)
+\item
+  \texttt{ggplot} operates on \emph{data frames}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    in R base graphics typically you pass in vectors
+  \item
+    in \texttt{ggplot} everything you want to use in a graphic must be
+    contained within a data frame
+  \item
+    Takes getting used to, but ultimately is a good way of thinking
+    about it.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Components of the grammar of
+graphics}\label{components-of-the-grammar-of-graphics}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \emph{data} and \emph{aesthetic mappings}
+\item
+  \emph{geoms} (geometric objects)
+\item
+  \emph{stats} (statistical transformations)
+\item
+  \emph{scales}
+\item
+  \emph{coords} (coordinate systems)
+\item
+  \emph{facets} (a specification of how to break things into smaller
+  subplots)
+\end{enumerate}
+
+We will focus on 1, 2 for most of today.
+
+\subsection{In a nutshell}\label{in-a-nutshell}
+
+Without getting into the complications of scales and coordinate systems
+here, in a nutshell, is what ggplot does:
+
+\begin{itemize}
+\tightlist
+\item
+  Layers in plots are made by:
+
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \tightlist
+  \item
+    mapping \emph{values} in the columns of a data frame to
+    \emph{aesthetics}, which are properties that can visually express
+    differences, for example:
+
+    \begin{enumerate}
+    \def\labelenumii{\alph{enumii}.}
+    \tightlist
+    \item
+      \(x\)-position
+    \item
+      \(y\)-position
+    \item
+      shape (of a plot character, for example)
+    \item
+      color
+    \item
+      size (of a point, for example)
+    \end{enumerate}
+  \item
+    Portraying those values by drawing a \emph{geometric object} whose
+    appearance and placement in space is dictated by the mapping of
+    values to aesthetics.
+  \end{enumerate}
+\end{itemize}
+
+\section{An example, please}\label{pv-example}
+
+Phew! That is a crazy mouthful. Is this really going to help us make
+pretty plots?
+
+All I can say is you owe it to yourself to persevere ---
+\texttt{ggplot2} is really worth the effort!
+
+\subsection{A pole vaulting example}\label{a-pole-vaulting-example}
+
+\begin{itemize}
+\tightlist
+\item
+  Here is a concrete example: we will investigate the history of
+  pole-vaulting world records
+\item
+  I grabbed the data by copying them from
+  \url{http://en.wikipedia.org/wiki/Men's_pole_vault_world_record_progression}
+  and pasting them into a text file
+\item
+  Here we make a data frame out of them:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)  }\CommentTok{# for dealing with dates}
+\KeywordTok{library}\NormalTok{(stringr)}
+\KeywordTok{library}\NormalTok{(lubridate)  }\CommentTok{# functions mdy, ymd, today(), etc.}
+    
+
+
+\CommentTok{# first off read the data into a data frame}
+\NormalTok{pv <-}\StringTok{ }\KeywordTok{read_tsv}\NormalTok{(}\StringTok{"inputs/mens_pole_vault_raw.txt"}\NormalTok{, }\DataTypeTok{comment =} \StringTok{"%"}\NormalTok{) %>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Date =} \NormalTok{lubridate::}\KeywordTok{mdy}\NormalTok{(}\KeywordTok{str_replace}\NormalTok{(Date, }\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{[[0-9]}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{]"}\NormalTok{, }\StringTok{""}\NormalTok{))) %>%}\StringTok{ }\CommentTok{# clean up dates}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Meters =} \KeywordTok{parse_number}\NormalTok{(Record))  }\CommentTok{# get the record in a numeric number of meters}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Parsed with column specification:
+## cols(
+##   Record = col_character(),
+##   Athlete = col_character(),
+##   Nation = col_character(),
+##   Venue = col_character(),
+##   Date = col_character(),
+##   `#[2]` = col_integer()
+## )
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Great, what do these look like? Try \texttt{View(pv)} if you are
+  following along. Here are the first few rows too:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pv}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 72 × 7
+##    Record        Athlete        Nation               Venue       Date
+##     <chr>          <chr>         <chr>               <chr>     <date>
+## 1  4.02 m    Marc Wright United States     Cambridge, U.S. 1912-06-08
+## 2  4.09 m     Frank Foss United States    Antwerp, Belgium 1920-08-20
+## 3  4.12 m   Charles Hoff        Norway Copenhagen, Denmark 1922-09-22
+## 4  4.21 m   Charles Hoff        Norway Copenhagen, Denmark 1923-07-22
+## 5  4.23 m   Charles Hoff        Norway        Oslo, Norway 1925-08-13
+## 6  4.25 m   Charles Hoff        Norway      Turku, Finland 1925-09-27
+## 7  4.27 m     Sabin Carr United States  Philadelphia, U.S. 1927-05-27
+## 8  4.30 m     Lee Barnes United States        Fresno, U.S. 1928-04-28
+## 9  4.37 m William Graber United States     Palo Alto, U.S. 1932-07-16
+## 10 4.39 m    Keith Brown United States        Boston, U.S. 1935-06-01
+## # ... with 62 more rows, and 2 more variables: `#[2]` <int>, Meters <dbl>
+\end{verbatim}
+
+\subsection{A first ggplot}\label{a-first-ggplot}
+
+\begin{itemize}
+\tightlist
+\item
+  There is a simplified ggplot function called \texttt{qplot} that
+  behaves more like R's base graphics function \texttt{plot()}.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I don't recommend \texttt{qplot}. It will just lengthen the time it
+    takes to understand the grammar of graphics.
+  \item
+    Instead, we will use the full \texttt{ggplot()} standard syntax.
+  \end{itemize}
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  First we have to essentially establish a plotting area upon which to
+  add layers. We will do this like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+  At this point, \texttt{g} is a ggplot plot object. We can try printing
+  it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-40-1.pdf}
+  That doesn't work, because there is nothing to plot. We have to add a
+  layer to it.
+\item
+  Adding a layer is done by adding a collection of geometric objects to
+  it using one of the \texttt{geom\_xxxx} functions. Each such function
+  requires a \emph{data set} and a \emph{mapping} of columns in the data
+  set to \emph{aesthetics}. Let's make some scatter-points: Meters as a
+  function of Date:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g2 <-}\StringTok{ }\NormalTok{g +}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{pv, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{Date, }\DataTypeTok{y =} \NormalTok{Meters))}
+\NormalTok{g2}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-41-1.pdf}
+
+  Wow! That totally worked. Here are some interesting points about:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g2 <-}\StringTok{ }\NormalTok{g +}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{pv, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{Date, }\DataTypeTok{y =} \NormalTok{Meters))}
+\NormalTok{g2}
+\end{Highlighting}
+\end{Shaded}
+
+  \begin{enumerate}
+  \def\labelenumii{\alph{enumii}.}
+  \tightlist
+  \item
+    You add layers by catenating them with \texttt{+}.
+  \item
+    the names of the columns don't need to be quoted.
+  \item
+    when you map aesthestics you wrap them inside the \texttt{aes()}
+    function
+  \item
+    the full object with all the layers is returned into \texttt{g2} and
+    then we printed it (by typing \texttt{g2}). (we could have also just
+    said
+    \texttt{g\ +\ geom\_point(data\ =\ pv,\ mapping\ =\ aes(x\ =\ Date,\ y\ =\ Meters))})
+  \item
+    we didn't have to do anything fancy to the dates\ldots{}ggplot knew
+    how to plot them. This is thanks to turning the dates into
+    \texttt{lubridate} objects. (If you work with dates, get to know the
+    lubridate package!)
+  \end{enumerate}
+\item
+  I want to overlay a line on that\ldots{}No problem! Add another layer:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g3 <-}\StringTok{ }\NormalTok{g2 +}\StringTok{ }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{data =} \NormalTok{pv, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{Date, }\DataTypeTok{y =} \NormalTok{Meters))}
+\NormalTok{g3}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-43-1.pdf}
+
+  That worked! We just added (literally, using a \texttt{+} sign!)
+  another layer---one that had a line on it. BUT! what if I want to make
+  that line blue?
+\item
+  Make the line blue. Note that you are giving the line an aesthetic
+  property (the color blue), but you are not mapping that to any values
+  in the data frame, \textbf{so} you don't put that within the
+  \texttt{aes()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g4 <-}\StringTok{ }\NormalTok{g2 +}\StringTok{ }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{data =} \NormalTok{pv, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{Date, }\DataTypeTok{y =} \NormalTok{Meters), }\DataTypeTok{color =} \StringTok{"blue"}\NormalTok{)}
+\NormalTok{g4}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-44-1.pdf}
+
+  That worked! Notice that we were able to put that new layer atop
+  \texttt{g2} which we had stored previously.
+\end{enumerate}
+
+\subsection{ggplot's system of
+defaults}\label{ggplots-system-of-defaults}
+
+\begin{itemize}
+\item
+  Hey! I am really tired of typing
+  \texttt{data\ =\ pv,\ mapping\ =\ aes(x\ =\ Date,\ y\ =\ Meters)}
+  isn't there some way around that?
+\item
+  Yes! You can pass a default data frame and/or default mappings to the
+  original \texttt{ggplot()} function. Then, if data and mappings are
+  not specified in later layers, the defaults are used.
+\item
+  Witness!
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{pv, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{Date, }\DataTypeTok{y =} \NormalTok{Meters))  }\CommentTok{# this defines defaults}
+\NormalTok{d2 <-}\StringTok{ }\NormalTok{d +}\StringTok{ }\KeywordTok{geom_point}\NormalTok{()  }\CommentTok{# add a layer with points}
+\NormalTok{d2  }\CommentTok{# print it}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-45-1.pdf}
+\item
+  Sick! Now we can add all sorts of fun layers as we see fit, each time,
+  by invoking a \texttt{geom\_xxx()} function.
+\item
+  Let's go totally crazy!
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Establish plot base with defaults:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{pv, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{Date, }\DataTypeTok{y =} \NormalTok{Meters))}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Add a transparent turquoise area along the back:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d2 <-}\StringTok{ }\NormalTok{d +}\StringTok{ }\KeywordTok{geom_ribbon}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{ymax =} \NormalTok{Meters), }\DataTypeTok{ymin =} \KeywordTok{min}\NormalTok{(pv$Meters), }\DataTypeTok{alpha =} \FloatTok{0.4}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"turquoise"}\NormalTok{)}
+\NormalTok{d2}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-47-1.pdf}
+
+  Wow! I feel like transparency was never so easy in R base graphics!
+\item
+  Put a line along there too:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d3 <-}\StringTok{ }\NormalTok{d2 +}\StringTok{ }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{color =} \StringTok{"blue"}\NormalTok{)}
+\NormalTok{d3}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-48-1.pdf}
+\item
+  Now add some small orange points:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d4 <-}\StringTok{ }\NormalTok{d3 +}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{color =} \StringTok{"orange"}\NormalTok{)}
+\NormalTok{d4}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-49-1.pdf}
+\item
+  Now, add ``rugs'' along the \(x\) and \(y\) axes that show the
+  position of points, and in them, map \emph{color} to \emph{Nation}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d5 <-}\StringTok{ }\NormalTok{d4 +}\StringTok{ }\KeywordTok{geom_rug}\NormalTok{(}\DataTypeTok{sides =} \StringTok{"bl"}\NormalTok{, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =} \NormalTok{Nation))}
+\NormalTok{d5}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-50-1.pdf}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Note that we are using the \texttt{aes()} function to add the
+    mapping of \emph{color} to \emph{Nation} within the
+    \texttt{geom\_rug()} function.
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Note also that the legend was created automatically.
+    \end{itemize}
+  \item
+    Wow! A legend is produced automatically, by default, and it looks
+    pretty good. This doesn't happen without an all-out wrestling match
+    in R's base graphics system.
+  \end{itemize}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  So, that was some fun playing around with the truly awesome ease with
+  which you can build up complex and lovely graphics with ggplot.
+\end{itemize}
+
+\subsection{How many geoms are there?}\label{how-many-geoms-are-there}
+
+\begin{itemize}
+\tightlist
+\item
+  Quite a few. There is a good summary with little icons for each
+  \href{http://docs.ggplot2.org/current/}{here}
+\item
+  Note that most geoms respond to the aesthetics of \texttt{x},
+  \texttt{y}, and \texttt{color} (or \texttt{fill}). And some have more
+  (or other) aesthetics you can map values to.
+\end{itemize}
+
+\subsection{Getting even sillier}\label{getting-even-sillier}
+
+\begin{itemize}
+\tightlist
+\item
+  Here is another plot I made while geeking out.
+\item
+  I wanted to get a sense for how much individual athletes had improved
+  since their first world record
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# add a column for the date of first record for each athlete}
+\NormalTok{pv <-}\StringTok{ }\NormalTok{pv %>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(Athlete) %>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{FirstRecordMeters =} \KeywordTok{min}\NormalTok{(Meters)) %>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ungroup}\NormalTok{() %>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{DateNext =} \KeywordTok{lead}\NormalTok{(Date,  }\DataTypeTok{default =} \NormalTok{lubridate::}\KeywordTok{ymd}\NormalTok{(lubridate::}\KeywordTok{today}\NormalTok{())))}
+
+
+\NormalTok{bb <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{pv, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{Date, }\DataTypeTok{y =} \NormalTok{Meters, }\DataTypeTok{color =} \NormalTok{Nation))  +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_ribbon}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{ymax =} \NormalTok{Meters, }\DataTypeTok{color =} \OtherTok{NULL}\NormalTok{), }\DataTypeTok{ymin =} \KeywordTok{min}\NormalTok{(pv$Meters), }\DataTypeTok{alpha =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"orange"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{color =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{size =} \NormalTok{.}\DecValTok{1}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_rect}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{xmin =} \NormalTok{Date, }
+                \DataTypeTok{xmax =} \NormalTok{DateNext, }
+                \DataTypeTok{ymin =} \NormalTok{FirstRecordMeters, }
+                \DataTypeTok{ymax =} \NormalTok{Meters,}
+                \DataTypeTok{fill =} \NormalTok{Nation}
+                \NormalTok{))}
+\NormalTok{bb}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-51-1.pdf}
+
+I used \texttt{geom\_rect()} to plot rectangles where the bottom edge is
+situated at the athlete's lowest world record. Note how it required
+massaging some data into the data frame at the beginning.
+
+\subsection{More! Add some text to it!}\label{more-add-some-text-to-it}
+
+Now, I want to try to get every single name in the first time the person
+set the record. Of course, they won't all fit exactly at the point (Date
+and Meters) of each record, so let's space them out evenly, then draw
+little line segments to meet up with the records.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  We make a new data frame that has just the first time a person got a
+  record
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pv1 <-}\StringTok{ }\NormalTok{pv %>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(}\StringTok{`}\DataTypeTok{#[2]}\StringTok{`} \NormalTok{==}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\NormalTok{pv1 }\CommentTok{# have a look at it}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 34 × 9
+##    Record        Athlete        Nation                       Venue
+##     <chr>          <chr>         <chr>                       <chr>
+## 1  4.02 m    Marc Wright United States             Cambridge, U.S.
+## 2  4.09 m     Frank Foss United States            Antwerp, Belgium
+## 3  4.12 m   Charles Hoff        Norway         Copenhagen, Denmark
+## 4  4.27 m     Sabin Carr United States          Philadelphia, U.S.
+## 5  4.30 m     Lee Barnes United States                Fresno, U.S.
+## 6  4.37 m William Graber United States             Palo Alto, U.S.
+## 7  4.39 m    Keith Brown United States                Boston, U.S.
+## 8  4.43 m  George Varoff United States Princeton, New Jersey, U.S.
+## 9  4.54 m    Bill Sefton United States           Los Angeles, U.S.
+## 10 4.54 m  Earle Meadows United States           Los Angeles, U.S.
+## # ... with 24 more rows, and 5 more variables: Date <date>, `#[2]` <int>,
+## #   Meters <dbl>, FirstRecordMeters <dbl>, DateNext <date>
+\end{verbatim}
+\item
+  Look at the previous plot and decide that we would like to run names
+  equally spaced along a line that runs from about (1910, 4.25) to
+  (1980, 6.5). Note that we will have to squish 34 names along that
+  line. So, we can define the points along it as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pv1 <-}\StringTok{ }\NormalTok{pv1 %>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{nameline.x =} \KeywordTok{seq}\NormalTok{(}\KeywordTok{mdy}\NormalTok{(}\StringTok{"1-1-1910"}\NormalTok{), }\KeywordTok{mdy}\NormalTok{(}\StringTok{"1-1-1980"}\NormalTok{), }\DataTypeTok{length.out =} \KeywordTok{nrow}\NormalTok{(.)),}
+         \DataTypeTok{nameline.y =} \KeywordTok{seq}\NormalTok{(}\FloatTok{4.5}\NormalTok{, }\FloatTok{6.44}\NormalTok{, }\DataTypeTok{length.out =} \KeywordTok{nrow}\NormalTok{(.)))}
+
+\NormalTok{pv1$nameline.x <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\KeywordTok{mdy}\NormalTok{(}\StringTok{"1-1-1910"}\NormalTok{), }\KeywordTok{mdy}\NormalTok{(}\StringTok{"1-1-1980"}\NormalTok{), }\DataTypeTok{length.out =} \KeywordTok{nrow}\NormalTok{(pv1))}
+\CommentTok{# holy cow! did you see how easily we got that sequence of dates? lubridate is amazing!}
+\NormalTok{pv1$nameline.y <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\FloatTok{4.5}\NormalTok{, }\FloatTok{6.44}\NormalTok{, }\DataTypeTok{length.out =} \KeywordTok{nrow}\NormalTok{(pv1))}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Add that line to the plot as colored points atop a black line.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bb2 <-}\StringTok{ }\NormalTok{bb +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{data =} \NormalTok{pv1, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{nameline.x, }\DataTypeTok{y =} \NormalTok{nameline.y), }\DataTypeTok{color =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.2}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{pv1, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{nameline.x, }\DataTypeTok{y =} \NormalTok{nameline.y))}
+\NormalTok{bb2}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-54-1.pdf}
+
+  Notice how the color of Nation gets applied to the points
+  automatically.
+\item
+  Now, little colored lines from the nameline points to the records. For
+  this we can use the \texttt{geom\_segment()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bb3 <-}\StringTok{ }\NormalTok{bb2 +}\StringTok{ }\KeywordTok{geom_segment}\NormalTok{(}\DataTypeTok{data =} \NormalTok{pv1, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{xend =} \NormalTok{nameline.x, }\DataTypeTok{yend =} \NormalTok{nameline.y))}
+\NormalTok{bb3}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-55-1.pdf}
+\item
+  Finally, we want to add the names of the athletes in there. We already
+  have their names in \texttt{pv1}. We use the \texttt{geom\_text()}
+  function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bb4 <-}\StringTok{ }\NormalTok{bb3 +}\StringTok{ }\KeywordTok{geom_text}\NormalTok{(}\DataTypeTok{data =} \NormalTok{pv1, }
+                       \KeywordTok{aes}\NormalTok{(}\DataTypeTok{label =} \NormalTok{Athlete, }
+                           \DataTypeTok{x =} \NormalTok{nameline.x, }
+                           \DataTypeTok{y =} \NormalTok{nameline.y +}\StringTok{ }\NormalTok{.}\DecValTok{05}\NormalTok{), }
+                       \DataTypeTok{angle =} \NormalTok{-}\DecValTok{45}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{)}
+\NormalTok{bb4}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-56-1.pdf}
+\item
+  That is pretty cool, but a lot of names have gotten chopped off. Can
+  we do something about that? There might be something a little more
+  automatic, but we can do it by-hand, too:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bb4 +}\StringTok{ }\KeywordTok{coord_cartesian}\NormalTok{(}\DataTypeTok{xlim =} \KeywordTok{mdy}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"1-1-1898"}\NormalTok{, }\StringTok{"1-1-2020"}\NormalTok{)), }\DataTypeTok{ylim =} \KeywordTok{c}\NormalTok{(}\FloatTok{3.8}\NormalTok{, }\FloatTok{7.1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-57-1.pdf}
+\end{enumerate}
+
+\chapter{Making Maps with R}\label{map-making-in-R}
+
+\section{Intro}\label{map-making-intro}
+
+For a long time, R has had a relatively simple mechanism, via the
+\texttt{maps} package, for making simple outlines of maps and plotting
+lat-long points and paths on them.
+
+More recently, with the advent of packages like \texttt{sp},
+\texttt{rgdal}, and \texttt{rgeos}, R has been acquiring much of the
+functionality of traditional GIS packages (like ArcGIS, etc). This is an
+exciting development, but not always easily accessible for the beginner,
+as it requires installation of specialized external libraries (that may,
+on some platforms, not be straightforward) and considerable familiarity
+with GIS concepts.
+
+More recently, a third approach to convenient mapping, using
+\texttt{ggmap} has been developed that allows the tiling of detailed
+base maps from Google Earth or Open Street Maps, upon which spatial data
+may be plotted. Today, we are going to focus on mapping using base maps
+from R's tried and true \texttt{maps} package and also using the
+\texttt{ggmap} package. We won't cover the more advanced GIS-related
+topics nor using \texttt{rgdal}, or \texttt{sp} to plot maps with
+different projections, etc. Nor will cover the somewhat more simplified
+approach to projections using the \texttt{mapproj} package.
+
+As in our previous explorations in this course, when it comes to
+plotting, we are going to completely skip over R's base graphics system
+and head directly to Hadley Wickham's \texttt{ggplot2} package. Hadley
+has included a few functions that make it relatively easy to interact
+with the data in R's \texttt{maps} package, and of course, once a map
+layer is laid down, you have all the power of ggplot at your fingertips
+to overlay whatever you may want to over the map. \texttt{ggmap} is a
+package that goes out to different map servers and grabs base maps to
+plot things on, then it sets up the coordinate system and writes it out
+as the base layer for further ggplotting. It is pretty sweet, but does
+not support different projections.
+
+\subsection{Today's Goals}\label{todays-goals}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Introduce readers to the map outlines available in the \texttt{maps}
+  package
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Show how to convert those data into data frames that
+    \texttt{ggplot2} can deal with
+  \item
+    Discuss some \texttt{ggplot2} related issues about plotting things.
+  \end{itemize}
+\item
+  Use \texttt{ggmap} to make some pretty decent looking maps
+\end{enumerate}
+
+I feel that the above twp topics should cover a large part of what
+people will need for making useful maps of field sites, or sampling
+locations, or fishing track lines, etc.
+
+For today we will be skipping how to read in traditional GIS
+``shapefiles'' so as to minimize the number of packages that need
+installation, but keep in mind that it isn't too hard to do that in R,
+too.
+
+\subsection{Prerequisites}\label{prerequisites}
+
+You are going to need to install a few extra packages to follow along
+with this lecture.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# these are packages you will need, but probably already have.}
+\CommentTok{# Don't bother installing if you already have them}
+\KeywordTok{install.packages}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{, }\StringTok{"devtools"}\NormalTok{, }\StringTok{"dplyr"}\NormalTok{, }\StringTok{"stringr"}\NormalTok{))}
+
+\CommentTok{# some standard map packages.}
+\KeywordTok{install.packages}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"maps"}\NormalTok{, }\StringTok{"mapdata"}\NormalTok{))}
+
+\CommentTok{# the github version of ggmap, which recently pulled in a small fix I had}
+\CommentTok{# for a bug }
+\NormalTok{devtools::}\KeywordTok{install_github}\NormalTok{(}\StringTok{"dkahle/ggmap"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Load up a few of the libraries we will
+use}\label{load-up-a-few-of-the-libraries-we-will-use}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(mapdata)}
+\KeywordTok{library}\NormalTok{(maps)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Plotting maps-package maps with
+ggplot}\label{maps-package-and-ggplot}
+
+\subsection{The main players:}\label{the-main-players}
+
+\begin{itemize}
+\tightlist
+\item
+  The \texttt{maps} package contains a lot of outlines of continents,
+  countries, states, and counties that have been with R for a long
+  time.\\
+\item
+  The \texttt{mapdata} package contains a few more, higher-resolution
+  outlines.
+\item
+  The \texttt{maps} package comes with a plotting function, but, we will
+  opt to use \texttt{ggplot2} to plot the maps in the \texttt{maps}
+  package.\\
+\item
+  Recall that \texttt{ggplot2} operates on data frames. Therefore we
+  need some way to translate the \texttt{maps} data into a data frame
+  format the \texttt{ggplot} can use.
+\end{itemize}
+
+\subsection{Maps in the maps package}\label{maps-in-the-maps-package}
+
+\begin{itemize}
+\tightlist
+\item
+  Package \texttt{maps} provides lots of different map outlines and
+  points for cities, etc.\\
+\item
+  Some examples: \texttt{usa}, \texttt{nz}, \texttt{state},
+  \texttt{world}, etc.
+\end{itemize}
+
+\subsection{Makin' data frames from map
+outlines}\label{makin-data-frames-from-map-outlines}
+
+\begin{itemize}
+\item
+  \texttt{ggplot2} provides the \texttt{map\_data()} function.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Think of it as a function that turns a series of points along an
+    outline into a data frame of those points.
+  \item
+    Syntax: \texttt{map\_data("name")} where ``name'' is a quoted string
+    of the name of a map in the \texttt{maps} or \texttt{mapdata}
+    package
+  \end{itemize}
+\item
+  Here we get a USA map from \texttt{maps}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{usa <-}\StringTok{ }\KeywordTok{map_data}\NormalTok{(}\StringTok{"usa"}\NormalTok{)}
+
+\KeywordTok{dim}\NormalTok{(usa)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7243    6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(usa)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        long      lat group order region subregion
+## 1 -101.4078 29.74224     1     1   main      <NA>
+## 2 -101.3906 29.74224     1     2   main      <NA>
+## 3 -101.3620 29.65056     1     3   main      <NA>
+## 4 -101.3505 29.63911     1     4   main      <NA>
+## 5 -101.3219 29.63338     1     5   main      <NA>
+## 6 -101.3047 29.64484     1     6   main      <NA>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{tail}\NormalTok{(usa)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           long      lat group order         region subregion
+## 7247 -122.6187 48.37482    10  7247 whidbey island      <NA>
+## 7248 -122.6359 48.35764    10  7248 whidbey island      <NA>
+## 7249 -122.6703 48.31180    10  7249 whidbey island      <NA>
+## 7250 -122.7218 48.23732    10  7250 whidbey island      <NA>
+## 7251 -122.7104 48.21440    10  7251 whidbey island      <NA>
+## 7252 -122.6703 48.17429    10  7252 whidbey island      <NA>
+\end{verbatim}
+\item
+  Here is the high-res world map centered on the Pacific Ocean from
+  \texttt{mapdata}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{w2hr <-}\StringTok{ }\KeywordTok{map_data}\NormalTok{(}\StringTok{"world2Hires"}\NormalTok{)}
+
+\KeywordTok{dim}\NormalTok{(w2hr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2274539       6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(w2hr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       long      lat group order region subregion
+## 1 226.6336 58.42416     1     1 Canada      <NA>
+## 2 226.6314 58.42336     1     2 Canada      <NA>
+## 3 226.6122 58.41196     1     3 Canada      <NA>
+## 4 226.5911 58.40027     1     4 Canada      <NA>
+## 5 226.5719 58.38864     1     5 Canada      <NA>
+## 6 226.5528 58.37724     1     6 Canada      <NA>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{tail}\NormalTok{(w2hr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             long      lat group   order      region subregion
+## 2276817 125.0258 11.18471  2284 2276817 Philippines     Leyte
+## 2276818 125.0172 11.17142  2284 2276818 Philippines     Leyte
+## 2276819 125.0114 11.16110  2284 2276819 Philippines     Leyte
+## 2276820 125.0100 11.15555  2284 2276820 Philippines     Leyte
+## 2276821 125.0111 11.14861  2284 2276821 Philippines     Leyte
+## 2276822 125.0155 11.13887  2284 2276822 Philippines     Leyte
+\end{verbatim}
+\end{itemize}
+
+\subsection{The structure of those data
+frames}\label{the-structure-of-those-data-frames}
+
+These are pretty straightforward:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{long} is longitude. Things to the west of the prime meridian
+  are negative.
+\item
+  \texttt{lat} is latitude.
+\item
+  \texttt{order}. This just shows in which order \texttt{ggplot} should
+  ``connect the dots''
+\item
+  \texttt{region} and \texttt{subregion} tell what region or subregion a
+  set of points surrounds.
+\item
+  \texttt{group}. This is \emph{very important}! \texttt{ggplot2}'s
+  functions can take a group argument which controls (amongst other
+  things) whether adjacent points should be connected by lines. If they
+  are in the same group, then they get connected, but if they are in
+  different groups then they don't.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Essentially, having to points in different groups means that
+    \texttt{ggplot} ``lifts the pen'' when going between them.
+  \end{itemize}
+\end{itemize}
+
+\subsection{Plot the USA map}\label{plot-the-usa-map}
+
+\begin{itemize}
+\tightlist
+\item
+  Maps in this format can be plotted with the polygon geom. i.e.~using
+  \texttt{geom\_polygon()}.
+\item
+  \texttt{geom\_polygon()} drawn lines between points and ``closes them
+  up'' (i.e.~draws a line from the last point back to the first point)
+\item
+  You have to map the \texttt{group} aesthetic to the \texttt{group}
+  column
+\item
+  Of course, \texttt{x\ =\ long} and \texttt{y\ =\ lat} are the other
+  aesthetics.
+\end{itemize}
+
+\subsubsection{Simple black map}\label{simple-black-map}
+
+By default, \texttt{geom\_polygon()} draws with no line color, but with
+a black fill:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{usa <-}\StringTok{ }\KeywordTok{map_data}\NormalTok{(}\StringTok{"usa"}\NormalTok{) }\CommentTok{# we already did this, but we can do it again}
+\KeywordTok{ggplot}\NormalTok{() +}\StringTok{ }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{usa, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{group =} \NormalTok{group)) +}\StringTok{ }
+\StringTok{  }\KeywordTok{coord_quickmap}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-62-1.pdf}
+
+\subsubsection{What is this
+coord\_quickmap()?}\label{what-is-this-coord_quickmap}
+
+\begin{itemize}
+\tightlist
+\item
+  This is very important when drawing maps.
+\item
+  It sets the relationship between one unit in the \(y\) direction and
+  one unit in the \(x\) direction so that the \emph{aspect ratio} is
+  good for your map.
+\item
+  Then, even if you change the outer dimensions of the plot (i.e.~by
+  changing the window size or the size of the pdf file you are saving it
+  to (in \texttt{ggsave} for example)), the aspect ratio remains
+  unchanged.
+\end{itemize}
+
+\subsubsection{Mess with line and fill
+colors}\label{mess-with-line-and-fill-colors}
+
+\begin{itemize}
+\item
+  Here is no fill, with a red line. Remember, fixed value of aesthetics
+  go \emph{outside} the \texttt{aes} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{usa, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{group =} \NormalTok{group), }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{color =} \StringTok{"red"}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\KeywordTok{coord_quickmap}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-63-1.pdf}
+\item
+  Here is violet fill, with a blue line.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gg1 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{() +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{usa, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{group =} \NormalTok{group), }\DataTypeTok{fill =} \StringTok{"violet"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"blue"}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\KeywordTok{coord_quickmap}\NormalTok{()}
+\NormalTok{gg1}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-64-1.pdf}
+\end{itemize}
+
+\subsubsection{Adding points to the map}\label{adding-points-to-the-map}
+
+\begin{itemize}
+\item
+  Let's add black and yellow points at our lab and at the NWFSC in
+  Seattle.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{labs <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}
+  \DataTypeTok{long =} \KeywordTok{c}\NormalTok{(-}\FloatTok{122.064873}\NormalTok{, -}\FloatTok{122.306417}\NormalTok{),}
+  \DataTypeTok{lat =} \KeywordTok{c}\NormalTok{(}\FloatTok{36.951968}\NormalTok{, }\FloatTok{47.644855}\NormalTok{),}
+  \DataTypeTok{names =} \KeywordTok{c}\NormalTok{(}\StringTok{"SWFSC-FED"}\NormalTok{, }\StringTok{"NWFSC"}\NormalTok{),}
+  \DataTypeTok{stringsAsFactors =} \OtherTok{FALSE}
+  \NormalTok{)  }
+
+\NormalTok{gg1 +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{labs, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat), }\DataTypeTok{color =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{5}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{labs, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat), }\DataTypeTok{color =} \StringTok{"yellow"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-65-1.pdf}
+\end{itemize}
+
+\subsubsection{See how important the group aesthetic
+is}\label{see-how-important-the-group-aesthetic-is}
+
+Here we plot that map without using the group aesthetic:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}\StringTok{ }
+\StringTok{      }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{usa, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat), }\DataTypeTok{fill =} \StringTok{"violet"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"blue"}\NormalTok{) +}\StringTok{ }
+\StringTok{      }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{labs, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat), }\DataTypeTok{color =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{5}\NormalTok{) +}
+\StringTok{      }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{labs, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat), }\DataTypeTok{color =} \StringTok{"yellow"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{4}\NormalTok{) +}
+\StringTok{      }\KeywordTok{coord_quickmap}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-66-1.pdf}
+
+That is no bueno! The lines are connecting points that should not be
+connected!
+
+\subsection{State maps}\label{state-maps}
+
+We can also get a data frame of polygons that tell us above state
+boundaries:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{states <-}\StringTok{ }\KeywordTok{map_data}\NormalTok{(}\StringTok{"state"}\NormalTok{)}
+\KeywordTok{dim}\NormalTok{(states)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 15537     6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(states)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        long      lat group order  region subregion
+## 1 -87.46201 30.38968     1     1 alabama      <NA>
+## 2 -87.48493 30.37249     1     2 alabama      <NA>
+## 3 -87.52503 30.37249     1     3 alabama      <NA>
+## 4 -87.53076 30.33239     1     4 alabama      <NA>
+## 5 -87.57087 30.32665     1     5 alabama      <NA>
+## 6 -87.58806 30.32665     1     6 alabama      <NA>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{tail}\NormalTok{(states)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            long      lat group order  region subregion
+## 15594 -106.3295 41.00659    63 15594 wyoming      <NA>
+## 15595 -106.8566 41.01232    63 15595 wyoming      <NA>
+## 15596 -107.3093 41.01805    63 15596 wyoming      <NA>
+## 15597 -107.9223 41.01805    63 15597 wyoming      <NA>
+## 15598 -109.0568 40.98940    63 15598 wyoming      <NA>
+## 15599 -109.0511 40.99513    63 15599 wyoming      <NA>
+\end{verbatim}
+
+\subsubsection{Plot all the states, all colored a little
+differently}\label{plot-all-the-states-all-colored-a-little-differently}
+
+This is just like it is above, but we can map fill to \texttt{region}
+and make sure the the lines of state borders are white.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{states) +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_polygon}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{fill =} \NormalTok{region, }\DataTypeTok{group =} \NormalTok{group), }\DataTypeTok{color =} \StringTok{"white"}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\KeywordTok{coord_quickmap}\NormalTok{() +}
+\StringTok{  }\KeywordTok{guides}\NormalTok{(}\DataTypeTok{fill=}\OtherTok{FALSE}\NormalTok{)  }\CommentTok{# do this to leave off the color legend}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-68-1.pdf}
+
+Boom! That is easy.
+
+\subsubsection{Plot just a subset of states in the contiguous
+48:}\label{plot-just-a-subset-of-states-in-the-contiguous-48}
+
+\begin{itemize}
+\item
+  Read about the \texttt{subset} command. It provides another way of
+  subsetting data frames (sort of like using the \texttt{{[}\ {]}}
+  operator with a logical vector).
+\item
+  We can use it to grab just CA, OR, and WA:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{west_coast <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(states, region %in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"california"}\NormalTok{, }\StringTok{"oregon"}\NormalTok{, }\StringTok{"washington"}\NormalTok{))}
+
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{west_coast) +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_polygon}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat), }\DataTypeTok{fill =} \StringTok{"palegreen"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"black"}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-69-1.pdf}
+\end{itemize}
+
+\subsubsection{Man that is ugly!!}\label{man-that-is-ugly}
+
+\begin{itemize}
+\item
+  I am just keeping people on their toes. What have we forgotten here?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{group}
+  \item
+    \texttt{coord\_quickmap()}
+  \end{itemize}
+\item
+  Let's put those back in there:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{west_coast) +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_polygon}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{group =} \NormalTok{group), }\DataTypeTok{fill =} \StringTok{"palegreen"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"black"}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\KeywordTok{coord_quickmap}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-70-1.pdf}
+\end{itemize}
+
+Phew! That is a little better!
+
+\subsubsection{Zoom in on California and look at
+counties}\label{zoom-in-on-california-and-look-at-counties}
+
+\begin{itemize}
+\item
+  Getting the california data is easy:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ca_df <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(states, region ==}\StringTok{ "california"}\NormalTok{)}
+
+\KeywordTok{head}\NormalTok{(ca_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          long      lat group order     region subregion
+## 667 -120.0060 42.00927     4   667 california      <NA>
+## 668 -120.0060 41.20139     4   668 california      <NA>
+## 669 -120.0060 39.70024     4   669 california      <NA>
+## 670 -119.9946 39.44241     4   670 california      <NA>
+## 671 -120.0060 39.31636     4   671 california      <NA>
+## 672 -120.0060 39.16166     4   672 california      <NA>
+\end{verbatim}
+\item
+  Now, let's also get the county lines there
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{counties <-}\StringTok{ }\KeywordTok{map_data}\NormalTok{(}\StringTok{"county"}\NormalTok{)}
+\NormalTok{ca_county <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(counties, region ==}\StringTok{ "california"}\NormalTok{)}
+
+\KeywordTok{head}\NormalTok{(ca_county)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           long      lat group order     region subregion
+## 6965 -121.4785 37.48290   157  6965 california   alameda
+## 6966 -121.5129 37.48290   157  6966 california   alameda
+## 6967 -121.8853 37.48290   157  6967 california   alameda
+## 6968 -121.8968 37.46571   157  6968 california   alameda
+## 6969 -121.9254 37.45998   157  6969 california   alameda
+## 6970 -121.9483 37.47717   157  6970 california   alameda
+\end{verbatim}
+\item
+  Plot the state first but let's ditch the axes gridlines, and gray
+  background by using the super-wonderful \texttt{theme\_void()} which
+  leaves off everything except the geoms.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ca_base <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =} \NormalTok{ca_df, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{group =} \NormalTok{group)) +}\StringTok{ }
+\StringTok{  }\KeywordTok{coord_quickmap}\NormalTok{() +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{color =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"gray"}\NormalTok{)}
+\NormalTok{ca_base +}\StringTok{ }\KeywordTok{theme_void}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-73-1.pdf}
+\item
+  Now plot the county boundaries in white:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ca_base +}\StringTok{ }\KeywordTok{theme_void}\NormalTok{() +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{ca_county, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{color =} \StringTok{"white"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{color =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{)  }\CommentTok{# get the state border back on top}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-74-1.pdf}
+\end{itemize}
+
+\subsubsection{Get some facts about the
+counties}\label{get-some-facts-about-the-counties}
+
+\begin{itemize}
+\tightlist
+\item
+  The above is pretty cool, but it seems like it would be a lot cooler
+  if we could plot some information about those counties.\\
+\item
+  Now I can go to wikipedia or
+  \url{http://www.california-demographics.com/counties_by_population}
+  and grab population and area data for each county.
+\item
+  In fact, I copied their little table on Wikipedia and saved it into
+  \texttt{inputs/ca-counties-wikipedia.txt}. In full disclosure I also
+  edited the name of San Francisco from ``City and County of San
+  Francisco'' to ``San Francisco County'' to be like the others (and not
+  break my regex!)
+\item
+  2016 Edit! I had originally pumped the matrix resulting from the
+  \texttt{str\_match} below through a few other \texttt{stringr}
+  function (like \texttt{str\_replace\_all}) which, apparently, in an
+  older version of \texttt{stringr} maintained the matrix form, but in a
+  newer version, squashed everything into a vector. This was kindly
+  noted by hueykwik
+  \href{https://github.com/eriqande/rep-res-course/issues/74}{in this
+  issue}. So the code below is modified from what it used to be, but
+  seems to work now. Just as an aside, in the years since I put this
+  course together, things have changed quite a bit in the data analysis
+  world, and, if I re-did the course today I would spend almost all my
+  time in the \href{http://r4ds.had.co.nz/}{tidyverse}.
+\item
+  Watch this regex fun:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+    \KeywordTok{library}\NormalTok{(stringr)}
+    \KeywordTok{library}\NormalTok{(dplyr)}
+
+    \CommentTok{# make a data frame}
+    \NormalTok{x <-}\StringTok{ }\KeywordTok{readLines}\NormalTok{(}\StringTok{"inputs/ca-counties-wikipedia.txt"}\NormalTok{)}
+    \NormalTok{pop_and_area <-}\StringTok{ }\KeywordTok{str_match}\NormalTok{(x, }\StringTok{"^([a-zA-Z ]+)County}\CharTok{\textbackslash{}t}\StringTok{.*}\CharTok{\textbackslash{}t}\StringTok{([0-9,]\{2,10\})}\CharTok{\textbackslash{}t}\StringTok{([0-9,]\{2,10\}) sq mi$"}\NormalTok{)[, -}\DecValTok{1}\NormalTok{] %>%}
+\StringTok{      }\KeywordTok{na.omit}\NormalTok{() %>%}
+\StringTok{      }\KeywordTok{as.data.frame}\NormalTok{(}\DataTypeTok{stringsAsFactors =} \OtherTok{FALSE}\NormalTok{) %>%}
+\StringTok{      }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{subregion =} \KeywordTok{str_trim}\NormalTok{(V1) %>%}\StringTok{ }\KeywordTok{tolower}\NormalTok{(),}
+             \DataTypeTok{population =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{str_replace_all}\NormalTok{(V2, }\StringTok{","}\NormalTok{, }\StringTok{""}\NormalTok{)),}
+             \DataTypeTok{area =} \KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{str_replace_all}\NormalTok{(V3, }\StringTok{","}\NormalTok{, }\StringTok{""}\NormalTok{))}
+      \NormalTok{) %>%}
+\StringTok{      }\KeywordTok{select}\NormalTok{(subregion, population, area) %>%}
+\StringTok{      }\KeywordTok{tbl_df}\NormalTok{()}
+    
+    \KeywordTok{head}\NormalTok{(pop_and_area)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 × 3
+##   subregion population  area
+##       <chr>      <dbl> <dbl>
+## 1   alameda    1578891   738
+## 2    alpine       1159   739
+## 3    amador      36519   593
+## 4     butte     222090  1640
+## 5 calaveras      44515  1020
+## 6    colusa      21358  1151
+\end{verbatim}
+
+\begin{itemize}
+\item
+  We now have the numbers that we want, but we need to attach those to
+  every point on polygons of the counties. This is a job for
+  \texttt{inner\_join} from the \texttt{dplyr} package
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cacopa <-}\StringTok{ }\KeywordTok{inner_join}\NormalTok{(ca_county, pop_and_area, }\DataTypeTok{by =} \StringTok{"subregion"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\item
+  And finally, add a column of \texttt{people\_per\_mile}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cacopa$people_per_mile <-}\StringTok{ }\NormalTok{cacopa$population /}\StringTok{ }\NormalTok{cacopa$area}
+
+\KeywordTok{head}\NormalTok{(cacopa)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        long      lat group order     region subregion population area
+## 1 -121.4785 37.48290   157  6965 california   alameda    1578891  738
+## 2 -121.5129 37.48290   157  6966 california   alameda    1578891  738
+## 3 -121.8853 37.48290   157  6967 california   alameda    1578891  738
+## 4 -121.8968 37.46571   157  6968 california   alameda    1578891  738
+## 5 -121.9254 37.45998   157  6969 california   alameda    1578891  738
+## 6 -121.9483 37.47717   157  6970 california   alameda    1578891  738
+##   people_per_mile
+## 1        2139.419
+## 2        2139.419
+## 3        2139.419
+## 4        2139.419
+## 5        2139.419
+## 6        2139.419
+\end{verbatim}
+\end{itemize}
+
+\subsubsection{Now plot population density by
+county}\label{now-plot-population-density-by-county}
+
+If you were needing a little more elbow room in the great Golden State,
+this shows you where you can find it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# prepare to drop the axes and ticks but leave the guides and legends}
+\CommentTok{# We can't just throw down a theme_void()!}
+\NormalTok{ditch_the_axes <-}\StringTok{ }\KeywordTok{theme}\NormalTok{(}
+  \DataTypeTok{axis.text =} \KeywordTok{element_blank}\NormalTok{(),}
+  \DataTypeTok{axis.line =} \KeywordTok{element_blank}\NormalTok{(),}
+  \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+  \DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{(),}
+  \DataTypeTok{panel.grid =} \KeywordTok{element_blank}\NormalTok{(),}
+  \DataTypeTok{axis.title =} \KeywordTok{element_blank}\NormalTok{()}
+  \NormalTok{)}
+
+\NormalTok{elbow_room1 <-}\StringTok{ }\NormalTok{ca_base +}\StringTok{ }
+\StringTok{      }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{cacopa, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill =} \NormalTok{people_per_mile), }\DataTypeTok{color =} \StringTok{"white"}\NormalTok{) +}
+\StringTok{      }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{color =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{) +}
+\StringTok{      }\KeywordTok{theme_bw}\NormalTok{() +}
+\StringTok{      }\NormalTok{ditch_the_axes}
+
+\NormalTok{elbow_room1 }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-78-1.pdf}
+
+\subsubsection{Lame!}\label{lame}
+
+\begin{itemize}
+\tightlist
+\item
+  The popuation density in San Francisco is so great that it makes it
+  hard to discern differences between other areas.
+\item
+  This is a job for a scale transformation. Let's take the log-base-10
+  of the population density.
+\item
+  Instead of making a new column which is log10 of the
+  \texttt{people\_per\_mile} we can just apply the transformation in the
+  gradient using the \texttt{trans} argument
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{elbow_room1 +}\StringTok{ }\KeywordTok{scale_fill_gradient}\NormalTok{(}\DataTypeTok{trans =} \StringTok{"log10"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-79-1.pdf}
+
+\subsubsection{Still not great}\label{still-not-great}
+
+I personally like more color than ggplot uses in its default gradient.
+In that respect I gravitate more toward Matlab's default color gradient.
+Can we do something similar with \texttt{ggplot}?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eb2 <-}\StringTok{ }\NormalTok{elbow_room1 +}\StringTok{ }
+\StringTok{    }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{rev}\NormalTok{(}\KeywordTok{rainbow}\NormalTok{(}\DecValTok{7}\NormalTok{)),}
+                         \DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{1000}\NormalTok{, }\DecValTok{10000}\NormalTok{),}
+                         \DataTypeTok{trans =} \StringTok{"log10"}\NormalTok{)}
+\NormalTok{eb2}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-80-1.pdf}
+
+That is reasonably cool.
+
+\subsection{zoom in?}\label{zoom-in}
+
+Note that the scale of these maps from package \texttt{maps} are not
+great. We can zoom in to the Bay region, and it sort of works
+scale-wise, but if we wanted to zoom in more, it would be tough.
+
+Let's try!
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eb2 +}\StringTok{ }\KeywordTok{xlim}\NormalTok{(-}\DecValTok{123}\NormalTok{, -}\FloatTok{121.0}\NormalTok{) +}\StringTok{ }\KeywordTok{ylim}\NormalTok{(}\DecValTok{36}\NormalTok{, }\DecValTok{38}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-81-1.pdf}
+
+\begin{itemize}
+\tightlist
+\item
+  Whoa! That is an epic fail. Why?
+\item
+  Recall that \texttt{geom\_polygon()} connects the end point of a
+  \texttt{group} to its starting point.
+\item
+  And the kicker: the \texttt{xlim} and \texttt{ylim} functions in
+  \texttt{ggplot2} discard all the data that is not within the plot
+  area.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Hence there are new starting points and ending points for some
+    groups (or in this case the black-line permiter of California) and
+    those points get connected. Not good.
+  \end{itemize}
+\end{itemize}
+
+\subsection{True zoom.}\label{true-zoom.}
+
+\begin{itemize}
+\item
+  If you want to keep all the data the same but just zoom in, you can
+  use the \texttt{xlim} and \texttt{ylim} arguments to
+  \texttt{coord\_cartesian()}. Though, to keep the aspect ratio correct
+  we must use \texttt{coord\_quickmap()} instead of
+  \texttt{coord\_cartesian()}.
+\item
+  This chops stuff off but doesn't discard it from the data set:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eb2 +}\StringTok{ }\KeywordTok{coord_quickmap}\NormalTok{(}\DataTypeTok{xlim =} \KeywordTok{c}\NormalTok{(-}\DecValTok{123}\NormalTok{, -}\FloatTok{121.0}\NormalTok{),  }\DataTypeTok{ylim =} \KeywordTok{c}\NormalTok{(}\DecValTok{36}\NormalTok{, }\DecValTok{38}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-82-1.pdf}
+\end{itemize}
+
+Side Note: The coastline in the \texttt{maps} package is pretty
+low-resolution, and looks like a heap of bird droppings when you zoom
+way in on it.
+
+If you want to get much more accurate coastlines, you can use better
+data sources like NOAA's
+\href{https://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html}{GSHHS}: A
+Global Self-consistent, Hierarchical, High-resolution Geography
+Database. I have a blog post about that at
+\url{http://eriqande.github.io/2014/12/17/compare-map-resolutions.html}.
+
+\section{ggmap}\label{ggmap-hooray}
+
+The \texttt{ggmap} package is a nice way to make quick maps with decent
+backgrounds! We will talk later about how to get better-looking maps at
+some resolutions by using shapefiles and rasters from
+naturalearthdata.com but \texttt{ggmap} will get you 95\% of the way
+there with a lot less of the work!
+
+If you don't have it, get the most updated version off GitHub:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{devtools::}\KeywordTok{install_github}\NormalTok{(}\StringTok{"dkahle/ggmap"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+And load it like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggmap)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Three examples}\label{three-examples}
+
+\begin{itemize}
+\tightlist
+\item
+  I am going to run through three examples. Working from the small
+  spatial scale up to a larger spatial scale.
+
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \tightlist
+  \item
+    Named ``sampling'' points on the Sisquoc River from the
+    ``Sisquoctober Adventure''
+  \item
+    A GPS track from a short bike ride in Wilder Ranch.
+  \item
+    Fish sampling locations from the coded wire tag data base.
+  \end{enumerate}
+\end{itemize}
+
+\subsection{How ggmap works}\label{how-ggmap-works}
+
+\begin{itemize}
+\tightlist
+\item
+  ggmap simplifies the process of downloading base maps from Google or
+  Open Street Maps or Stamen Maps to use in the background of your
+  plots.
+\item
+  It also sets the axis scales, etc, in a nice way.\\
+\item
+  Once you have gotten your maps, you make a call with \texttt{ggmap()}
+  much as you would with \texttt{ggplot()}
+\item
+  Let's do by example.
+\end{itemize}
+
+\subsection{Sisquoctober}\label{sisquoctober}
+
+\begin{itemize}
+\item
+  Here is a small data frame of points from the Sisquoc River.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sisquoc <-}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"inputs/sisquoc-points.txt"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{"}\CharTok{\textbackslash{}t}\StringTok{"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{sisquoc}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     name       lon      lat
+## 1    a17 -119.7603 34.75474
+## 2 a20-24 -119.7563 34.75380
+## 3 a25-28 -119.7537 34.75371
+## 4 a18,19 -119.7573 34.75409
+## 5 a35,36 -119.7467 34.75144
+## 6    a31 -119.7478 34.75234
+## 7    a38 -119.7447 34.75230
+## 8    a43 -119.7437 34.75251
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# note that ggmap tends to use "lon" instead of "long" for longitude.}
+\end{Highlighting}
+\end{Shaded}
+\end{itemize}
+
+Grab google map tiles by specifying a center and a zoom. They are always
+squarish tiles\ldots{}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_googlemap}\NormalTok{(}\DataTypeTok{center =} \KeywordTok{c}\NormalTok{(}\KeywordTok{mean}\NormalTok{(sisquoc$lon), }\KeywordTok{mean}\NormalTok{(sisquoc$lat)), }\DataTypeTok{zoom =} \DecValTok{15}\NormalTok{) %>%}
+\StringTok{  }\KeywordTok{ggmap}\NormalTok{() +}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{sisquoc, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{lon, }\DataTypeTok{y =} \NormalTok{lat), }\DataTypeTok{color =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=34.753117,-119.751324&zoom=15&size=640x640&scale=2&maptype=terrain
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-86-1.pdf}
+
+Here with satellite photos:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_googlemap}\NormalTok{(}\DataTypeTok{center =} \KeywordTok{c}\NormalTok{(}\KeywordTok{mean}\NormalTok{(sisquoc$lon), }\KeywordTok{mean}\NormalTok{(sisquoc$lat)), }
+              \DataTypeTok{zoom =} \DecValTok{15}\NormalTok{,}
+              \DataTypeTok{maptype =} \StringTok{"satellite"}\NormalTok{) %>%}
+\StringTok{  }\KeywordTok{ggmap}\NormalTok{() +}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{sisquoc, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{lon, }\DataTypeTok{y =} \NormalTok{lat), }\DataTypeTok{color =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=34.753117,-119.751324&zoom=15&size=640x640&scale=2&maptype=satellite
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-87-1.pdf}
+
+Out of curiosity, let's see what Big Creek looks like:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{get_googlemap}\NormalTok{(}\DataTypeTok{center =} \KeywordTok{c}\NormalTok{(-}\FloatTok{121.599271}\NormalTok{, }\FloatTok{36.071003}\NormalTok{), }\DataTypeTok{zoom =} \DecValTok{15}\NormalTok{) %>%}
+\StringTok{  }\KeywordTok{ggmap}\NormalTok{() }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=36.071003,-121.599271&zoom=15&size=640x640&scale=2&maptype=terrain
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-88-1.pdf}
+
+Can we get the stamen maps to work?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bounds <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DataTypeTok{left =} \NormalTok{-}\FloatTok{119.77}\NormalTok{, }
+            \DataTypeTok{bottom =} \FloatTok{34.750}\NormalTok{,}
+            \DataTypeTok{right =} \NormalTok{-}\FloatTok{119.73}\NormalTok{,}
+            \DataTypeTok{top =} \FloatTok{34.755}\NormalTok{)}
+
+\CommentTok{# note, if you get these in the wrong order you get a totally }
+\CommentTok{# uninformative error message.}
+
+\NormalTok{sisquoc_stamen <-}\StringTok{ }\KeywordTok{get_stamenmap}\NormalTok{(}\DataTypeTok{bbox =} \NormalTok{bounds, }\DataTypeTok{maptype =} \StringTok{"terrain"}\NormalTok{, }\DataTypeTok{zoom =} \DecValTok{16}\NormalTok{)}
+
+\CommentTok{# this looks like crap!}
+
+\CommentTok{# maybe at bigger zoom levels it would be OK.}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\item
+  \texttt{ggmap} typically asks you for a zoom level, but we can try
+  using \texttt{ggmap}'s \texttt{make\_bbox} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sbbox <-}\StringTok{ }\KeywordTok{make_bbox}\NormalTok{(}\DataTypeTok{lon =} \NormalTok{sisquoc$lon, }\DataTypeTok{lat =} \NormalTok{sisquoc$lat, }\DataTypeTok{f =} \NormalTok{.}\DecValTok{1}\NormalTok{)}
+\NormalTok{sbbox}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       left     bottom      right        top 
+## -119.76198   34.75111 -119.74201   34.75507
+\end{verbatim}
+\item
+  Now, when we grab the map ggmap will try to fit it into that bounding
+  box. Let's try:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# First get the map. By default it gets it from Google.  I want it to be a satellite map}
+\NormalTok{sq_map <-}\StringTok{ }\KeywordTok{get_googlemap}\NormalTok{(}\DataTypeTok{location =} \NormalTok{sbbox, }\DataTypeTok{maptype =} \StringTok{"satellite"}\NormalTok{, }\DataTypeTok{source =} \StringTok{"google"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=29.763284,-95.363271&zoom=10&size=640x640&scale=2&maptype=satellite
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggmap}\NormalTok{(sq_map) +}\StringTok{ }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{sisquoc, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{lon, }\DataTypeTok{y =} \NormalTok{lat), }\DataTypeTok{color =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 8 rows containing missing values (geom_point).
+\end{verbatim}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-91-1.pdf}
+\item
+  Nope! That was a fail, but we got a warning about it too. (Actually it
+  is a little better than before because I hacked \texttt{ggmap} a
+  bit\ldots{}) Let's try using the zoom level. Zoom levels go from 3
+  (world scale to 20 (house scale)).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# compute the mean lat and lon}
+\NormalTok{ll_means <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(sisquoc[}\DecValTok{2}\NormalTok{:}\DecValTok{3}\NormalTok{], mean)}
+\NormalTok{sq_map2 <-}\StringTok{ }\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \NormalTok{ll_means,  }\DataTypeTok{maptype =} \StringTok{"satellite"}\NormalTok{, }\DataTypeTok{source =} \StringTok{"google"}\NormalTok{, }\DataTypeTok{zoom =} \DecValTok{15}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=34.753117,-119.751324&zoom=15&size=640x640&scale=2&maptype=satellite&language=en-EN
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggmap}\NormalTok{(sq_map2) +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{sisquoc, }\DataTypeTok{color =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{4}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_text}\NormalTok{(}\DataTypeTok{data =} \NormalTok{sisquoc, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{label =} \KeywordTok{paste}\NormalTok{(}\StringTok{"  "}\NormalTok{, }\KeywordTok{as.character}\NormalTok{(name), }\DataTypeTok{sep=}\StringTok{""}\NormalTok{)), }\DataTypeTok{angle =} \DecValTok{60}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{, }\DataTypeTok{color =} \StringTok{"yellow"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-92-1.pdf}
+\item
+  That is decent. How about if we use the ``terrain'' type of map:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sq_map3 <-}\StringTok{ }\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \NormalTok{ll_means,  }\DataTypeTok{maptype =} \StringTok{"terrain"}\NormalTok{, }\DataTypeTok{source =} \StringTok{"google"}\NormalTok{, }\DataTypeTok{zoom =} \DecValTok{15}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=34.753117,-119.751324&zoom=15&size=640x640&scale=2&maptype=terrain&language=en-EN
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggmap}\NormalTok{(sq_map3) +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{sisquoc, }\DataTypeTok{color =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{4}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_text}\NormalTok{(}\DataTypeTok{data =} \NormalTok{sisquoc, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{label =} \KeywordTok{paste}\NormalTok{(}\StringTok{"  "}\NormalTok{, }\KeywordTok{as.character}\NormalTok{(name), }\DataTypeTok{sep=}\StringTok{""}\NormalTok{)), }\DataTypeTok{angle =} \DecValTok{60}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{, }\DataTypeTok{color =} \StringTok{"yellow"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-93-1.pdf}
+\item
+  That is cool, but I would search for a better color for the
+  lettering\ldots{}
+\end{itemize}
+
+\subsection{How about a bike ride?}\label{how-about-a-bike-ride}
+
+\begin{itemize}
+\item
+  I was riding my bike one day with a my phone and downloaded the GPS
+  readings at short intervals.
+\item
+  We can plot the route like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bike <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"inputs/bike-ride.csv"}\NormalTok{)}
+\KeywordTok{head}\NormalTok{(bike)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         lon      lat elevation                 time
+## 1 -122.0646 36.95144      15.8 2011-12-08T19:37:56Z
+## 2 -122.0646 36.95191      15.5 2011-12-08T19:37:59Z
+## 3 -122.0645 36.95201      15.4 2011-12-08T19:38:04Z
+## 4 -122.0645 36.95218      15.5 2011-12-08T19:38:07Z
+## 5 -122.0643 36.95224      15.7 2011-12-08T19:38:10Z
+## 6 -122.0642 36.95233      15.8 2011-12-08T19:38:13Z
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bikemap1 <-}\StringTok{ }\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \KeywordTok{c}\NormalTok{(-}\FloatTok{122.080954}\NormalTok{, }\FloatTok{36.971709}\NormalTok{), }\DataTypeTok{maptype =} \StringTok{"terrain"}\NormalTok{, }\DataTypeTok{source =} \StringTok{"google"}\NormalTok{, }\DataTypeTok{zoom =} \DecValTok{14}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=36.971709,-122.080954&zoom=14&size=640x640&scale=2&maptype=terrain&language=en-EN
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggmap}\NormalTok{(bikemap1) +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_path}\NormalTok{(}\DataTypeTok{data =} \NormalTok{bike, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =} \NormalTok{elevation), }\DataTypeTok{size =} \DecValTok{3}\NormalTok{, }\DataTypeTok{lineend =} \StringTok{"round"}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_color_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{rainbow}\NormalTok{(}\DecValTok{7}\NormalTok{), }\DataTypeTok{breaks =} \KeywordTok{seq}\NormalTok{(}\DecValTok{25}\NormalTok{, }\DecValTok{200}\NormalTok{, }\DataTypeTok{by =} \DecValTok{25}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-94-1.pdf}
+\item
+  See how we have mapped elevation to the color of the path using our
+  rainbow colors again.
+\item
+  Note that getting the right zoom and position for the map is sort of
+  trial and error. You can go to google maps to figure out where the
+  center should be (right click and choose ``What's here?'' to get the
+  lat-long of any point. )
+\item
+  The \texttt{make\_bbox} function has never really worked for me.
+\end{itemize}
+
+\subsection{Fish sampling locations}\label{fish-sampling-locations}
+
+For this, I have whittled down some stuff in the coded wire tag data
+base to georeferenced marine locations in British Columbia where at
+least one Chinook salmon was recovered in between 2000 and 2012
+inclusive. To see how I did all that you can check out
+\href{https://github.com/eriqande/pbt-feasibility/blob/4ea2fc960f74f66b5ec3a11c107cdc52bfb346dc/Rmd/02-02-explore-recovery-and-catch-sample-data.Rmd\#looking-at-locations-of-location-codes}{this}
+
+Let's have a look at the data:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bc <-}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\StringTok{"inputs/bc_sites.rds"}\NormalTok{)}
+
+\CommentTok{# look at some of it:}
+\NormalTok{bc %>%}\StringTok{ }\KeywordTok{select}\NormalTok{(state_or_province:sub_location, longitude, latitude)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1,113 × 9
+##    state_or_province water_type sector region  area location sub_location
+##                <chr>      <chr>  <chr>  <chr> <chr>    <chr>        <chr>
+## 1                  2          M      S     22  016   THOR IS           01
+## 2                  2          M      N     26  012   MITC BY           18
+## 3                  2          M      S     22  015   HARW IS           02
+## 4                  2          M      N     26  006   HOPK PT           01
+## 5                  2          M      S     23  017   TENT IS           06
+## 6                  2          M      S     28  23A   NAHM BY           02
+## 7                  2          M      N     26  006   GIL IS            06
+## 8                  2          M      S     27  024   CLEL IS           06
+## 9                  2          M      S     27  23B   SAND IS           04
+## 10                 2          M      N     26  012   DUVA IS           16
+## # ... with 1,103 more rows, and 2 more variables: longitude <dbl>,
+## #   latitude <dbl>
+\end{verbatim}
+
+So, we have 1,113 points to play with.
+
+\subsubsection{What do we hope to
+learn?}\label{what-do-we-hope-to-learn}
+
+\begin{itemize}
+\item
+  These locations in BC are hierarchically structured. I am basically
+  interested in how close together sites in the same ``region'' or
+  ``area'' or ``sector'' are, and pondering whether it is OK to
+  aggregate fish recoveries at a certain level for the purposes of
+  getting a better overall estimate of the proportion of fish from
+  different hatcheries in these areas.
+\item
+  So, pretty simple stuff. I just want to plot these points on a map,
+  and paint them a different color according to their sector, region,
+  area, etc.
+\item
+  Let's just enumerate things first, using \texttt{dplyr}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bc %>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(sector, region, area) %>%}\StringTok{ }\KeywordTok{tally}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Source: local data frame [42 x 4]
+## Groups: sector, region [?]
+## 
+##    sector region  area     n
+##     <chr>  <chr> <chr> <int>
+## 1             48  008      1
+## 2             48  028      1
+## 3             48  311      1
+## 4       N     25  001     33
+## 5       N     25  003     15
+## 6       N     25  004     44
+## 7       N     25  02E      2
+## 8       N     25  02W     34
+## 9       N     26  006     28
+## 10      N     26  007     23
+## # ... with 32 more rows
+\end{verbatim}
+\item
+  That looks good. It appears like we could probably color code over the
+  whole area down to region, and then down to area within subregions.
+\end{itemize}
+
+\subsubsection{Makin' a map.}\label{makin-a-map.}
+
+\begin{itemize}
+\tightlist
+\item
+  Let us try again to use \texttt{make\_bbox()} to see if it will work
+  better when used on a large scale.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# compute the bounding box}
+\NormalTok{bc_bbox <-}\StringTok{ }\KeywordTok{make_bbox}\NormalTok{(}\DataTypeTok{lat =} \NormalTok{latitude, }\DataTypeTok{lon =} \NormalTok{longitude, }\DataTypeTok{data =} \NormalTok{bc)}
+\NormalTok{bc_bbox}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       left     bottom      right        top 
+## -133.63297   47.92497 -122.33652   55.80833
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# grab the maps from google}
+\NormalTok{bc_big <-}\StringTok{ }\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \NormalTok{bc_bbox, }\DataTypeTok{source =} \StringTok{"google"}\NormalTok{, }\DataTypeTok{maptype =} \StringTok{"terrain"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: bounding box given to google - spatial extent only approximate.
+\end{verbatim}
+
+\begin{verbatim}
+## converting bounding box to center/zoom specification. (experimental)
+\end{verbatim}
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=51.86665,-127.98475&zoom=6&size=640x640&scale=2&maptype=terrain&language=en-EN
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# plot the points and color them by sector}
+\KeywordTok{ggmap}\NormalTok{(bc_big) +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{bc, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{longitude, }\DataTypeTok{y =} \NormalTok{latitude, }\DataTypeTok{color =} \NormalTok{sector))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-97-1.pdf}
+
+\begin{itemize}
+\tightlist
+\item
+  Cool! That was about as easy as could be. North is in the north, south
+  is in the south, and the three reddish points are clearly aberrant
+  ones at the mouths of rivers.
+\end{itemize}
+
+\subsubsection{Coloring it by region}\label{coloring-it-by-region}
+
+\begin{itemize}
+\tightlist
+\item
+  We should be able to color these all by region to some extent (it
+  might get overwhelming), but let us have a go with it.
+\item
+  Notice that region names are unique overall (not just within N or S)
+  so we can just color by region name.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggmap}\NormalTok{(bc_big) +}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{bc, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{longitude, }\DataTypeTok{y =} \NormalTok{latitude, }\DataTypeTok{color =} \NormalTok{region))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-98-1.pdf}
+
+\begin{itemize}
+\tightlist
+\item
+  Once again that was dirt easy, though at this scale with all the
+  different regions, it is hard to resolve all the colors.
+\end{itemize}
+
+\subsubsection{Zooming in on each region and coloring by
+area}\label{zooming-in-on-each-region-and-coloring-by-area}
+
+\begin{itemize}
+\tightlist
+\item
+  It is time to really put this thing through its paces. (Keeping in
+  mind that \texttt{make\_bbox()} might fail\ldots{})
+\item
+  I want to make series of maps. One for each region, in which the the
+  areas in that region are colored differently.
+\item
+  How? Let's make a function: you pass it the region and it makes the
+  plot.
+\item
+  Keep in mind that there are no factors in this data frame so we don't
+  have to worry about dropping levels, etc.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{region_plot <-}\StringTok{ }\NormalTok{function(MyRegion) \{}
+  \NormalTok{tmp <-}\StringTok{ }\NormalTok{bc %>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(region ==}\StringTok{ }\NormalTok{MyRegion)}
+  \NormalTok{bbox <-}\StringTok{ }\KeywordTok{make_bbox}\NormalTok{(}\DataTypeTok{lon =} \NormalTok{longitude, }\DataTypeTok{lat =} \NormalTok{latitude, }\DataTypeTok{data =} \NormalTok{tmp)}
+  \NormalTok{mymap <-}\StringTok{ }\KeywordTok{get_map}\NormalTok{(}\DataTypeTok{location =} \NormalTok{bbox, }\DataTypeTok{source =} \StringTok{"google"}\NormalTok{, }\DataTypeTok{maptype =} \StringTok{"terrain"}\NormalTok{)}
+  \CommentTok{# now we want to count up how many areas there are}
+  \NormalTok{NumAreas <-}\StringTok{ }\NormalTok{tmp %>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\KeywordTok{n_distinct}\NormalTok{(area))}
+  \NormalTok{NumPoints <-}\StringTok{ }\KeywordTok{nrow}\NormalTok{(tmp)}
+  
+  \NormalTok{the_map <-}\StringTok{ }\KeywordTok{ggmap}\NormalTok{(mymap) +}
+\StringTok{    }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{tmp, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{longitude, }\DataTypeTok{y =} \NormalTok{latitude), }\DataTypeTok{size =} \DecValTok{4}\NormalTok{, }\DataTypeTok{color =} \StringTok{"black"}\NormalTok{) +}
+\StringTok{    }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{tmp, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{longitude, }\DataTypeTok{y =} \NormalTok{latitude, }\DataTypeTok{color =} \NormalTok{area), }\DataTypeTok{size =} \DecValTok{3}\NormalTok{) +}
+\StringTok{    }\KeywordTok{ggtitle}\NormalTok{(}
+      \KeywordTok{paste}\NormalTok{(}\StringTok{"BC Region: "}\NormalTok{, MyRegion, }\StringTok{" with "}\NormalTok{, NumPoints, }\StringTok{" locations in "}\NormalTok{, NumAreas, }\StringTok{" area(s)"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{""}\NormalTok{)}
+      \NormalTok{)}
+  
+  \KeywordTok{ggsave}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"bc_region"}\NormalTok{, MyRegion, }\StringTok{".pdf"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{""}\NormalTok{), the_map, }\DataTypeTok{width =} \DecValTok{9}\NormalTok{, }\DataTypeTok{height =} \DecValTok{9}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+So, with that function we just need to cycle over the regions and make
+all those plots.
+
+Note that I am saving them to PDFs because it is no fun to make a web
+page with all of those in there.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dump <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\KeywordTok{unique}\NormalTok{(bc$region), region_plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\chapter{in development}\label{in-development}
+
+Yo! Here is info about the california hydrologic regions:
+
+\url{https://www.arcgis.com/home/item.html?id=7a495cfa71ca4616aba58c5e915eef2c}
+
+THey can be downloaded as shape files here
+\url{https://mpsl.mlml.calstate.edu/GIS-shapefile-layers}.
 
 \bibliography{packages.bib,book.bib}
 

@@ -38,6 +38,7 @@ in the long run.
 1. Use R-Studio's magical `Cmd-i` keyboard shortcut to automatically indent highlighted code.
 1. If you want to really geek out, Hadley shares his style tips more completely 
 in his [Advanced R Programming](http://adv-r.had.co.nz/Style.html) book.
+1. In fact, he now has updated those edicts for the tidyverse [here](http://style.tidyverse.org/index.html).
 
 This might seem pedantic, but adhering to these conventions makes it much easier for
 people to read your code.

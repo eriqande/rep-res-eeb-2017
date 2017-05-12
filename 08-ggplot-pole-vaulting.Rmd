@@ -1,0 +1,395 @@
+# Week 6 meeting: using ggplot2 {#ggplot2-intro-lecture} 
+
+
+Today we are going to do a super brief review of the book chapter, namely
+just this template:
+```{r, eval= FALSE}
+ggplot(data = <DATA>) +         # DATA is a tibble of data *in long (tidy) format*
+  <GEOM_FUNCTION>(              # geom_point(), geom_bar(), geom_histogram(), etc. 
+                                # each geom_function output gets layered on top of the last!
+     mapping = aes(<MAPPINGS>), # mappings wrapped up in the aes() function
+     stat = <STAT>,             # usually can be avoided if the default is used
+     position = <POSITION>      # dodge, stack, jitter...
+  ) +
+  <COORDINATE_FUNCTION> +       # coord_flip(), or coord_quickmap(), or other things to set scales. 
+  <FACET_FUNCTION>              # facet_grid() or facet_wrap()
+
+```
+
+
+And now we are going to launch directly into having everyone try this out on their own.  
+
+Here is a data set of simulation results:
+```{r}
+library(tidyverse)
+sims <- readRDS("inputs/alewife_snps_100_of_200.rds")
+```
+That looks like this:
+```{r}
+sims
+```
+
+What we have here is a true proportion (`true_rho`) that was simulated (100 iterations for each of 7 `repunit`s),
+and then we have estimates of that proportion using different methods (`rho_mcmc`, `rho_bh`, and `rho_pb`).
+
+We want to compare the different types of estimated rho's to the `true_rho` for each repunit.  
+
+But before we do this, there is one more thing we need to know about ggplot:  like most of the 
+tidyverse tools, it doesn't like having multiple columns _of the same variable_.  What do we
+mean by that?  Well, `rho_mcmc`, `rho_bh`, and `rho_pb` are all just different flavors of a 
+variable we might call `estimated_rho`.  
+
+We won't get to it this quarter, but everyone should read the [Tidy Data](http://r4ds.had.co.nz/tidy-data.html) chapter.
+It will show how and why we would want to tidy our data to look like this:
+```{r}
+tidy_sims <- sims %>%
+  tidyr::gather(data = ., key = "estimation_method", value = "estimated_rho", rho_mcmc:rho_pb)
+
+# see what that looks like:
+tidy_sims %>%
+  arrange(iter, repunit, estimation_method)
+```
+
+See that we have taken the three columns of estimates and put them int he `estimated_rho` column,
+and we are using the `estimation_method` column to say which method was used for each row of
+values in `estimated_rho`. 
+
+You can download that `tidy_sims` tibble from [here](https://www.dropbox.com/s/4uniolfszui6av7/tidy_sims.rds?dl=1).
+
+Now, we could start by making a scatter plot of estimated versus true rho with ggplot.  That would look like this:
+```{r}
+ggplot(tidy_sims, aes(x = true_rho, y = estimated_rho)) +
+  geom_point()
+```
+
+OK, that is relatively uninformative.  How about we spice it up a bit to make this:
+```{r, echo=FALSE, fig.width=10, fig.height=14}
+ggplot(tidy_sims, aes(x = true_rho, y = estimated_rho, colour = repunit)) +
+  geom_point() + 
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  facet_grid(repunit ~ estimation_method)
+```
+
+### Your Mission
+
+OK Class!  Here is your mission.  
+
+1. Download `tidy_sims` and figure out during our class time how to make the above plot.  
+Hints:  you will be using the `colour` aesthetic, a `geom_abline()` geom, and also `facet_grid()`
+2. When you have finished that, use your newly-acquired ggplot skills to make an informative
+plot from your own data set.
+
+I will be here in class to help with this and field any questions.
+
+
+## Some lecture notes from a few years ago
+
+This is just a rewrite of some playing with ggplot that I did for the
+reproducible research course a few years ago, updated to the tidyverse.
+
+It might be worth a reading through to see more examples
+### Prerequisites {#ggplot-prereq}
+* To work through the examples you will need another package that you might not have yet.
+* Please download/install these before coming to class:
+    1. install necessary packages:
+        ```{r, eval = FALSE}
+        install.packages("lubridate")
+        ```
+    2. Pull the most recent version of the rep-res-course repo just before coming to class.
+
+### Goals for this hour:
+
+1. Describe (briefly) `ggplot2`s underlying philosophy and how 
+to work with it.
+2. Quickly overview the _geom_s available in `ggplot2`
+3. Develop an example plot together
+4. Turn you all loose with the `mosaic` package to experiment with different plots
+
+
+## About ggplot2
+
+### Basics
+
+* A package created by Hadley Wickham in 2005
+* Implements Wilkinson's "grammar of graphics"
+* Unified way of thinking about 2-D statistical graphics
+* Not entirely easy to learn
+    + if you already know R's base graphics system, it is painful to re-learn a different way of doing things
+    + if you don't already know how to do graphics in R, be glad.
+    + regardless it is worth learning ggplot
+    + I am not even going to teach R's base graphics system
+* Amazing for quick data exploration and also produces publication quality graphics
+* Support for legends etc., considerably better/easier than R base graphics
+
+### What is this grammar of graphics?
+
+* Traditionally, people have referred to plots by _name_
+    + i.e., scatterplot, histogram, bar chart, bubble plot, etc.
+* Disadvantages:
+    + Lots of possible graphics = way too many names 
+    + Fails to acknowledge the common elements / similarities / dissimilarities between different plots
+* Wilkinson's _Grammar of Graphics_ (a book) describes a few building blocks which when assembled together
+in particular ways can generate all these named graphics (and more)
+    + Provides a nice way of thinking about and describing graphics
+
+
+### ggplot2
+
+* Hadley Wickham's R implementation of a modified (_layered_) grammar of graphics
+* `ggplot` and `ggplot2` are similar. ``ggplot2` is just more recent (and recommended)
+* `ggplot` operates on _data frames_
+    + in R base graphics typically you pass in vectors
+    + in `ggplot` everything you want to use in a graphic must be contained within a data frame
+    + Takes getting used to, but ultimately is a good way of thinking about it.
+
+### Components of the grammar of graphics
+
+1. _data_ and _aesthetic mappings_
+2. _geoms_ (geometric objects)
+3. _stats_ (statistical transformations)
+4. _scales_ 
+5. _coords_ (coordinate systems)
+6. _facets_ (a specification of how to break things into smaller subplots)
+
+We will focus on 1, 2 for most of today.
+
+### In a nutshell
+
+Without getting into the complications of scales and coordinate systems
+here, in a nutshell, is what ggplot does:
+
+* Layers in plots are made by:
+    1. mapping _values_ in the columns of a data frame to _aesthetics_, which are properties that can visually express differences, for example:
+        a. $x$-position
+        b. $y$-position
+        c. shape (of a plot character, for example)
+        d. color
+        e. size (of a point, for example)
+    2. Portraying those values by drawing a _geometric object_ whose appearance and placement in space is dictated by the mapping of values to aesthetics.
+
+
+## An example, please {#pv-example}
+
+Phew! That is a crazy mouthful. Is this really going to help us make pretty plots?
+
+All I can say is you owe it to yourself to persevere --- `ggplot2` is really worth the effort!
+
+### A pole vaulting example
+
+* Here is a concrete example: we will investigate the history of pole-vaulting world records
+* I grabbed the data by copying them from http://en.wikipedia.org/wiki/Men's_pole_vault_world_record_progression and pasting them into a text file
+* Here we make a data frame out of them:
+```{r}
+library(tidyverse)  # for dealing with dates
+library(stringr)
+library(lubridate)  # functions mdy, ymd, today(), etc.
+    
+
+
+# first off read the data into a data frame
+pv <- read_tsv("inputs/mens_pole_vault_raw.txt", comment = "%") %>%
+  mutate(Date = lubridate::mdy(str_replace(Date, "\\[[0-9]\\]", ""))) %>% # clean up dates
+  mutate(Meters = parse_number(Record))  # get the record in a numeric number of meters
+
+```
+* Great, what do these look like? Try `View(pv)` if you are following along. Here are the first few rows too:
+```{r}
+pv
+```
+
+### A first ggplot
+
+* There is a simplified ggplot function called `qplot` that behaves more like R's base graphics
+function `plot()`.
+    + I don't recommend `qplot`.  It will just lengthen the time it takes to understand the grammar of graphics.
+    + Instead, we will use the full `ggplot()` standard syntax.
+    
+1. First we have to essentially establish a plotting area upon which to add layers. We will do this like so:
+    ```{r}
+    g <- ggplot()
+    ```
+    At this point, `g` is a ggplot plot object.  We can try printing it:
+    ```{r, error=TRUE}
+    g
+    ```
+    That doesn't work, because there is nothing to plot.  We have to add a layer to it.
+2. Adding a layer is done by adding a collection of geometric objects to it using one of the `geom_xxxx` functions. Each such function 
+requires a _data set_ and a _mapping_ of columns in the data set to _aesthetics_.  Let's make some scatter-points: Meters as a function of Date:
+    ```{r}
+    g2 <- g + geom_point(data = pv, mapping = aes(x = Date, y = Meters))
+    g2
+    ```
+    
+    Wow! That totally worked.  Here are some interesting points about:
+    ```{r, eval=FALSE}
+    g2 <- g + geom_point(data = pv, mapping = aes(x = Date, y = Meters))
+    g2
+    ```
+    a. You add layers by catenating them with `+`.
+    b. the names of the columns don't need to be quoted.
+    c. when you map aesthestics you wrap them inside the `aes()` function
+    b. the full object with all the layers is returned into `g2` and then we printed it (by typing `g2`).
+    (we could have also just said `g + geom_point(data = pv, mapping = aes(x = Date, y = Meters))`)
+    d. we didn't have to do anything fancy to the dates...ggplot knew how to plot them.  This is thanks to 
+    turning the dates into `lubridate` objects. (If you work with dates, get to know the lubridate package!)
+3.  I want to overlay a line on that...No problem!  Add another layer:
+    ```{r}
+    g3 <- g2 + geom_line(data = pv, mapping = aes(x = Date, y = Meters))
+    g3
+    ```
+    
+    That worked! We just added (literally, using a `+` sign!) another layer---one that had a line on it. BUT! what if I want
+    to make that line blue?
+4. Make the line blue.  Note that you are giving the line an aesthetic property (the color blue), but you are not mapping that
+to any values in the data frame, __so__ you don't put that within the `aes()` function:
+    ```{r}
+    g4 <- g2 + geom_line(data = pv, mapping = aes(x = Date, y = Meters), color = "blue")
+    g4
+    ```
+    
+    That worked!  Notice that we were able to put that new layer atop `g2` which we had stored previously.
+    
+
+### ggplot's system of defaults
+
+* Hey! I am really tired of typing `data = pv, mapping = aes(x = Date, y = Meters)` isn't there some way around that?
+* Yes! You can pass a default data frame and/or default mappings to the original `ggplot()` function.  Then, if data
+and mappings are not specified in later layers, the defaults are used. 
+* Witness!
+    ```{r}
+    d <- ggplot(data = pv, aes(x = Date, y = Meters))  # this defines defaults
+    d2 <- d + geom_point()  # add a layer with points
+    d2  # print it
+    ```
+* Sick!  Now we can add all sorts of fun layers as we see fit, each time, by invoking a `geom_xxx()` function.
+* Let's go totally crazy!
+
+1. Establish plot base with defaults:
+    ```{r}
+    d <- ggplot(data = pv, aes(x = Date, y = Meters))
+    ```
+2. Add a transparent turquoise area along the back:
+    ```{r}
+    d2 <- d + geom_ribbon(aes(ymax = Meters), ymin = min(pv$Meters), alpha = 0.4, fill = "turquoise")
+    d2
+    ```
+    
+    Wow! I feel like transparency was never so easy in R base graphics!
+3. Put a line along there too:
+    ```{r}
+    d3 <- d2 + geom_line(color = "blue")
+    d3
+    ```
+4. Now add some small orange points:
+    ```{r}
+    d4 <- d3 + geom_point(color = "orange")
+    d4
+    ```
+5. Now, add "rugs" along the $x$ and $y$ axes that show the position of points, and
+in them, map _color_ to _Nation_:
+    ```{r}
+    d5 <- d4 + geom_rug(sides = "bl", mapping = aes(color = Nation))
+    d5
+    ```
+    * Note that we are using the `aes()` function to add the mapping of _color_ to _Nation_ within the `geom_rug()` function.
+        + Note also that the legend was created automatically.
+    * Wow! A legend is produced automatically, by default, and it looks pretty good.  This doesn't happen without an all-out
+    wrestling match in R's base graphics system.
+    
+* So, that was some fun playing around with the truly awesome ease with which you can build up complex and lovely graphics with ggplot.
+
+
+          
+### How many geoms are there?
+
+* Quite a few.  There is a good summary with little icons for each [here](http://docs.ggplot2.org/current/)
+* Note that most geoms respond to the aesthetics of `x`, `y`, and `color` (or `fill`).  And some have more (or other) aesthetics you can
+map values to.
+
+### Getting even sillier
+
+* Here is another plot I made while geeking out.
+* I wanted to get a sense for how much individual athletes had improved since their first world record
+```{r}
+# add a column for the date of first record for each athlete
+pv <- pv %>%
+  group_by(Athlete) %>%
+  mutate(FirstRecordMeters = min(Meters)) %>% 
+  ungroup() %>%
+  mutate(DateNext = lead(Date,  default = lubridate::ymd(lubridate::today())))
+
+
+bb <- ggplot(data = pv, mapping = aes(x = Date, y = Meters, color = Nation))  + 
+  geom_ribbon(aes(ymax = Meters, color = NULL), ymin = min(pv$Meters), alpha = 0.2, fill = "orange") +
+  geom_line(color = "black", size = .1) +
+  geom_rect(aes(xmin = Date, 
+                xmax = DateNext, 
+                ymin = FirstRecordMeters, 
+                ymax = Meters,
+                fill = Nation
+                ))
+bb
+```
+
+I used `geom_rect()` to plot rectangles where the bottom edge is situated at the athlete's 
+lowest world record.  Note how it required massaging some data into the 
+data frame at the beginning.
+
+
+### More! Add some text to it!
+
+Now, I want to try to get every single name in the first time the person set
+the record. Of course, they won't all fit exactly at the point (Date and Meters)
+of each record, so let's space them out evenly, then draw little line segments
+to meet up with the records.
+
+1. We make a new data frame that has just the first time a person got
+a record
+    ```{r}
+    pv1 <- pv %>% 
+      filter(`#[2]` == 1)
+    pv1 # have a look at it
+    ```
+2. Look at the previous plot and decide that we would like to run names
+equally spaced along a line that runs from about (1910, 4.25) to (1980, 6.5).
+Note that we will have to squish `r nrow(pv1)` names along that line. So, we
+can define the points along it as follows:
+    ```{r}
+    pv1 <- pv1 %>%
+      mutate(nameline.x = seq(mdy("1-1-1910"), mdy("1-1-1980"), length.out = nrow(.)),
+             nameline.y = seq(4.5, 6.44, length.out = nrow(.)))
+    
+    pv1$nameline.x <- seq(mdy("1-1-1910"), mdy("1-1-1980"), length.out = nrow(pv1))
+    # holy cow! did you see how easily we got that sequence of dates? lubridate is amazing!
+    pv1$nameline.y <- seq(4.5, 6.44, length.out = nrow(pv1))
+    ```
+3. Add that line to the plot as colored points atop a black line.
+    ```{r}
+    bb2 <- bb + 
+      geom_line(data = pv1, mapping = aes(x = nameline.x, y = nameline.y), color = "black", size = 0.2) +
+      geom_point(data = pv1, mapping = aes(x = nameline.x, y = nameline.y))
+    bb2
+    ```
+    
+    Notice how the color of Nation gets applied to the points automatically.
+4. Now, little colored lines from the nameline points to the records. For this
+we can use the `geom_segment()` function.
+    ```{r}
+    bb3 <- bb2 + geom_segment(data = pv1, mapping = aes(xend = nameline.x, yend = nameline.y))
+    bb3
+    ```
+5. Finally, we want to add the names of the athletes in there.  We already have their names
+in `pv1`.  We use the `geom_text()` function.
+    ```{r, warning=FALSE}
+    bb4 <- bb3 + geom_text(data = pv1, 
+                           aes(label = Athlete, 
+                               x = nameline.x, 
+                               y = nameline.y + .05), 
+                           angle = -45, hjust = 1)
+    bb4
+    ```
+6. That is pretty cool, but a lot of names have gotten chopped off.  Can we do something about that? 
+There might be something a little more automatic, but we can do it by-hand, too:
+    ```{r, warning=FALSE, fig.width = 10}
+    bb4 + coord_cartesian(xlim = mdy(c("1-1-1898", "1-1-2020")), ylim = c(3.8, 7.1))
+    ```

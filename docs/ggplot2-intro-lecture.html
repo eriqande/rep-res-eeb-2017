@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Case Studies in Reproducible Research: a spring seminar at UCSC</title>
+  <meta name="description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook.">
+  <meta name="generator" content="bookdown 0.3.16 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Case Studies in Reproducible Research: a spring seminar at UCSC" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook." />
+  <meta name="github-repo" content="eriqande/rep-res-eeb-2017" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Case Studies in Reproducible Research: a spring seminar at UCSC" />
+  
+  <meta name="twitter:description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook." />
+  
+
+<meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
+
+
+<meta name="date" content="2017-05-12">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="week5.html">
+<link rel="next" href="map-making-in-R.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Case Studies in Reproducible Research</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Course Overview</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#meeting-times-location-requirements"><i class="fa fa-check"></i><b>1.1</b> Meeting Times, Location, Requirements</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#the-origin-of-this-seminar"><i class="fa fa-check"></i><b>1.2</b> The origin of this seminar</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#course-organizers"><i class="fa fa-check"></i><b>1.3</b> Course Organizers</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#course-goals"><i class="fa fa-check"></i><b>1.4</b> Course Goals</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#weekly-syllabus"><i class="fa fa-check"></i><b>1.5</b> Weekly Syllabus</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#week-1-introduction-and-getting-your-workspace-set-up"><i class="fa fa-check"></i><b>1.5.1</b> Week 1 — Introduction and Getting Your Workspace Set Up</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#week-2-rstudio-project-organization-using-git-and-github-quick-rmarkdown"><i class="fa fa-check"></i><b>1.5.2</b> Week 2 — RStudio project organization; using git and GitHub; Quick RMarkdown</a></li>
+<li class="chapter" data-level="1.5.3" data-path="index.html"><a href="index.html#week-3-tibbles.-reading-data-in.-data-rectangling"><i class="fa fa-check"></i><b>1.5.3</b> Week 3 — Tibbles. Reading data in. Data rectangling</a></li>
+<li class="chapter" data-level="1.5.4" data-path="index.html"><a href="index.html#week-4"><i class="fa fa-check"></i><b>1.5.4</b> Week 4 —</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="week1.html"><a href="week1.html"><i class="fa fa-check"></i><b>2</b> Week One Meeting</a><ul>
+<li class="chapter" data-level="2.1" data-path="week1.html"><a href="week1.html#software-installation"><i class="fa fa-check"></i><b>2.1</b> Software Installation</a></li>
+<li class="chapter" data-level="2.2" data-path="week1.html"><a href="week1.html#get-an-account-on-github"><i class="fa fa-check"></i><b>2.2</b> Get an account on GitHub</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="week1.html"><a href="week1.html#private-repositories"><i class="fa fa-check"></i><b>2.2.1</b> Private repositories</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="week1.html"><a href="week1.html#open-an-rstudio-project-from-github"><i class="fa fa-check"></i><b>2.3</b> Open an RStudio Project from GitHub</a></li>
+<li class="chapter" data-level="2.4" data-path="week1.html"><a href="week1.html#assignment-for-next-week-create-an-rstudio-project-with-your-own-data"><i class="fa fa-check"></i><b>2.4</b> Assignment for next week: Create an RStudio Project with Your Own Data</a></li>
+<li class="chapter" data-level="2.5" data-path="week1.html"><a href="week1.html#week2reading"><i class="fa fa-check"></i><b>2.5</b> Reading for next week</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="week2.html"><a href="week2.html"><i class="fa fa-check"></i><b>3</b> Week Two Meeting</a><ul>
+<li class="chapter" data-level="3.1" data-path="week2.html"><a href="week2.html#workflow-and-project-recap"><i class="fa fa-check"></i><b>3.1</b> Workflow and Project Recap</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="week2.html"><a href="week2.html#workflow-basics"><i class="fa fa-check"></i><b>3.1.1</b> Workflow: basics</a></li>
+<li class="chapter" data-level="3.1.2" data-path="week2.html"><a href="week2.html#workflow-projects"><i class="fa fa-check"></i><b>3.1.2</b> Workflow: projects</a></li>
+<li class="chapter" data-level="3.1.3" data-path="week2.html"><a href="week2.html#workflow-scripts"><i class="fa fa-check"></i><b>3.1.3</b> Workflow: scripts</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="week2.html"><a href="week2.html#lets-talk-about-the-pipe"><i class="fa fa-check"></i><b>3.2</b> Let’s talk about the pipe <code>%&gt;%</code></a></li>
+<li class="chapter" data-level="3.3" data-path="week2.html"><a href="week2.html#tibbles-and-rectangular-data"><i class="fa fa-check"></i><b>3.3</b> Tibbles and “rectangular” data</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="week2.html"><a href="week2.html#tibble-excercises"><i class="fa fa-check"></i><b>3.3.1</b> Tibble excercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="week2.html"><a href="week2.html#data-import"><i class="fa fa-check"></i><b>3.4</b> Data import</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="week2.html"><a href="week2.html#rstudios-gui-importer"><i class="fa fa-check"></i><b>3.4.1</b> RStudio’s GUI importer</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="week3.html"><a href="week3.html"><i class="fa fa-check"></i><b>4</b> Week Three Meeting</a><ul>
+<li class="chapter" data-level="4.1" data-path="week3.html"><a href="week3.html#git-basics"><i class="fa fa-check"></i><b>4.1</b> Git Basics</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="week3.html"><a href="week3.html#vcs"><i class="fa fa-check"></i><b>4.1.1</b> An overview of Version Control Systems (VCS)</a></li>
+<li class="chapter" data-level="4.1.2" data-path="week3.html"><a href="week3.html#git-versus-github"><i class="fa fa-check"></i><b>4.1.2</b> Git versus GitHub</a></li>
+<li class="chapter" data-level="4.1.3" data-path="week3.html"><a href="week3.html#git-thru-rstudio"><i class="fa fa-check"></i><b>4.1.3</b> Using git through RStudio</a></li>
+<li class="chapter" data-level="4.1.4" data-path="week3.html"><a href="week3.html#git-play"><i class="fa fa-check"></i><b>4.1.4</b> Go for it everyone!</a></li>
+<li class="chapter" data-level="4.1.5" data-path="week3.html"><a href="week3.html#git-how"><i class="fa fa-check"></i><b>4.1.5</b> How does git store and keep track of things</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="week3.html"><a href="week3.html#pushing-and-pulling-with-github"><i class="fa fa-check"></i><b>4.2</b> Pushing and Pulling With GitHub</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="week3.html"><a href="week3.html#creating-a-repository-on-github-and-the-initial-push"><i class="fa fa-check"></i><b>4.2.1</b> Creating a Repository on GitHub and the initial push</a></li>
+<li class="chapter" data-level="4.2.2" data-path="week3.html"><a href="week3.html#subsequent-pushes"><i class="fa fa-check"></i><b>4.2.2</b> Subsequent pushes</a></li>
+<li class="chapter" data-level="4.2.3" data-path="week3.html"><a href="week3.html#assign-collaborators"><i class="fa fa-check"></i><b>4.2.3</b> Assign collaborators</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="week3.html"><a href="week3.html#next-weeks-assignment"><i class="fa fa-check"></i><b>4.3</b> Next Week’s Assignment</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="week4.html"><a href="week4.html"><i class="fa fa-check"></i><b>5</b> Week Four Meeting</a><ul>
+<li class="chapter" data-level="5.1" data-path="week4.html"><a href="week4.html#knit-your-readme.rmd-files"><i class="fa fa-check"></i><b>5.1</b> Knit your README.Rmd files</a></li>
+<li class="chapter" data-level="5.2" data-path="week4.html"><a href="week4.html#changing-to-factors"><i class="fa fa-check"></i><b>5.2</b> Changing to factors</a></li>
+<li class="chapter" data-level="5.3" data-path="week4.html"><a href="week4.html#the-group_by-function"><i class="fa fa-check"></i><b>5.3</b> The <code>group_by()</code> function</a></li>
+<li class="chapter" data-level="5.4" data-path="week4.html"><a href="week4.html#how-do-i-learn-about-all-the-vectorized-functions-i-can-use-in-mutate-and-summarize"><i class="fa fa-check"></i><b>5.4</b> How do I learn about all the vectorized functions I can use in <code>mutate()</code> and <code>summarize()</code>?</a></li>
+<li class="chapter" data-level="5.5" data-path="week4.html"><a href="week4.html#next-weeks-assignment-1"><i class="fa fa-check"></i><b>5.5</b> Next Week’s Assignment</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="week5.html"><a href="week5.html"><i class="fa fa-check"></i><b>6</b> Week Five Meeting</a><ul>
+<li class="chapter" data-level="6.1" data-path="week5.html"><a href="week5.html#some-things-regarding-peoples-repositories"><i class="fa fa-check"></i><b>6.1</b> Some things regarding people’s repositories</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="week5.html"><a href="week5.html#data-compression"><i class="fa fa-check"></i><b>6.1.1</b> Data Compression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="week5.html"><a href="week5.html#a-quick-aside-about-missing-data"><i class="fa fa-check"></i><b>6.2</b> A quick aside about missing data</a></li>
+<li class="chapter" data-level="6.3" data-path="week5.html"><a href="week5.html#brief-highlights-of-the-joins-chapter"><i class="fa fa-check"></i><b>6.3</b> Brief Highlights of the Joins Chapter</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="week5.html"><a href="week5.html#a-few-thoughts-on-keys"><i class="fa fa-check"></i><b>6.3.1</b> A few thoughts on keys</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="week5.html"><a href="week5.html#an-example-of-using-some-joins"><i class="fa fa-check"></i><b>6.4</b> An example of using some joins</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="week5.html"><a href="week5.html#when-would-i-use-right_join"><i class="fa fa-check"></i><b>6.4.1</b> When would I use <code>right_join()</code>?</a></li>
+<li class="chapter" data-level="6.4.2" data-path="week5.html"><a href="week5.html#what-about-that-inner_join"><i class="fa fa-check"></i><b>6.4.2</b> What about that <code>inner_join()</code></a></li>
+<li class="chapter" data-level="6.4.3" data-path="week5.html"><a href="week5.html#an-anti_join-example"><i class="fa fa-check"></i><b>6.4.3</b> An anti_join example</a></li>
+<li class="chapter" data-level="6.4.4" data-path="week5.html"><a href="week5.html#just-for-fun-lets-see-a-full_join"><i class="fa fa-check"></i><b>6.4.4</b> Just for fun, let’s see a full_join()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="week5.html"><a href="week5.html#working-with-r-notebooks"><i class="fa fa-check"></i><b>6.5</b> Working with R Notebooks</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="week5.html"><a href="week5.html#open-your-own-r-notebook"><i class="fa fa-check"></i><b>6.5.1</b> Open your own R Notebook</a></li>
+<li class="chapter" data-level="6.5.2" data-path="week5.html"><a href="week5.html#working-with-r-notebooks-1"><i class="fa fa-check"></i><b>6.5.2</b> Working with R Notebooks</a></li>
+<li class="chapter" data-level="6.5.3" data-path="week5.html"><a href="week5.html#some-caveats-about-notebooks"><i class="fa fa-check"></i><b>6.5.3</b> Some caveats about notebooks</a></li>
+<li class="chapter" data-level="6.5.4" data-path="week5.html"><a href="week5.html#opening-a-.nb.html-file-in-rstudio"><i class="fa fa-check"></i><b>6.5.4</b> Opening a .nb.html file in Rstudio</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="week5.html"><a href="week5.html#for-next-week"><i class="fa fa-check"></i><b>6.6</b> For Next Week:</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html"><i class="fa fa-check"></i><b>7</b> Week 6 meeting: using ggplot2</a><ul>
+<li class="chapter" data-level="7.0.1" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#your-mission"><i class="fa fa-check"></i><b>7.0.1</b> Your Mission</a></li>
+<li class="chapter" data-level="7.1" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#some-lecture-notes-from-a-few-years-ago"><i class="fa fa-check"></i><b>7.1</b> Some lecture notes from a few years ago</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#goals-for-this-hour"><i class="fa fa-check"></i><b>7.1.1</b> Goals for this hour:</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#about-ggplot2"><i class="fa fa-check"></i><b>7.2</b> About ggplot2</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#basics"><i class="fa fa-check"></i><b>7.2.1</b> Basics</a></li>
+<li class="chapter" data-level="7.2.2" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#what-is-this-grammar-of-graphics"><i class="fa fa-check"></i><b>7.2.2</b> What is this grammar of graphics?</a></li>
+<li class="chapter" data-level="7.2.3" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#ggplot2"><i class="fa fa-check"></i><b>7.2.3</b> ggplot2</a></li>
+<li class="chapter" data-level="7.2.4" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#components-of-the-grammar-of-graphics"><i class="fa fa-check"></i><b>7.2.4</b> Components of the grammar of graphics</a></li>
+<li class="chapter" data-level="7.2.5" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#in-a-nutshell"><i class="fa fa-check"></i><b>7.2.5</b> In a nutshell</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#pv-example"><i class="fa fa-check"></i><b>7.3</b> An example, please</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#a-pole-vaulting-example"><i class="fa fa-check"></i><b>7.3.1</b> A pole vaulting example</a></li>
+<li class="chapter" data-level="7.3.2" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#a-first-ggplot"><i class="fa fa-check"></i><b>7.3.2</b> A first ggplot</a></li>
+<li class="chapter" data-level="7.3.3" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#ggplots-system-of-defaults"><i class="fa fa-check"></i><b>7.3.3</b> ggplot’s system of defaults</a></li>
+<li class="chapter" data-level="7.3.4" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#how-many-geoms-are-there"><i class="fa fa-check"></i><b>7.3.4</b> How many geoms are there?</a></li>
+<li class="chapter" data-level="7.3.5" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#getting-even-sillier"><i class="fa fa-check"></i><b>7.3.5</b> Getting even sillier</a></li>
+<li class="chapter" data-level="7.3.6" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#more-add-some-text-to-it"><i class="fa fa-check"></i><b>7.3.6</b> More! Add some text to it!</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="map-making-in-R.html"><a href="map-making-in-R.html"><i class="fa fa-check"></i><b>8</b> Making Maps with R</a><ul>
+<li class="chapter" data-level="8.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#map-making-intro"><i class="fa fa-check"></i><b>8.1</b> Intro</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#todays-goals"><i class="fa fa-check"></i><b>8.1.1</b> Today’s Goals</a></li>
+<li class="chapter" data-level="8.1.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#prerequisites"><i class="fa fa-check"></i><b>8.1.2</b> Prerequisites</a></li>
+<li class="chapter" data-level="8.1.3" data-path="map-making-in-R.html"><a href="map-making-in-R.html#load-up-a-few-of-the-libraries-we-will-use"><i class="fa fa-check"></i><b>8.1.3</b> Load up a few of the libraries we will use</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#maps-package-and-ggplot"><i class="fa fa-check"></i><b>8.2</b> Plotting maps-package maps with ggplot</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#the-main-players"><i class="fa fa-check"></i><b>8.2.1</b> The main players:</a></li>
+<li class="chapter" data-level="8.2.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#maps-in-the-maps-package"><i class="fa fa-check"></i><b>8.2.2</b> Maps in the maps package</a></li>
+<li class="chapter" data-level="8.2.3" data-path="map-making-in-R.html"><a href="map-making-in-R.html#makin-data-frames-from-map-outlines"><i class="fa fa-check"></i><b>8.2.3</b> Makin’ data frames from map outlines</a></li>
+<li class="chapter" data-level="8.2.4" data-path="map-making-in-R.html"><a href="map-making-in-R.html#the-structure-of-those-data-frames"><i class="fa fa-check"></i><b>8.2.4</b> The structure of those data frames</a></li>
+<li class="chapter" data-level="8.2.5" data-path="map-making-in-R.html"><a href="map-making-in-R.html#plot-the-usa-map"><i class="fa fa-check"></i><b>8.2.5</b> Plot the USA map</a></li>
+<li class="chapter" data-level="8.2.6" data-path="map-making-in-R.html"><a href="map-making-in-R.html#state-maps"><i class="fa fa-check"></i><b>8.2.6</b> State maps</a></li>
+<li class="chapter" data-level="8.2.7" data-path="map-making-in-R.html"><a href="map-making-in-R.html#zoom-in"><i class="fa fa-check"></i><b>8.2.7</b> zoom in?</a></li>
+<li class="chapter" data-level="8.2.8" data-path="map-making-in-R.html"><a href="map-making-in-R.html#true-zoom."><i class="fa fa-check"></i><b>8.2.8</b> True zoom.</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="map-making-in-R.html"><a href="map-making-in-R.html#ggmap-hooray"><i class="fa fa-check"></i><b>8.3</b> ggmap</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#three-examples"><i class="fa fa-check"></i><b>8.3.1</b> Three examples</a></li>
+<li class="chapter" data-level="8.3.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#how-ggmap-works"><i class="fa fa-check"></i><b>8.3.2</b> How ggmap works</a></li>
+<li class="chapter" data-level="8.3.3" data-path="map-making-in-R.html"><a href="map-making-in-R.html#sisquoctober"><i class="fa fa-check"></i><b>8.3.3</b> Sisquoctober</a></li>
+<li class="chapter" data-level="8.3.4" data-path="map-making-in-R.html"><a href="map-making-in-R.html#how-about-a-bike-ride"><i class="fa fa-check"></i><b>8.3.4</b> How about a bike ride?</a></li>
+<li class="chapter" data-level="8.3.5" data-path="map-making-in-R.html"><a href="map-making-in-R.html#fish-sampling-locations"><i class="fa fa-check"></i><b>8.3.5</b> Fish sampling locations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="in-development.html"><a href="in-development.html"><i class="fa fa-check"></i><b>9</b> in development</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Case Studies in Reproducible Research: a spring seminar at UCSC</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ggplot2-intro-lecture" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> Week 6 meeting: using ggplot2</h1>
+<p>Today we are going to do a super brief review of the book chapter, namely just this template:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> &lt;DATA&gt;) +<span class="st">         </span><span class="co"># DATA is a tibble of data *in long (tidy) format*</span>
+<span class="st">  </span><span class="er">&lt;</span>GEOM_FUNCTION&gt;(              <span class="co"># geom_point(), geom_bar(), geom_histogram(), etc. </span>
+                                <span class="co"># each geom_function output gets layered on top of the last!</span>
+     <span class="dt">mapping =</span> <span class="kw">aes</span>(&lt;MAPPINGS&gt;), <span class="co"># mappings wrapped up in the aes() function</span>
+     <span class="dt">stat =</span> &lt;STAT&gt;,             <span class="co"># usually can be avoided if the default is used</span>
+     <span class="dt">position =</span> &lt;POSITION&gt;<span class="st">      </span><span class="co"># dodge, stack, jitter...</span>
+<span class="st">  </span>) +
+<span class="st">  </span><span class="er">&lt;</span>COORDINATE_FUNCTION&gt;<span class="st"> </span>+<span class="st">       </span><span class="co"># coord_flip(), or coord_quickmap(), or other things to set scales. </span>
+<span class="st">  </span><span class="er">&lt;</span>FACET_FUNCTION&gt;<span class="st">              </span><span class="co"># facet_grid() or facet_wrap()</span></code></pre></div>
+<p>And now we are going to launch directly into having everyone try this out on their own.</p>
+<p>Here is a data set of simulation results:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+sims &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;inputs/alewife_snps_100_of_200.rds&quot;</span>)</code></pre></div>
+<p>That looks like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sims</code></pre></div>
+<pre><code>## # A tibble: 700 × 6
+##     iter     repunit   true_rho   rho_mcmc     rho_bh     rho_pb
+##    &lt;int&gt;      &lt;fctr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+## 1      1         CAN 0.04573827 0.06489907 0.04550360 0.06226238
+## 2      1         NNE 0.06962820 0.07385272 0.05886538 0.06360804
+## 3      1          MB 0.14588315 0.21344097 0.21242781 0.22291767
+## 4      1         NUN 0.46891013 0.14646259 0.35338886 0.24710874
+## 5      1         BIS 0.06644381 0.09336929 0.15767998 0.08005169
+## 6      1         LIS 0.15719031 0.35012560 0.11664560 0.27002139
+## 7      1 MidAtlantic 0.04620614 0.05784975 0.05548877 0.05403009
+## 8      2         CAN 0.02751659 0.02866411 0.02224521 0.02645824
+## 9      2         NNE 0.23190134 0.27633524 0.20446014 0.26219858
+## 10     2          MB 0.16320168 0.07701908 0.17914736 0.11657221
+## # ... with 690 more rows</code></pre>
+<p>What we have here is a true proportion (<code>true_rho</code>) that was simulated (100 iterations for each of 7 <code>repunit</code>s), and then we have estimates of that proportion using different methods (<code>rho_mcmc</code>, <code>rho_bh</code>, and <code>rho_pb</code>).</p>
+<p>We want to compare the different types of estimated rho’s to the <code>true_rho</code> for each repunit.</p>
+<p>But before we do this, there is one more thing we need to know about ggplot: like most of the tidyverse tools, it doesn’t like having multiple columns <em>of the same variable</em>. What do we mean by that? Well, <code>rho_mcmc</code>, <code>rho_bh</code>, and <code>rho_pb</code> are all just different flavors of a variable we might call <code>estimated_rho</code>.</p>
+<p>We won’t get to it this quarter, but everyone should read the <a href="http://r4ds.had.co.nz/tidy-data.html">Tidy Data</a> chapter. It will show how and why we would want to tidy our data to look like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_sims &lt;-<span class="st"> </span>sims %&gt;%
+<span class="st">  </span>tidyr::<span class="kw">gather</span>(<span class="dt">data =</span> ., <span class="dt">key =</span> <span class="st">&quot;estimation_method&quot;</span>, <span class="dt">value =</span> <span class="st">&quot;estimated_rho&quot;</span>, rho_mcmc:rho_pb)
+
+<span class="co"># see what that looks like:</span>
+tidy_sims %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(iter, repunit, estimation_method)</code></pre></div>
+<pre><code>## # A tibble: 2,100 × 5
+##     iter repunit   true_rho estimation_method estimated_rho
+##    &lt;int&gt;  &lt;fctr&gt;      &lt;dbl&gt;             &lt;chr&gt;         &lt;dbl&gt;
+## 1      1     CAN 0.04573827            rho_bh    0.04550360
+## 2      1     CAN 0.04573827          rho_mcmc    0.06489907
+## 3      1     CAN 0.04573827            rho_pb    0.06226238
+## 4      1     NNE 0.06962820            rho_bh    0.05886538
+## 5      1     NNE 0.06962820          rho_mcmc    0.07385272
+## 6      1     NNE 0.06962820            rho_pb    0.06360804
+## 7      1      MB 0.14588315            rho_bh    0.21242781
+## 8      1      MB 0.14588315          rho_mcmc    0.21344097
+## 9      1      MB 0.14588315            rho_pb    0.22291767
+## 10     1     NUN 0.46891013            rho_bh    0.35338886
+## # ... with 2,090 more rows</code></pre>
+<p>See that we have taken the three columns of estimates and put them int he <code>estimated_rho</code> column, and we are using the <code>estimation_method</code> column to say which method was used for each row of values in <code>estimated_rho</code>.</p>
+<p>You can download that <code>tidy_sims</code> tibble from <a href="https://www.dropbox.com/s/4uniolfszui6av7/tidy_sims.rds?dl=1">here</a>.</p>
+<p>Now, we could start by making a scatter plot of estimated versus true rho with ggplot. That would look like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(tidy_sims, <span class="kw">aes</span>(<span class="dt">x =</span> true_rho, <span class="dt">y =</span> estimated_rho)) +
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p>OK, that is relatively uninformative. How about we spice it up a bit to make this: <img src="bookdown-demo_files/figure-html/unnamed-chunk-35-1.png" width="960" /></p>
+<div id="your-mission" class="section level3">
+<h3><span class="header-section-number">7.0.1</span> Your Mission</h3>
+<p>OK Class! Here is your mission.</p>
+<ol style="list-style-type: decimal">
+<li>Download <code>tidy_sims</code> and figure out during our class time how to make the above plot.<br />
+Hints: you will be using the <code>colour</code> aesthetic, a <code>geom_abline()</code> geom, and also <code>facet_grid()</code></li>
+<li>When you have finished that, use your newly-acquired ggplot skills to make an informative plot from your own data set.</li>
+</ol>
+<p>I will be here in class to help with this and field any questions.</p>
+</div>
+<div id="some-lecture-notes-from-a-few-years-ago" class="section level2">
+<h2><span class="header-section-number">7.1</span> Some lecture notes from a few years ago</h2>
+<p>This is just a rewrite of some playing with ggplot that I did for the reproducible research course a few years ago, updated to the tidyverse.</p>
+<p>It might be worth a reading through to see more examples ### Prerequisites {#ggplot-prereq} * To work through the examples you will need another package that you might not have yet. * Please download/install these before coming to class: 1. install necessary packages:</p>
+<pre><code>    ```r
+    install.packages(&quot;lubridate&quot;)
+    ```
+2. Pull the most recent version of the rep-res-course repo just before coming to class.</code></pre>
+<div id="goals-for-this-hour" class="section level3">
+<h3><span class="header-section-number">7.1.1</span> Goals for this hour:</h3>
+<ol style="list-style-type: decimal">
+<li>Describe (briefly) <code>ggplot2</code>s underlying philosophy and how to work with it.</li>
+<li>Quickly overview the _geom_s available in <code>ggplot2</code></li>
+<li>Develop an example plot together</li>
+<li>Turn you all loose with the <code>mosaic</code> package to experiment with different plots</li>
+</ol>
+</div>
+</div>
+<div id="about-ggplot2" class="section level2">
+<h2><span class="header-section-number">7.2</span> About ggplot2</h2>
+<div id="basics" class="section level3">
+<h3><span class="header-section-number">7.2.1</span> Basics</h3>
+<ul>
+<li>A package created by Hadley Wickham in 2005</li>
+<li>Implements Wilkinson’s “grammar of graphics”</li>
+<li>Unified way of thinking about 2-D statistical graphics</li>
+<li>Not entirely easy to learn
+<ul>
+<li>if you already know R’s base graphics system, it is painful to re-learn a different way of doing things</li>
+<li>if you don’t already know how to do graphics in R, be glad.</li>
+<li>regardless it is worth learning ggplot</li>
+<li>I am not even going to teach R’s base graphics system</li>
+</ul></li>
+<li>Amazing for quick data exploration and also produces publication quality graphics</li>
+<li>Support for legends etc., considerably better/easier than R base graphics</li>
+</ul>
+</div>
+<div id="what-is-this-grammar-of-graphics" class="section level3">
+<h3><span class="header-section-number">7.2.2</span> What is this grammar of graphics?</h3>
+<ul>
+<li>Traditionally, people have referred to plots by <em>name</em>
+<ul>
+<li>i.e., scatterplot, histogram, bar chart, bubble plot, etc.</li>
+</ul></li>
+<li>Disadvantages:
+<ul>
+<li>Lots of possible graphics = way too many names</li>
+<li>Fails to acknowledge the common elements / similarities / dissimilarities between different plots</li>
+</ul></li>
+<li>Wilkinson’s <em>Grammar of Graphics</em> (a book) describes a few building blocks which when assembled together in particular ways can generate all these named graphics (and more)
+<ul>
+<li>Provides a nice way of thinking about and describing graphics</li>
+</ul></li>
+</ul>
+</div>
+<div id="ggplot2" class="section level3">
+<h3><span class="header-section-number">7.2.3</span> ggplot2</h3>
+<ul>
+<li>Hadley Wickham’s R implementation of a modified (<em>layered</em>) grammar of graphics</li>
+<li><code>ggplot</code> and <code>ggplot2</code> are similar. `<code>ggplot2</code> is just more recent (and recommended)</li>
+<li><code>ggplot</code> operates on <em>data frames</em>
+<ul>
+<li>in R base graphics typically you pass in vectors</li>
+<li>in <code>ggplot</code> everything you want to use in a graphic must be contained within a data frame</li>
+<li>Takes getting used to, but ultimately is a good way of thinking about it.</li>
+</ul></li>
+</ul>
+</div>
+<div id="components-of-the-grammar-of-graphics" class="section level3">
+<h3><span class="header-section-number">7.2.4</span> Components of the grammar of graphics</h3>
+<ol style="list-style-type: decimal">
+<li><em>data</em> and <em>aesthetic mappings</em></li>
+<li><em>geoms</em> (geometric objects)</li>
+<li><em>stats</em> (statistical transformations)</li>
+<li><em>scales</em></li>
+<li><em>coords</em> (coordinate systems)</li>
+<li><em>facets</em> (a specification of how to break things into smaller subplots)</li>
+</ol>
+<p>We will focus on 1, 2 for most of today.</p>
+</div>
+<div id="in-a-nutshell" class="section level3">
+<h3><span class="header-section-number">7.2.5</span> In a nutshell</h3>
+<p>Without getting into the complications of scales and coordinate systems here, in a nutshell, is what ggplot does:</p>
+<ul>
+<li>Layers in plots are made by:
+<ol style="list-style-type: decimal">
+<li>mapping <em>values</em> in the columns of a data frame to <em>aesthetics</em>, which are properties that can visually express differences, for example:
+<ol style="list-style-type: lower-alpha">
+<li><span class="math inline">\(x\)</span>-position</li>
+<li><span class="math inline">\(y\)</span>-position</li>
+<li>shape (of a plot character, for example)</li>
+<li>color</li>
+<li>size (of a point, for example)</li>
+</ol></li>
+<li>Portraying those values by drawing a <em>geometric object</em> whose appearance and placement in space is dictated by the mapping of values to aesthetics.</li>
+</ol></li>
+</ul>
+</div>
+</div>
+<div id="pv-example" class="section level2">
+<h2><span class="header-section-number">7.3</span> An example, please</h2>
+<p>Phew! That is a crazy mouthful. Is this really going to help us make pretty plots?</p>
+<p>All I can say is you owe it to yourself to persevere — <code>ggplot2</code> is really worth the effort!</p>
+<div id="a-pole-vaulting-example" class="section level3">
+<h3><span class="header-section-number">7.3.1</span> A pole vaulting example</h3>
+<ul>
+<li>Here is a concrete example: we will investigate the history of pole-vaulting world records</li>
+<li>I grabbed the data by copying them from <a href="http://en.wikipedia.org/wiki/Men&#39;s_pole_vault_world_record_progression" class="uri">http://en.wikipedia.org/wiki/Men's_pole_vault_world_record_progression</a> and pasting them into a text file</li>
+<li>Here we make a data frame out of them:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)  <span class="co"># for dealing with dates</span>
+<span class="kw">library</span>(stringr)
+<span class="kw">library</span>(lubridate)  <span class="co"># functions mdy, ymd, today(), etc.</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     date</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># first off read the data into a data frame</span>
+pv &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(<span class="st">&quot;inputs/mens_pole_vault_raw.txt&quot;</span>, <span class="dt">comment =</span> <span class="st">&quot;%&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Date =</span> lubridate::<span class="kw">mdy</span>(<span class="kw">str_replace</span>(Date, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">[[0-9]</span><span class="ch">\\</span><span class="st">]&quot;</span>, <span class="st">&quot;&quot;</span>))) %&gt;%<span class="st"> </span><span class="co"># clean up dates</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Meters =</span> <span class="kw">parse_number</span>(Record))  <span class="co"># get the record in a numeric number of meters</span></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   Record = col_character(),
+##   Athlete = col_character(),
+##   Nation = col_character(),
+##   Venue = col_character(),
+##   Date = col_character(),
+##   `#[2]` = col_integer()
+## )</code></pre>
+<ul>
+<li>Great, what do these look like? Try <code>View(pv)</code> if you are following along. Here are the first few rows too:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pv</code></pre></div>
+<pre><code>## # A tibble: 72 × 7
+##    Record        Athlete        Nation               Venue       Date
+##     &lt;chr&gt;          &lt;chr&gt;         &lt;chr&gt;               &lt;chr&gt;     &lt;date&gt;
+## 1  4.02 m    Marc Wright United States     Cambridge, U.S. 1912-06-08
+## 2  4.09 m     Frank Foss United States    Antwerp, Belgium 1920-08-20
+## 3  4.12 m   Charles Hoff        Norway Copenhagen, Denmark 1922-09-22
+## 4  4.21 m   Charles Hoff        Norway Copenhagen, Denmark 1923-07-22
+## 5  4.23 m   Charles Hoff        Norway        Oslo, Norway 1925-08-13
+## 6  4.25 m   Charles Hoff        Norway      Turku, Finland 1925-09-27
+## 7  4.27 m     Sabin Carr United States  Philadelphia, U.S. 1927-05-27
+## 8  4.30 m     Lee Barnes United States        Fresno, U.S. 1928-04-28
+## 9  4.37 m William Graber United States     Palo Alto, U.S. 1932-07-16
+## 10 4.39 m    Keith Brown United States        Boston, U.S. 1935-06-01
+## # ... with 62 more rows, and 2 more variables: `#[2]` &lt;int&gt;, Meters &lt;dbl&gt;</code></pre>
+</div>
+<div id="a-first-ggplot" class="section level3">
+<h3><span class="header-section-number">7.3.2</span> A first ggplot</h3>
+<ul>
+<li>There is a simplified ggplot function called <code>qplot</code> that behaves more like R’s base graphics function <code>plot()</code>.
+<ul>
+<li>I don’t recommend <code>qplot</code>. It will just lengthen the time it takes to understand the grammar of graphics.</li>
+<li>Instead, we will use the full <code>ggplot()</code> standard syntax.</li>
+</ul></li>
+</ul>
+<ol style="list-style-type: decimal">
+<li><p>First we have to essentially establish a plotting area upon which to add layers. We will do this like so:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g &lt;-<span class="st"> </span><span class="kw">ggplot</span>()</code></pre></div>
+<p>At this point, <code>g</code> is a ggplot plot object. We can try printing it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g</code></pre></div>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-40-1.png" width="672" /> That doesn’t work, because there is nothing to plot. We have to add a layer to it.</li>
+<li><p>Adding a layer is done by adding a collection of geometric objects to it using one of the <code>geom_xxxx</code> functions. Each such function requires a <em>data set</em> and a <em>mapping</em> of columns in the data set to <em>aesthetics</em>. Let’s make some scatter-points: Meters as a function of Date:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g2 &lt;-<span class="st"> </span>g +<span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> pv, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters))
+g2</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<p>Wow! That totally worked. Here are some interesting points about:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g2 &lt;-<span class="st"> </span>g +<span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> pv, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters))
+g2</code></pre></div>
+<ol style="list-style-type: lower-alpha">
+<li>You add layers by catenating them with <code>+</code>.</li>
+<li>the names of the columns don’t need to be quoted.</li>
+<li>when you map aesthestics you wrap them inside the <code>aes()</code> function</li>
+<li>the full object with all the layers is returned into <code>g2</code> and then we printed it (by typing <code>g2</code>). (we could have also just said <code>g + geom_point(data = pv, mapping = aes(x = Date, y = Meters))</code>)</li>
+<li>we didn’t have to do anything fancy to the dates…ggplot knew how to plot them. This is thanks to turning the dates into <code>lubridate</code> objects. (If you work with dates, get to know the lubridate package!)</li>
+</ol></li>
+<li><p>I want to overlay a line on that…No problem! Add another layer:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g3 &lt;-<span class="st"> </span>g2 +<span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">data =</span> pv, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters))
+g3</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+That worked! We just added (literally, using a <code>+</code> sign!) another layer—one that had a line on it. BUT! what if I want to make that line blue?</li>
+<li><p>Make the line blue. Note that you are giving the line an aesthetic property (the color blue), but you are not mapping that to any values in the data frame, <strong>so</strong> you don’t put that within the <code>aes()</code> function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">g4 &lt;-<span class="st"> </span>g2 +<span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">data =</span> pv, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters), <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)
+g4</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<p>That worked! Notice that we were able to put that new layer atop <code>g2</code> which we had stored previously.</p></li>
+</ol>
+</div>
+<div id="ggplots-system-of-defaults" class="section level3">
+<h3><span class="header-section-number">7.3.3</span> ggplot’s system of defaults</h3>
+<ul>
+<li>Hey! I am really tired of typing <code>data = pv, mapping = aes(x = Date, y = Meters)</code> isn’t there some way around that?</li>
+<li>Yes! You can pass a default data frame and/or default mappings to the original <code>ggplot()</code> function. Then, if data and mappings are not specified in later layers, the defaults are used.</li>
+<li><p>Witness!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> pv, <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters))  <span class="co"># this defines defaults</span>
+d2 &lt;-<span class="st"> </span>d +<span class="st"> </span><span class="kw">geom_point</span>()  <span class="co"># add a layer with points</span>
+d2  <span class="co"># print it</span></code></pre></div>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-45-1.png" width="672" /></li>
+<li>Sick! Now we can add all sorts of fun layers as we see fit, each time, by invoking a <code>geom_xxx()</code> function.</li>
+<li><p>Let’s go totally crazy!</p></li>
+</ul>
+<ol style="list-style-type: decimal">
+<li><p>Establish plot base with defaults:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> pv, <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters))</code></pre></div></li>
+<li><p>Add a transparent turquoise area along the back:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d2 &lt;-<span class="st"> </span>d +<span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymax =</span> Meters), <span class="dt">ymin =</span> <span class="kw">min</span>(pv$Meters), <span class="dt">alpha =</span> <span class="fl">0.4</span>, <span class="dt">fill =</span> <span class="st">&quot;turquoise&quot;</span>)
+d2</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+Wow! I feel like transparency was never so easy in R base graphics!</li>
+<li><p>Put a line along there too:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d3 &lt;-<span class="st"> </span>d2 +<span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)
+d3</code></pre></div>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-48-1.png" width="672" /></li>
+<li><p>Now add some small orange points:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d4 &lt;-<span class="st"> </span>d3 +<span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;orange&quot;</span>)
+d4</code></pre></div>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-49-1.png" width="672" /></li>
+<li><p>Now, add “rugs” along the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> axes that show the position of points, and in them, map <em>color</em> to <em>Nation</em>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d5 &lt;-<span class="st"> </span>d4 +<span class="st"> </span><span class="kw">geom_rug</span>(<span class="dt">sides =</span> <span class="st">&quot;bl&quot;</span>, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">color =</span> Nation))
+d5</code></pre></div>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-50-1.png" width="672" />
+<ul>
+<li>Note that we are using the <code>aes()</code> function to add the mapping of <em>color</em> to <em>Nation</em> within the <code>geom_rug()</code> function.
+<ul>
+<li>Note also that the legend was created automatically.</li>
+</ul></li>
+<li>Wow! A legend is produced automatically, by default, and it looks pretty good. This doesn’t happen without an all-out wrestling match in R’s base graphics system.</li>
+</ul></li>
+</ol>
+<ul>
+<li>So, that was some fun playing around with the truly awesome ease with which you can build up complex and lovely graphics with ggplot.</li>
+</ul>
+</div>
+<div id="how-many-geoms-are-there" class="section level3">
+<h3><span class="header-section-number">7.3.4</span> How many geoms are there?</h3>
+<ul>
+<li>Quite a few. There is a good summary with little icons for each <a href="http://docs.ggplot2.org/current/">here</a></li>
+<li>Note that most geoms respond to the aesthetics of <code>x</code>, <code>y</code>, and <code>color</code> (or <code>fill</code>). And some have more (or other) aesthetics you can map values to.</li>
+</ul>
+</div>
+<div id="getting-even-sillier" class="section level3">
+<h3><span class="header-section-number">7.3.5</span> Getting even sillier</h3>
+<ul>
+<li>Here is another plot I made while geeking out.</li>
+<li>I wanted to get a sense for how much individual athletes had improved since their first world record</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># add a column for the date of first record for each athlete</span>
+pv &lt;-<span class="st"> </span>pv %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Athlete) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">FirstRecordMeters =</span> <span class="kw">min</span>(Meters)) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">DateNext =</span> <span class="kw">lead</span>(Date,  <span class="dt">default =</span> lubridate::<span class="kw">ymd</span>(lubridate::<span class="kw">today</span>())))
+
+
+bb &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> pv, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> Meters, <span class="dt">color =</span> Nation))  +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymax =</span> Meters, <span class="dt">color =</span> <span class="ot">NULL</span>), <span class="dt">ymin =</span> <span class="kw">min</span>(pv$Meters), <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;orange&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> .<span class="dv">1</span>) +
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> Date, 
+                <span class="dt">xmax =</span> DateNext, 
+                <span class="dt">ymin =</span> FirstRecordMeters, 
+                <span class="dt">ymax =</span> Meters,
+                <span class="dt">fill =</span> Nation
+                ))
+bb</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+<p>I used <code>geom_rect()</code> to plot rectangles where the bottom edge is situated at the athlete’s lowest world record. Note how it required massaging some data into the data frame at the beginning.</p>
+</div>
+<div id="more-add-some-text-to-it" class="section level3">
+<h3><span class="header-section-number">7.3.6</span> More! Add some text to it!</h3>
+<p>Now, I want to try to get every single name in the first time the person set the record. Of course, they won’t all fit exactly at the point (Date and Meters) of each record, so let’s space them out evenly, then draw little line segments to meet up with the records.</p>
+<ol style="list-style-type: decimal">
+<li><p>We make a new data frame that has just the first time a person got a record</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pv1 &lt;-<span class="st"> </span>pv %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="st">`</span><span class="dt">#[2]</span><span class="st">`</span> ==<span class="st"> </span><span class="dv">1</span>)
+pv1 <span class="co"># have a look at it</span></code></pre></div>
+<pre><code>## # A tibble: 34 × 9
+##    Record        Athlete        Nation                       Venue
+##     &lt;chr&gt;          &lt;chr&gt;         &lt;chr&gt;                       &lt;chr&gt;
+## 1  4.02 m    Marc Wright United States             Cambridge, U.S.
+## 2  4.09 m     Frank Foss United States            Antwerp, Belgium
+## 3  4.12 m   Charles Hoff        Norway         Copenhagen, Denmark
+## 4  4.27 m     Sabin Carr United States          Philadelphia, U.S.
+## 5  4.30 m     Lee Barnes United States                Fresno, U.S.
+## 6  4.37 m William Graber United States             Palo Alto, U.S.
+## 7  4.39 m    Keith Brown United States                Boston, U.S.
+## 8  4.43 m  George Varoff United States Princeton, New Jersey, U.S.
+## 9  4.54 m    Bill Sefton United States           Los Angeles, U.S.
+## 10 4.54 m  Earle Meadows United States           Los Angeles, U.S.
+## # ... with 24 more rows, and 5 more variables: Date &lt;date&gt;, `#[2]` &lt;int&gt;,
+## #   Meters &lt;dbl&gt;, FirstRecordMeters &lt;dbl&gt;, DateNext &lt;date&gt;</code></pre></li>
+<li><p>Look at the previous plot and decide that we would like to run names equally spaced along a line that runs from about (1910, 4.25) to (1980, 6.5). Note that we will have to squish 34 names along that line. So, we can define the points along it as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pv1 &lt;-<span class="st"> </span>pv1 %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">nameline.x =</span> <span class="kw">seq</span>(<span class="kw">mdy</span>(<span class="st">&quot;1-1-1910&quot;</span>), <span class="kw">mdy</span>(<span class="st">&quot;1-1-1980&quot;</span>), <span class="dt">length.out =</span> <span class="kw">nrow</span>(.)),
+         <span class="dt">nameline.y =</span> <span class="kw">seq</span>(<span class="fl">4.5</span>, <span class="fl">6.44</span>, <span class="dt">length.out =</span> <span class="kw">nrow</span>(.)))
+
+pv1$nameline.x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">mdy</span>(<span class="st">&quot;1-1-1910&quot;</span>), <span class="kw">mdy</span>(<span class="st">&quot;1-1-1980&quot;</span>), <span class="dt">length.out =</span> <span class="kw">nrow</span>(pv1))
+<span class="co"># holy cow! did you see how easily we got that sequence of dates? lubridate is amazing!</span>
+pv1$nameline.y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">4.5</span>, <span class="fl">6.44</span>, <span class="dt">length.out =</span> <span class="kw">nrow</span>(pv1))</code></pre></div></li>
+<li><p>Add that line to the plot as colored points atop a black line.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bb2 &lt;-<span class="st"> </span>bb +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> pv1, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> nameline.x, <span class="dt">y =</span> nameline.y), <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="fl">0.2</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> pv1, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> nameline.x, <span class="dt">y =</span> nameline.y))
+bb2</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+Notice how the color of Nation gets applied to the points automatically.</li>
+<li><p>Now, little colored lines from the nameline points to the records. For this we can use the <code>geom_segment()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bb3 &lt;-<span class="st"> </span>bb2 +<span class="st"> </span><span class="kw">geom_segment</span>(<span class="dt">data =</span> pv1, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">xend =</span> nameline.x, <span class="dt">yend =</span> nameline.y))
+bb3</code></pre></div>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-55-1.png" width="672" /></li>
+<li><p>Finally, we want to add the names of the athletes in there. We already have their names in <code>pv1</code>. We use the <code>geom_text()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bb4 &lt;-<span class="st"> </span>bb3 +<span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">data =</span> pv1, 
+                       <span class="kw">aes</span>(<span class="dt">label =</span> Athlete, 
+                           <span class="dt">x =</span> nameline.x, 
+                           <span class="dt">y =</span> nameline.y +<span class="st"> </span>.<span class="dv">05</span>), 
+                       <span class="dt">angle =</span> -<span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)
+bb4</code></pre></div>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-56-1.png" width="672" /></li>
+<li><p>That is pretty cool, but a lot of names have gotten chopped off. Can we do something about that? There might be something a little more automatic, but we can do it by-hand, too:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bb4 +<span class="st"> </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">mdy</span>(<span class="kw">c</span>(<span class="st">&quot;1-1-1898&quot;</span>, <span class="st">&quot;1-1-2020&quot;</span>)), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="fl">3.8</span>, <span class="fl">7.1</span>))</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-57-1.png" width="960" /></p></li>
+</ol>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="week5.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="map-making-in-R.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/08-ggplot-pole-vaulting.Rmd",
+"text": "Edit"
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
