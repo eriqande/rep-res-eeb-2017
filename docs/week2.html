@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Case Studies in Reproducible Research: a spring seminar at UCSC</title>
   <meta name="description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook.">
-  <meta name="generator" content="bookdown 0.3.16 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3.14 and GitBook 2.6.7">
 
   <meta property="og:title" content="Case Studies in Reproducible Research: a spring seminar at UCSC" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-05-12">
+<meta name="date" content="2017-05-22">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -203,7 +203,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.3.6" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#more-add-some-text-to-it"><i class="fa fa-check"></i><b>7.3.6</b> More! Add some text to it!</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="map-making-in-R.html"><a href="map-making-in-R.html"><i class="fa fa-check"></i><b>8</b> Making Maps with R</a><ul>
+<li class="chapter" data-level="8" data-path="map-making-in-R.html"><a href="map-making-in-R.html"><i class="fa fa-check"></i><b>8</b> Week 7: Making Simple Maps with R</a><ul>
 <li class="chapter" data-level="8.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#map-making-intro"><i class="fa fa-check"></i><b>8.1</b> Intro</a><ul>
 <li class="chapter" data-level="8.1.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#todays-goals"><i class="fa fa-check"></i><b>8.1.1</b> Today’s Goals</a></li>
 <li class="chapter" data-level="8.1.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#prerequisites"><i class="fa fa-check"></i><b>8.1.2</b> Prerequisites</a></li>
@@ -223,8 +223,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.3.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#three-examples"><i class="fa fa-check"></i><b>8.3.1</b> Three examples</a></li>
 <li class="chapter" data-level="8.3.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#how-ggmap-works"><i class="fa fa-check"></i><b>8.3.2</b> How ggmap works</a></li>
 <li class="chapter" data-level="8.3.3" data-path="map-making-in-R.html"><a href="map-making-in-R.html#sisquoctober"><i class="fa fa-check"></i><b>8.3.3</b> Sisquoctober</a></li>
-<li class="chapter" data-level="8.3.4" data-path="map-making-in-R.html"><a href="map-making-in-R.html#how-about-a-bike-ride"><i class="fa fa-check"></i><b>8.3.4</b> How about a bike ride?</a></li>
-<li class="chapter" data-level="8.3.5" data-path="map-making-in-R.html"><a href="map-making-in-R.html#fish-sampling-locations"><i class="fa fa-check"></i><b>8.3.5</b> Fish sampling locations</a></li>
+<li class="chapter" data-level="8.3.4" data-path="map-making-in-R.html"><a href="map-making-in-R.html#big-creek-in-big-sur"><i class="fa fa-check"></i><b>8.3.4</b> Big Creek in Big Sur</a></li>
+<li class="chapter" data-level="8.3.5" data-path="map-making-in-R.html"><a href="map-making-in-R.html#how-about-a-bike-ride"><i class="fa fa-check"></i><b>8.3.5</b> How about a bike ride?</a></li>
+<li class="chapter" data-level="8.3.6" data-path="map-making-in-R.html"><a href="map-making-in-R.html#fish-sampling-locations"><i class="fa fa-check"></i><b>8.3.6</b> Fish sampling locations</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="in-development.html"><a href="in-development.html"><i class="fa fa-check"></i><b>9</b> in development</a></li>
@@ -472,7 +473,7 @@ df$x</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">abc =</span> <span class="dv">1</span>, <span class="dt">xyz =</span> <span class="st">&quot;a&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">as_tibble</span>()
 df$x</code></pre></div>
-<pre><code>## Warning: Unknown or uninitialised column: &#39;x&#39;.</code></pre>
+<pre><code>## Warning: Unknown column &#39;x&#39;</code></pre>
 <pre><code>## NULL</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df$xyz</code></pre></div>
 <pre><code>## [1] &quot;a&quot;</code></pre>
