@@ -227,6 +227,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.3.5" data-path="map-making-in-R.html"><a href="map-making-in-R.html#how-about-a-bike-ride"><i class="fa fa-check"></i><b>8.3.5</b> How about a bike ride?</a></li>
 <li class="chapter" data-level="8.3.6" data-path="map-making-in-R.html"><a href="map-making-in-R.html#fish-sampling-locations"><i class="fa fa-check"></i><b>8.3.6</b> Fish sampling locations</a></li>
 </ul></li>
+<li class="chapter" data-level="8.4" data-path="map-making-in-R.html"><a href="map-making-in-R.html#in-class-review-and-short-assignment"><i class="fa fa-check"></i><b>8.4</b> In-class review and short assignment</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#short-assignment-of-plotting-with-maps"><i class="fa fa-check"></i><b>8.4.1</b> Short assignment of plotting with <code>maps</code></a></li>
+<li class="chapter" data-level="8.4.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#short-assignment-of-plotting-with-ggmap"><i class="fa fa-check"></i><b>8.4.2</b> Short assignment of plotting with ggmap()</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="in-development.html"><a href="in-development.html"><i class="fa fa-check"></i><b>9</b> in development</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -929,8 +933,92 @@ bc_big &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class
 <ul>
 <li>Once again that was dirt easy, though at this scale with all the different regions, it is hard to resolve all the colors. In general, it gets hard to resolve more than 7 or 8 colors on a map.</li>
 </ul>
-
 </div>
+</div>
+</div>
+<div id="in-class-review-and-short-assignment" class="section level2">
+<h2><span class="header-section-number">8.4</span> In-class review and short assignment</h2>
+<p>A lot of stuff went by in the last few sections. Here are the key players, in review:</p>
+<p>Using the <code>maps</code> package with <code>ggplot2</code>:</p>
+<ul>
+<li><code>library(maps)</code> this loads the library that has the map data.</li>
+<li><code>map_data()</code> this function from <code>ggplot2</code> grabs map data from the <code>maps</code> package and returns it as a data frame <code>ggplot</code> can handle. Choices for the arguments are many. Some common ones are <code>&quot;states&quot;</code>, <code>&quot;counties&quot;</code>, <code>&quot;usa&quot;</code>, etc.</li>
+<li><code>geom_polygon()</code> plots boundaries from the maps package.</li>
+<li>Don’t forget: <code>group = group</code> in the aesthetics!</li>
+<li><code>coord_quickmap()</code> ggplot function to get a good aspect ratio (or do projections, if you want…)</li>
+<li>Zoom in without improper chopping with <code>coord_quickmap(xlim = ..., ylim = ...)</code></li>
+</ul>
+<p>Using <code>ggmap</code>:</p>
+<ul>
+<li>Get the latest version from GitHub: <code>devtools::install_github(&quot;dkahle/ggmap&quot;)</code></li>
+<li><code>get_googlemap(center = c(long, lat), zoom = 3 to 20)</code></li>
+<li>Put the output of <code>get_googlemap()</code> into the <code>ggmap()</code> function and then proceed as you would with ggplot.</li>
+<li>Google Maps maptypes: “terrain”, “satellite”, “hybrid”</li>
+</ul>
+<div id="short-assignment-of-plotting-with-maps" class="section level3">
+<h3><span class="header-section-number">8.4.1</span> Short assignment of plotting with <code>maps</code></h3>
+<p>If you don’t have your own data to start plotting, you can try to make the following plot of the four “four-corners” states and their capitals. I have a list of capitals in the course repository that I read in like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">caps &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;inputs/state_capitals.csv&quot;</span>)</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   state = col_character(),
+##   capital = col_character(),
+##   lat = col_double(),
+##   long = col_double()
+## )</code></pre>
+<p>It looks like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">caps</code></pre></div>
+<pre><code>## # A tibble: 50 × 4
+##          state     capital      lat       long
+##          &lt;chr&gt;       &lt;chr&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+## 1      Alabama  Montgomery 32.36154  -86.27912
+## 2       Alaska      Juneau 58.30194 -134.41974
+## 3      Arizona     Phoenix 33.44846 -112.07384
+## 4     Arkansas Little Rock 34.73601  -92.33112
+## 5   California  Sacramento 38.55560 -121.46893
+## 6     Colorado      Denver 39.73917 -104.98417
+## 7  Connecticut    Hartford 41.76700  -72.67700
+## 8     Delaware       Dover 39.16192  -75.52675
+## 9      Florida Tallahassee 30.45180  -84.27277
+## 10     Georgia     Atlanta 33.76000  -84.39000
+## # ... with 40 more rows</code></pre>
+<p>You can quickly download the CSV file from <a href="https://www.dropbox.com/s/d3gehuzl4pdkntj/state_capitals.csv?dl=1">here</a>.</p>
+<p>Once you have that, try to put together a map that looks like this: <img src="bookdown-demo_files/figure-html/unnamed-chunk-97-1.png" width="672" /></p>
+<p>OK, now, to display your mad dplyr skills and mapping capabilities, do the gyrations necessary to do this: <img src="bookdown-demo_files/figure-html/unnamed-chunk-98-1.png" width="672" /></p>
+</div>
+<div id="short-assignment-of-plotting-with-ggmap" class="section level3">
+<h3><span class="header-section-number">8.4.2</span> Short assignment of plotting with ggmap()</h3>
+<p>Here are the locations of 357 Wilson’s warblers sampled in North America. You can download them from <a href="https://www.dropbox.com/s/fiq6zj0qsmj0dqa/breeding_wiwa_isotopes.rds?dl=1">here</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wiwa &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;inputs/breeding_wiwa_isotopes.rds&quot;</span>)
+
+<span class="co"># look at the range of the lat longs</span>
+<span class="kw">range</span>(wiwa$lat)</code></pre></div>
+<pre><code>## [1] 35.195 63.716</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">range</span>(wiwa$long)</code></pre></div>
+<pre><code>## [1] -157.283  -66.700</code></pre>
+<p>The data frame looks like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wiwa</code></pre></div>
+<pre><code>## # A tibble: 357 × 15
+##         ID Short_Name Isotope.Value        Source Species Region  Location
+##      &lt;chr&gt;      &lt;chr&gt;         &lt;dbl&gt;         &lt;chr&gt;   &lt;chr&gt;  &lt;lgl&gt;     &lt;chr&gt;
+## 1  01N0729    wCAHU01     -94.99667 Kelly_Dec2013    WIWA     NA      Hume
+## 2  01N0730    wCAHU02    -119.67951 Kelly_Dec2013    WIWA     NA      Hume
+## 3  01N0731    wCAHU03    -102.67823 Kelly_Dec2013    WIWA     NA      Hume
+## 4  01N0732    wCAHU04    -100.38197 Kelly_Dec2013    WIWA     NA      Hume
+## 5  01N0733    wCAHU05    -102.88861 Kelly_Dec2013    WIWA     NA      Hume
+## 6  01N7414    wAKUG11    -102.90747 Kelly_Dec2013    WIWA     NA Ugashik_2
+## 7  01N7415    wAKUG12    -120.25431 Kelly_Dec2013    WIWA     NA Ugashik_2
+## 8  01N7416    wAKUG13    -116.58946 Kelly_Dec2013    WIWA     NA Ugashik_2
+## 9  01N7417    wAKUG14    -124.93382 Kelly_Dec2013    WIWA     NA Ugashik_2
+## 10 01N7418    wAKUG15    -114.09978 Kelly_Dec2013    WIWA     NA Ugashik_2
+## # ... with 347 more rows, and 8 more variables: Near_Town &lt;chr&gt;,
+## #   State &lt;chr&gt;, Country &lt;chr&gt;, Kristina_Notes &lt;lgl&gt;, Age &lt;chr&gt;,
+## #   lat &lt;dbl&gt;, long &lt;dbl&gt;, stage &lt;chr&gt;</code></pre>
+<p>Let’s make a google_map with some of that info on it—namely the locations of the samples colored by the State or Province that they are in.</p>
+<pre><code>## Source : https://maps.googleapis.com/maps/api/staticmap?center=49,-110&amp;zoom=3&amp;size=640x640&amp;scale=2&amp;maptype=hybrid</code></pre>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-101-1.png" width="672" /></p>
+<p>That shows one of the limitations of plotting things in unprojected latitude and longitude coordinates: Alaska gets all inflated. Next week, if everyone really wants to see how we might overcome that useing the Natural Earth Data rasters, we might just be able to do so.</p>
+
 </div>
 </div>
 </div>

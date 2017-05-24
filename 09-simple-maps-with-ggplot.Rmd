@@ -641,3 +641,108 @@ regions, it is hard to resolve all the colors. In general, it gets hard to resol
 colors on a map.  
 
 
+## In-class review and short assignment
+
+A lot of stuff went by in the last few sections.  Here are the key players, in review:
+
+Using the `maps` package with `ggplot2`:
+
+- `library(maps)` this loads the library that has the map data.
+- `map_data()` this function from `ggplot2` grabs map data from the `maps` package and returns
+it as a data frame `ggplot` can handle.  Choices for the arguments are many.  Some common ones are
+`"states"`, `"counties"`, `"usa"`, etc.
+- `geom_polygon()` plots boundaries from the maps package.
+- Don't forget: `group = group` in the aesthetics!
+- `coord_quickmap()` ggplot function to get a good aspect ratio (or do projections, if you want...)
+- Zoom in without improper chopping with `coord_quickmap(xlim = ..., ylim = ...)`
+
+
+Using `ggmap`:
+
+- Get the latest version from GitHub: `devtools::install_github("dkahle/ggmap")`
+- `get_googlemap(center = c(long, lat), zoom = 3 to 20)`
+- Put the output of `get_googlemap()` into the `ggmap()` function and then proceed as 
+you would with ggplot.
+- Google Maps maptypes: "terrain", "satellite", "hybrid"
+
+### Short assignment of plotting with `maps`
+
+If you don't have your own data to start plotting, you can try to make the following plot of the 
+four "four-corners" states and their capitals.  I have a list of capitals in the course
+repository that I read in like this:
+```{r}
+caps <- read_csv("inputs/state_capitals.csv")
+```
+It looks like this:
+```{r}
+caps
+```
+You can quickly download the CSV file from [here](https://www.dropbox.com/s/d3gehuzl4pdkntj/state_capitals.csv?dl=1).
+
+Once you have that, try to put together a map that looks like this:
+```{r, echo=FALSE}
+states <- map_data("state") %>%
+  as_tibble
+
+fc <- states %>%
+  filter(region %in% c("arizona", "utah", "new mexico", "colorado"))
+
+caps_fc <- caps %>%
+  filter(state %in% c("Arizona", "Utah", "New Mexico", "Colorado"))
+
+ggplot() +
+  geom_polygon(data = fc, mapping = aes(x = long, y = lat, fill = region), colour = "white") +
+  coord_quickmap() +
+  geom_point(data = caps_fc, mapping = aes(x = long, y = lat), shape = 23, fill = "yellow", colour = "black", size = 3) +
+  geom_text(data = caps_fc, mapping = aes(x = long, y = lat, label = capital), 
+            hjust = 0, nudge_x = 0.3) +
+  scale_fill_manual(values = c("red", "green", "brown", "blue"))
+```
+
+OK, now, to display your mad dplyr skills and mapping capabilities, do the gyrations 
+necessary to do this:
+```{r, echo=FALSE}
+s2 <- states %>%
+  mutate(state = ifelse(region %in% c("arizona", "utah", "new mexico", "colorado"), region, "not-a-4-corner-state"))
+
+ggplot() +
+  geom_polygon(data = s2, mapping = aes(x = long, y = lat, fill = state, group = group), colour = "white") +
+  coord_quickmap(xlim = c(-125, -95), ylim = c(30, 50)) +
+  geom_point(data = caps, mapping = aes(x = long, y = lat), shape = 23, fill = "yellow", colour = "black", size = 3) +
+  geom_text(data = caps, mapping = aes(x = long, y = lat, label = capital), 
+            hjust = 0, nudge_x = 0.3) +
+  scale_fill_manual(values = c("red", "green", "brown", "gray", "blue")) +
+  theme_bw()
+```
+
+
+### Short assignment of plotting with ggmap()
+
+Here are the locations of 357 Wilson's warblers sampled in North America.  You can
+download them from [here](https://www.dropbox.com/s/fiq6zj0qsmj0dqa/breeding_wiwa_isotopes.rds?dl=1).
+```{r}
+wiwa <- readRDS("inputs/breeding_wiwa_isotopes.rds")
+
+# look at the range of the lat longs
+range(wiwa$lat)
+range(wiwa$long)
+```
+
+The data frame looks like this:
+```{r}
+wiwa
+```
+Let's make a google_map with some of that info on it---namely the locations of the 
+samples colored by the State or Province that they are in.
+```{r, echo=FALSE}
+get_googlemap(center = c(-110, 49), zoom = 3, maptype = "hybrid") %>%
+  ggmap() +
+  geom_jitter(data = wiwa, mapping = aes(x = long, y = lat, colour = State))
+```
+
+That shows one of the limitations of plotting things in unprojected latitude and longitude coordinates:
+Alaska gets all inflated.  Next week, if everyone really wants to see how we might overcome
+that using the Natural Earth Data rasters, we might just be able to do so.
+
+
+

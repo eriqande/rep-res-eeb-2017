@@ -4933,6 +4933,183 @@ learn?}\label{what-do-we-hope-to-learn}
   it gets hard to resolve more than 7 or 8 colors on a map.
 \end{itemize}
 
+\section{In-class review and short
+assignment}\label{in-class-review-and-short-assignment}
+
+A lot of stuff went by in the last few sections. Here are the key
+players, in review:
+
+Using the \texttt{maps} package with \texttt{ggplot2}:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{library(maps)} this loads the library that has the map data.
+\item
+  \texttt{map\_data()} this function from \texttt{ggplot2} grabs map
+  data from the \texttt{maps} package and returns it as a data frame
+  \texttt{ggplot} can handle. Choices for the arguments are many. Some
+  common ones are \texttt{"states"}, \texttt{"counties"},
+  \texttt{"usa"}, etc.
+\item
+  \texttt{geom\_polygon()} plots boundaries from the maps package.
+\item
+  Don't forget: \texttt{group\ =\ group} in the aesthetics!
+\item
+  \texttt{coord\_quickmap()} ggplot function to get a good aspect ratio
+  (or do projections, if you want\ldots{})
+\item
+  Zoom in without improper chopping with
+  \texttt{coord\_quickmap(xlim\ =\ ...,\ ylim\ =\ ...)}
+\end{itemize}
+
+Using \texttt{ggmap}:
+
+\begin{itemize}
+\tightlist
+\item
+  Get the latest version from GitHub:
+  \texttt{devtools::install\_github("dkahle/ggmap")}
+\item
+  \texttt{get\_googlemap(center\ =\ c(long,\ lat),\ zoom\ =\ 3\ to\ 20)}
+\item
+  Put the output of \texttt{get\_googlemap()} into the \texttt{ggmap()}
+  function and then proceed as you would with ggplot.
+\item
+  Google Maps maptypes: ``terrain'', ``satellite'', ``hybrid''
+\end{itemize}
+
+\subsection{\texorpdfstring{Short assignment of plotting with
+\texttt{maps}}{Short assignment of plotting with maps}}\label{short-assignment-of-plotting-with-maps}
+
+If you don't have your own data to start plotting, you can try to make
+the following plot of the four ``four-corners'' states and their
+capitals. I have a list of capitals in the course repository that I read
+in like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{caps <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"inputs/state_capitals.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Parsed with column specification:
+## cols(
+##   state = col_character(),
+##   capital = col_character(),
+##   lat = col_double(),
+##   long = col_double()
+## )
+\end{verbatim}
+
+It looks like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{caps}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 50 × 4
+##          state     capital      lat       long
+##          <chr>       <chr>    <dbl>      <dbl>
+## 1      Alabama  Montgomery 32.36154  -86.27912
+## 2       Alaska      Juneau 58.30194 -134.41974
+## 3      Arizona     Phoenix 33.44846 -112.07384
+## 4     Arkansas Little Rock 34.73601  -92.33112
+## 5   California  Sacramento 38.55560 -121.46893
+## 6     Colorado      Denver 39.73917 -104.98417
+## 7  Connecticut    Hartford 41.76700  -72.67700
+## 8     Delaware       Dover 39.16192  -75.52675
+## 9      Florida Tallahassee 30.45180  -84.27277
+## 10     Georgia     Atlanta 33.76000  -84.39000
+## # ... with 40 more rows
+\end{verbatim}
+
+You can quickly download the CSV file from
+\href{https://www.dropbox.com/s/d3gehuzl4pdkntj/state_capitals.csv?dl=1}{here}.
+
+Once you have that, try to put together a map that looks like this:
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-97-1.pdf}
+
+OK, now, to display your mad dplyr skills and mapping capabilities, do
+the gyrations necessary to do this:
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-98-1.pdf}
+
+\subsection{Short assignment of plotting with
+ggmap()}\label{short-assignment-of-plotting-with-ggmap}
+
+Here are the locations of 357 Wilson's warblers sampled in North
+America. You can download them from
+\href{https://www.dropbox.com/s/fiq6zj0qsmj0dqa/breeding_wiwa_isotopes.rds?dl=1}{here}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wiwa <-}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\StringTok{"inputs/breeding_wiwa_isotopes.rds"}\NormalTok{)}
+
+\CommentTok{# look at the range of the lat longs}
+\KeywordTok{range}\NormalTok{(wiwa$lat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 35.195 63.716
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{range}\NormalTok{(wiwa$long)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -157.283  -66.700
+\end{verbatim}
+
+The data frame looks like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wiwa}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 357 × 15
+##         ID Short_Name Isotope.Value        Source Species Region  Location
+##      <chr>      <chr>         <dbl>         <chr>   <chr>  <lgl>     <chr>
+## 1  01N0729    wCAHU01     -94.99667 Kelly_Dec2013    WIWA     NA      Hume
+## 2  01N0730    wCAHU02    -119.67951 Kelly_Dec2013    WIWA     NA      Hume
+## 3  01N0731    wCAHU03    -102.67823 Kelly_Dec2013    WIWA     NA      Hume
+## 4  01N0732    wCAHU04    -100.38197 Kelly_Dec2013    WIWA     NA      Hume
+## 5  01N0733    wCAHU05    -102.88861 Kelly_Dec2013    WIWA     NA      Hume
+## 6  01N7414    wAKUG11    -102.90747 Kelly_Dec2013    WIWA     NA Ugashik_2
+## 7  01N7415    wAKUG12    -120.25431 Kelly_Dec2013    WIWA     NA Ugashik_2
+## 8  01N7416    wAKUG13    -116.58946 Kelly_Dec2013    WIWA     NA Ugashik_2
+## 9  01N7417    wAKUG14    -124.93382 Kelly_Dec2013    WIWA     NA Ugashik_2
+## 10 01N7418    wAKUG15    -114.09978 Kelly_Dec2013    WIWA     NA Ugashik_2
+## # ... with 347 more rows, and 8 more variables: Near_Town <chr>,
+## #   State <chr>, Country <chr>, Kristina_Notes <lgl>, Age <chr>,
+## #   lat <dbl>, long <dbl>, stage <chr>
+\end{verbatim}
+
+Let's make a google\_map with some of that info on it---namely the
+locations of the samples colored by the State or Province that they are
+in.
+
+\begin{verbatim}
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=49,-110&zoom=3&size=640x640&scale=2&maptype=hybrid
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-101-1.pdf}
+
+That shows one of the limitations of plotting things in unprojected
+latitude and longitude coordinates: Alaska gets all inflated. Next week,
+if everyone really wants to see how we might overcome that useing the
+Natural Earth Data rasters, we might just be able to do so.
+
 \chapter{in development}\label{in-development}
 
 Yo! Here is info about the california hydrologic regions:
