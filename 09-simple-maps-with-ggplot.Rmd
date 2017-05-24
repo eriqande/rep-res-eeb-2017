@@ -197,7 +197,7 @@ Here we plot that map without using the group aesthetic:
 ggplot() + 
       geom_polygon(data = usa, aes(x = long, y = lat), fill = "violet", color = "blue") + 
       geom_point(data = labs, aes(x = long, y = lat), shape = 21, color = "black", fill = "yellow", size = 5) +
-      geom_text(data = labs, aes(x = long, y = lat, label = names), hjust = 0, nudge_x = 1)
+      geom_text(data = labs, aes(x = long, y = lat, label = names), hjust = 0, nudge_x = 1) +
       coord_quickmap()
 ```
 
@@ -237,10 +237,9 @@ Boom! That is easy.
 
 #### Plot just a subset of states in the contiguous 48:
 
-* Read about the `subset` command.  It provides another way of 
-subsetting data frames (sort of like using the `[ ]` operator with
-a logical vector).
-* We can use it to grab just CA, OR, and WA:
+* Because the `map_data()` sends back a data frame, we can use the 
+tidy tools of `dplyr` to retain just certain parts of it.
+* For example, we can grab just CA, OR, and WA and then plot them:
     ```{r}
     west_coast <- states %>%
       filter(region %in% c("california", "oregon", "washington"))
@@ -386,8 +385,8 @@ elbow_room1 + scale_fill_gradient(trans = "log10")
 #### Still not great
 I personally like more color than `ggplot` uses in its default gradient.  In that respect I gravitate more 
 toward Matlab's default color gradient.  Can we do something similar with `ggplot`?  (It turns out we can...my apologies
-to those purists who would tell me that rainbow colors are not good for showing quantitative scales---I disagree with 
-them, unabashedly...behold the following and try to argue that you can read the values more easily off the blue plot above...)
+to those purists who would tell me that rainbow colors are not good for showing quantitative scales---I think that in some cases they work reasonaly well...for example the following...of course, there are times
+when they work abysmally, as well.)
 ```{r}
 eb2 <- elbow_room1 + 
     scale_fill_gradientn(colours = rev(rainbow(7)),

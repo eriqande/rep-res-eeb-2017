@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-05-22">
+<meta name="date" content="2017-05-24">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -444,24 +444,9 @@ gg1 +<span class="st"> </span>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +<span class="st"> </span>
 <span class="st">      </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> usa, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat), <span class="dt">fill =</span> <span class="st">&quot;violet&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) +<span class="st"> </span>
 <span class="st">      </span><span class="kw">geom_point</span>(<span class="dt">data =</span> labs, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat), <span class="dt">shape =</span> <span class="dv">21</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">      </span><span class="kw">geom_text</span>(<span class="dt">data =</span> labs, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">label =</span> names), <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">nudge_x =</span> <span class="dv">1</span>)</code></pre></div>
+<span class="st">      </span><span class="kw">geom_text</span>(<span class="dt">data =</span> labs, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">label =</span> names), <span class="dt">hjust =</span> <span class="dv">0</span>, <span class="dt">nudge_x =</span> <span class="dv">1</span>) +
+<span class="st">      </span><span class="kw">coord_quickmap</span>()</code></pre></div>
 <p><img src="bookdown-demo_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">      <span class="kw">coord_quickmap</span>()</code></pre></div>
-<pre><code>## &lt;ggproto object: Class CoordQuickmap, CoordCartesian, Coord&gt;
-##     aspect: function
-##     distance: function
-##     expand: TRUE
-##     is_linear: function
-##     labels: function
-##     limits: list
-##     range: function
-##     render_axis_h: function
-##     render_axis_v: function
-##     render_bg: function
-##     render_fg: function
-##     train: function
-##     transform: function
-##     super:  &lt;ggproto object: Class CoordQuickmap, CoordCartesian, Coord&gt;</code></pre>
 <p>That is no bueno! The lines are connecting points that should not be connected!</p>
 </div>
 </div>
@@ -500,8 +485,8 @@ gg1 +<span class="st"> </span>
 <div id="plot-just-a-subset-of-states-in-the-contiguous-48" class="section level4">
 <h4><span class="header-section-number">8.2.6.2</span> Plot just a subset of states in the contiguous 48:</h4>
 <ul>
-<li>Read about the <code>subset</code> command. It provides another way of subsetting data frames (sort of like using the <code>[ ]</code> operator with a logical vector).</li>
-<li><p>We can use it to grab just CA, OR, and WA:</p>
+<li>Because the <code>map_data()</code> sends back a data frame, we can use the tidy tools of <code>dplyr</code> to retain just certain parts of it.</li>
+<li><p>For example, we can grab just CA, OR, and WA and then plot them:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">west_coast &lt;-<span class="st"> </span>states %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(region %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;california&quot;</span>, <span class="st">&quot;oregon&quot;</span>, <span class="st">&quot;washington&quot;</span>))
 
@@ -658,7 +643,7 @@ elbow_room1 </code></pre></div>
 </div>
 <div id="still-not-great" class="section level4">
 <h4><span class="header-section-number">8.2.6.8</span> Still not great</h4>
-<p>I personally like more color than <code>ggplot</code> uses in its default gradient. In that respect I gravitate more toward Matlab’s default color gradient. Can we do something similar with <code>ggplot</code>? (It turns out we can…my apologies to those purists who would tell me that rainbow colors are not good for showing quantitative scales—I disagree with them, unabashedly…behold the following and try to argue that you can read the values more easily off the blue plot above…)</p>
+<p>I personally like more color than <code>ggplot</code> uses in its default gradient. In that respect I gravitate more toward Matlab’s default color gradient. Can we do something similar with <code>ggplot</code>? (It turns out we can…my apologies to those purists who would tell me that rainbow colors are not good for showing quantitative scales—I think that in some cases they work reasonaly well…for example the following…of course, there are times when they work abysmally, as well.)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eb2 &lt;-<span class="st"> </span>elbow_room1 +<span class="st"> </span>
 <span class="st">    </span><span class="kw">scale_fill_gradientn</span>(<span class="dt">colours =</span> <span class="kw">rev</span>(<span class="kw">rainbow</span>(<span class="dv">7</span>)),
                          <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>),

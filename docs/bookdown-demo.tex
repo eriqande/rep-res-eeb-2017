@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-05-22}
+  \date{2017-05-24}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -3994,35 +3994,12 @@ Here we plot that map without using the group aesthetic:
 \KeywordTok{ggplot}\NormalTok{() +}\StringTok{ }
 \StringTok{      }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{usa, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat), }\DataTypeTok{fill =} \StringTok{"violet"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"blue"}\NormalTok{) +}\StringTok{ }
 \StringTok{      }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{labs, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat), }\DataTypeTok{shape =} \DecValTok{21}\NormalTok{, }\DataTypeTok{color =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{fill =} \StringTok{"yellow"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{5}\NormalTok{) +}
-\StringTok{      }\KeywordTok{geom_text}\NormalTok{(}\DataTypeTok{data =} \NormalTok{labs, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{label =} \NormalTok{names), }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{, }\DataTypeTok{nudge_x =} \DecValTok{1}\NormalTok{)}
+\StringTok{      }\KeywordTok{geom_text}\NormalTok{(}\DataTypeTok{data =} \NormalTok{labs, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{long, }\DataTypeTok{y =} \NormalTok{lat, }\DataTypeTok{label =} \NormalTok{names), }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{, }\DataTypeTok{nudge_x =} \DecValTok{1}\NormalTok{) +}
+\StringTok{      }\KeywordTok{coord_quickmap}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-66-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-      \KeywordTok{coord_quickmap}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## <ggproto object: Class CoordQuickmap, CoordCartesian, Coord>
-##     aspect: function
-##     distance: function
-##     expand: TRUE
-##     is_linear: function
-##     labels: function
-##     limits: list
-##     range: function
-##     render_axis_h: function
-##     render_axis_v: function
-##     render_bg: function
-##     render_fg: function
-##     train: function
-##     transform: function
-##     super:  <ggproto object: Class CoordQuickmap, CoordCartesian, Coord>
-\end{verbatim}
 
 That is no bueno! The lines are connecting points that should not be
 connected!
@@ -4100,11 +4077,10 @@ Boom! That is easy.
 
 \begin{itemize}
 \item
-  Read about the \texttt{subset} command. It provides another way of
-  subsetting data frames (sort of like using the \texttt{{[}\ {]}}
-  operator with a logical vector).
+  Because the \texttt{map\_data()} sends back a data frame, we can use
+  the tidy tools of \texttt{dplyr} to retain just certain parts of it.
 \item
-  We can use it to grab just CA, OR, and WA:
+  For example, we can grab just CA, OR, and WA and then plot them:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4386,9 +4362,10 @@ I personally like more color than \texttt{ggplot} uses in its default
 gradient. In that respect I gravitate more toward Matlab's default color
 gradient. Can we do something similar with \texttt{ggplot}? (It turns
 out we can\ldots{}my apologies to those purists who would tell me that
-rainbow colors are not good for showing quantitative scales---I disagree
-with them, unabashedly\ldots{}behold the following and try to argue that
-you can read the values more easily off the blue plot above\ldots{})
+rainbow colors are not good for showing quantitative scales---I think
+that in some cases they work reasonaly well\ldots{}for example the
+following\ldots{}of course, there are times when they work abysmally, as
+well.)
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4964,6 +4941,24 @@ Yo! Here is info about the california hydrologic regions:
 
 THey can be downloaded as shape files here
 \url{https://mpsl.mlml.calstate.edu/GIS-shapefile-layers}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(raster)}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(rgdal)}
+\KeywordTok{library}\NormalTok{(ggspatial)  }\CommentTok{# use GitHub version}
+
+
+\NormalTok{ws_dir <-}\StringTok{ }\KeywordTok{normalizePath}\NormalTok{(}\StringTok{"~/Documents/MapStuff/GISlayers_calw221_shp"}\NormalTok{)}
+
+\NormalTok{calw <-}\StringTok{ }\KeywordTok{readOGR}\NormalTok{(}\DataTypeTok{dsn =} \NormalTok{ws_dir, }
+        \DataTypeTok{layer =} \StringTok{"calw221"}\NormalTok{)}
+
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\KeywordTok{geom_spatial}\NormalTok{(calw, }\DataTypeTok{colour =} \StringTok{"white"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \bibliography{packages.bib,book.bib}
 

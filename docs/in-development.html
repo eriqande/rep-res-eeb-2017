@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-05-22">
+<meta name="date" content="2017-05-24">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -255,6 +255,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Yo! Here is info about the california hydrologic regions:</p>
 <p><a href="https://www.arcgis.com/home/item.html?id=7a495cfa71ca4616aba58c5e915eef2c" class="uri">https://www.arcgis.com/home/item.html?id=7a495cfa71ca4616aba58c5e915eef2c</a></p>
 <p>THey can be downloaded as shape files here <a href="https://mpsl.mlml.calstate.edu/GIS-shapefile-layers" class="uri">https://mpsl.mlml.calstate.edu/GIS-shapefile-layers</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raster)
+<span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(rgdal)
+<span class="kw">library</span>(ggspatial)  <span class="co"># use GitHub version</span>
+
+
+ws_dir &lt;-<span class="st"> </span><span class="kw">normalizePath</span>(<span class="st">&quot;~/Documents/MapStuff/GISlayers_calw221_shp&quot;</span>)
+
+calw &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="dt">dsn =</span> ws_dir, 
+        <span class="dt">layer =</span> <span class="st">&quot;calw221&quot;</span>)
+
+<span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_spatial</span>(calw, <span class="dt">colour =</span> <span class="st">&quot;white&quot;</span>)</code></pre></div>
 
 </div>
             </section>

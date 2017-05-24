@@ -8,3 +8,21 @@ THey can be downloaded as shape files here
 [https://mpsl.mlml.calstate.edu/GIS-shapefile-layers](https://mpsl.mlml.calstate.edu/GIS-shapefile-layers).
 
 
+
+
+```{r, eval=FALSE}
+library(raster)
+library(tidyverse)
+library(rgdal)
+library(ggspatial)  # use GitHub version
+
+
+ws_dir <- normalizePath("~/Documents/MapStuff/GISlayers_calw221_shp")
+
+calw <- readOGR(dsn = ws_dir, 
+        layer = "calw221")
+
+ggplot() +
+  geom_spatial(calw, colour = "white")
+
+```
