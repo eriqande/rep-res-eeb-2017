@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-05-24}
+  \date{2017-05-26}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -1105,7 +1105,7 @@ These are answers I would use.
 \end{Shaded}
 
 \begin{verbatim}
-## Warning: Unknown column 'x'
+## Warning: Unknown or uninitialised column: 'x'.
 \end{verbatim}
 
 \begin{verbatim}
@@ -4174,7 +4174,8 @@ counties}\label{zoom-in-on-california-and-look-at-counties}
 \item
   Plot the state first but let's ditch the axes gridlines, and gray
   background by using the super-wonderful \texttt{theme\_void()} which
-  leaves off everything except the geoms.
+  leaves off everything except the geoms, and the guides if they are
+  needed.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4309,22 +4310,10 @@ this shows you where you can find it:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# prepare to drop the axes and ticks but leave the guides and legends}
-\CommentTok{# We can't just throw down a theme_void() because we still need to legends!}
-\NormalTok{ditch_the_axes <-}\StringTok{ }\KeywordTok{theme}\NormalTok{(}
-  \DataTypeTok{axis.text =} \KeywordTok{element_blank}\NormalTok{(),}
-  \DataTypeTok{axis.line =} \KeywordTok{element_blank}\NormalTok{(),}
-  \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
-  \DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{(),}
-  \DataTypeTok{panel.grid =} \KeywordTok{element_blank}\NormalTok{(),}
-  \DataTypeTok{axis.title =} \KeywordTok{element_blank}\NormalTok{()}
-  \NormalTok{)}
-
 \NormalTok{elbow_room1 <-}\StringTok{ }\NormalTok{ca_base +}\StringTok{ }
 \StringTok{      }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{data =} \NormalTok{cacopa, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill =} \NormalTok{people_per_mile), }\DataTypeTok{color =} \StringTok{"white"}\NormalTok{) +}
 \StringTok{      }\KeywordTok{geom_polygon}\NormalTok{(}\DataTypeTok{color =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{) +}
-\StringTok{      }\KeywordTok{theme_bw}\NormalTok{() +}
-\StringTok{      }\NormalTok{ditch_the_axes}
+\StringTok{      }\KeywordTok{theme_void}\NormalTok{()}
 
 \NormalTok{elbow_room1 }
 \end{Highlighting}
@@ -5107,7 +5096,7 @@ in.
 
 That shows one of the limitations of plotting things in unprojected
 latitude and longitude coordinates: Alaska gets all inflated. Next week,
-if everyone really wants to see how we might overcome that useing the
+if everyone really wants to see how we might overcome that using the
 Natural Earth Data rasters, we might just be able to do so.
 
 \chapter{in development}\label{in-development}

@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Case Studies in Reproducible Research: a spring seminar at UCSC</title>
   <meta name="description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook.">
-  <meta name="generator" content="bookdown 0.3.14 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3.16 and GitBook 2.6.7">
 
   <meta property="og:title" content="Case Studies in Reproducible Research: a spring seminar at UCSC" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-05-24">
+<meta name="date" content="2017-05-26">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -543,7 +543,7 @@ ca_county &lt;-<span class="st"> </span>counties %&gt;%
 ## 4 -121.8968 37.46571   157  6968 california   alameda
 ## 5 -121.9254 37.45998   157  6969 california   alameda
 ## 6 -121.9483 37.47717   157  6970 california   alameda</code></pre></li>
-<li><p>Plot the state first but let’s ditch the axes gridlines, and gray background by using the super-wonderful <code>theme_void()</code> which leaves off everything except the geoms.</p>
+<li><p>Plot the state first but let’s ditch the axes gridlines, and gray background by using the super-wonderful <code>theme_void()</code> which leaves off everything except the geoms, and the guides if they are needed.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ca_base &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> ca_df, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group)) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">coord_quickmap</span>() +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;gray&quot;</span>)
@@ -615,22 +615,10 @@ ca_base +<span class="st"> </span><span class="kw">theme_void</span>()</code></p
 <div id="now-plot-population-density-by-county" class="section level4">
 <h4><span class="header-section-number">8.2.6.6</span> Now plot population density by county</h4>
 <p>If you were needing a little more elbow room in the great Golden State, this shows you where you can find it:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># prepare to drop the axes and ticks but leave the guides and legends</span>
-<span class="co"># We can&#39;t just throw down a theme_void() because we still need to legends!</span>
-ditch_the_axes &lt;-<span class="st"> </span><span class="kw">theme</span>(
-  <span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),
-  <span class="dt">axis.line =</span> <span class="kw">element_blank</span>(),
-  <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>(),
-  <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(),
-  <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(),
-  <span class="dt">axis.title =</span> <span class="kw">element_blank</span>()
-  )
-
-elbow_room1 &lt;-<span class="st"> </span>ca_base +<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">elbow_room1 &lt;-<span class="st"> </span>ca_base +<span class="st"> </span>
 <span class="st">      </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> cacopa, <span class="kw">aes</span>(<span class="dt">fill =</span> people_per_mile), <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) +
 <span class="st">      </span><span class="kw">geom_polygon</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) +
-<span class="st">      </span><span class="kw">theme_bw</span>() +
-<span class="st">      </span>ditch_the_axes
+<span class="st">      </span><span class="kw">theme_void</span>()
 
 elbow_room1 </code></pre></div>
 <p><img src="bookdown-demo_files/figure-html/unnamed-chunk-77-1.png" width="672" /></p>
@@ -1017,7 +1005,7 @@ bc_big &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class
 <p>Let’s make a google_map with some of that info on it—namely the locations of the samples colored by the State or Province that they are in.</p>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/staticmap?center=49,-110&amp;zoom=3&amp;size=640x640&amp;scale=2&amp;maptype=hybrid</code></pre>
 <p><img src="bookdown-demo_files/figure-html/unnamed-chunk-101-1.png" width="672" /></p>
-<p>That shows one of the limitations of plotting things in unprojected latitude and longitude coordinates: Alaska gets all inflated. Next week, if everyone really wants to see how we might overcome that useing the Natural Earth Data rasters, we might just be able to do so.</p>
+<p>That shows one of the limitations of plotting things in unprojected latitude and longitude coordinates: Alaska gets all inflated. Next week, if everyone really wants to see how we might overcome that using the Natural Earth Data rasters, we might just be able to do so.</p>
 
 </div>
 </div>
