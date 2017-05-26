@@ -283,7 +283,8 @@ Phew! That is a little better!
     ```
 
 * Plot the state first but let's ditch the axes gridlines, and gray background by
-using the super-wonderful `theme_void()` which leaves off everything except the geoms.
+using the super-wonderful `theme_void()` which leaves off everything except the geoms, and the
+guides if they are needed.
     ```{r}
     ca_base <- ggplot(data = ca_df, mapping = aes(x = long, y = lat, group = group)) + 
       coord_quickmap() + 
@@ -347,22 +348,11 @@ the `dplyr` package, and while we are at it, we will add a column of `people_per
 
 If you were needing a little more elbow room in the great Golden State, this shows you where you can find it:
 ```{r}
-# prepare to drop the axes and ticks but leave the guides and legends
-# We can't just throw down a theme_void() because we still need to legends!
-ditch_the_axes <- theme(
-  axis.text = element_blank(),
-  axis.line = element_blank(),
-  axis.ticks = element_blank(),
-  panel.border = element_blank(),
-  panel.grid = element_blank(),
-  axis.title = element_blank()
-  )
 
 elbow_room1 <- ca_base + 
       geom_polygon(data = cacopa, aes(fill = people_per_mile), color = "white") +
       geom_polygon(color = "black", fill = NA) +
-      theme_bw() +
-      ditch_the_axes
+      theme_void()
 
 elbow_room1 
 ```
