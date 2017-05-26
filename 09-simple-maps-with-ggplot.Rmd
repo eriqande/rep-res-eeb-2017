@@ -1,5 +1,12 @@
 # Week 7: Making Simple Maps with R {#map-making-in-R} 
 
+**Note** that if you, the student, wish to run all the code
+yourself, you should download the `inputs` directory as a zipped file by going [here](https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip) with a web browser and
+then clicking the big "Download" button on the right.  Once you have downloaded that, 
+unzip it and put the whole `inputs` directory in the current working directory where you are
+working with R. 
+
+
 ## Intro {#map-making-intro}
 
 For a long time, R has had a relatively simple mechanism, via the `maps` package, for making simple outlines
@@ -211,7 +218,7 @@ That is no bueno!  The lines are connecting points that should not be connected!
 
 
 ### State maps
-We can also get a data frame of polygons that tell us above state boundaries:
+We can also get a data frame of polygons that tell us about state boundaries:
 ```{r}
 states <- map_data("state")
 dim(states)
@@ -312,11 +319,16 @@ full disclosure I also edited the name of San Francisco from "City and County of
 other `stringr` function (like `str_replace_all`) which, apparently, in an older version of `stringr` 
 maintained the matrix form, but in a newer version, squashed everything into a vector.  This was kindly
 noted by hueykwik [in this issue](https://github.com/eriqande/rep-res-course/issues/74).  So the code below
-is modified from what it used to be, but seems to work now.  Just as an aside, in the years since I put this
-course together, things have changed quite a bit in the data analysis world, and, as we are doing in this
-course in 2017, we are
+is modified from what it used to be, but seems to work now.  Just as an aside, in the years since I first put this
+course together (in 2014), things have changed quite a bit in the data analysis world, 
+and, as we are doing in this
+course again in 2017, we are
 spending almost all our time in the [tidyverse](http://r4ds.had.co.nz/).
-* Watch this regex fun:
+* Watch this regex fun.  Note that if you, the student, wish to run all the code
+yourself, you should download the `inputs` directory as a zipped file by going [here](https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip) with a web browser and
+then clicking the big "Download" button on the right.  Once you have downloaded that, 
+unzip it and put the whole `inputs` directory in the current working directory where you are
+working with R. 
 ```{r, warning=FALSE, message=FALSE}
     library(stringr)
     library(dplyr)

@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Case Studies in Reproducible Research: a spring seminar at UCSC</title>
   <meta name="description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook.">
-  <meta name="generator" content="bookdown 0.3.16 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3.14 and GitBook 2.6.7">
 
   <meta property="og:title" content="Case Studies in Reproducible Research: a spring seminar at UCSC" />
   <meta property="og:type" content="book" />
@@ -256,6 +256,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="map-making-in-R" class="section level1">
 <h1><span class="header-section-number">Chapter 8</span> Week 7: Making Simple Maps with R</h1>
+<p><strong>Note</strong> that if you, the student, wish to run all the code yourself, you should download the <code>inputs</code> directory as a zipped file by going <a href="https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip">here</a> with a web browser and then clicking the big “Download” button on the right. Once you have downloaded that, unzip it and put the whole <code>inputs</code> directory in the current working directory where you are working with R.</p>
 <div id="map-making-intro" class="section level2">
 <h2><span class="header-section-number">8.1</span> Intro</h2>
 <p>For a long time, R has had a relatively simple mechanism, via the <code>maps</code> package, for making simple outlines of maps and plotting lat-long points and paths on them.</p>
@@ -456,7 +457,7 @@ gg1 +<span class="st"> </span>
 </div>
 <div id="state-maps" class="section level3">
 <h3><span class="header-section-number">8.2.6</span> State maps</h3>
-<p>We can also get a data frame of polygons that tell us above state boundaries:</p>
+<p>We can also get a data frame of polygons that tell us about state boundaries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">states &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">&quot;state&quot;</span>)
 <span class="kw">dim</span>(states)</code></pre></div>
 <pre><code>## [1] 15537     6</code></pre>
@@ -563,8 +564,8 @@ ca_base +<span class="st"> </span><span class="kw">theme_void</span>()</code></p
 </li>
 <li>Now I can go to wikipedia or <a href="http://www.california-demographics.com/counties_by_population" class="uri">http://www.california-demographics.com/counties_by_population</a> and grab population and area data for each county.</li>
 <li>In fact, I copied their little table on Wikipedia and saved it into <code>inputs/ca-counties-wikipedia.txt</code>. In full disclosure I also edited the name of San Francisco from “City and County of San Francisco” to “San Francisco County” to be like the others (and not break my regular expression searches)</li>
-<li>2016 Edit! I had originally pumped the matrix resulting from the <code>str_match</code> below through a few other <code>stringr</code> function (like <code>str_replace_all</code>) which, apparently, in an older version of <code>stringr</code> maintained the matrix form, but in a newer version, squashed everything into a vector. This was kindly noted by hueykwik <a href="https://github.com/eriqande/rep-res-course/issues/74">in this issue</a>. So the code below is modified from what it used to be, but seems to work now. Just as an aside, in the years since I put this course together, things have changed quite a bit in the data analysis world, and, as we are doing in this course in 2017, we are spending almost all our time in the <a href="http://r4ds.had.co.nz/">tidyverse</a>.</li>
-<li>Watch this regex fun:</li>
+<li>2016 Edit! I had originally pumped the matrix resulting from the <code>str_match</code> below through a few other <code>stringr</code> function (like <code>str_replace_all</code>) which, apparently, in an older version of <code>stringr</code> maintained the matrix form, but in a newer version, squashed everything into a vector. This was kindly noted by hueykwik <a href="https://github.com/eriqande/rep-res-course/issues/74">in this issue</a>. So the code below is modified from what it used to be, but seems to work now. Just as an aside, in the years since I first put this course together (in 2014), things have changed quite a bit in the data analysis world, and, as we are doing in this course again in 2017, we are spending almost all our time in the <a href="http://r4ds.had.co.nz/">tidyverse</a>.</li>
+<li>Watch this regex fun. Note that if you, the student, wish to run all the code yourself, you should download the <code>inputs</code> directory as a zipped file by going <a href="https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip">here</a> with a web browser and then clicking the big “Download” button on the right. Once you have downloaded that, unzip it and put the whole <code>inputs</code> directory in the current working directory where you are working with R.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="kw">library</span>(stringr)
     <span class="kw">library</span>(dplyr)

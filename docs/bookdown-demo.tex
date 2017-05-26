@@ -1105,7 +1105,7 @@ These are answers I would use.
 \end{Shaded}
 
 \begin{verbatim}
-## Warning: Unknown or uninitialised column: 'x'.
+## Warning: Unknown column 'x'
 \end{verbatim}
 
 \begin{verbatim}
@@ -3599,6 +3599,15 @@ little line segments to meet up with the records.
 
 \chapter{Week 7: Making Simple Maps with R}\label{map-making-in-R}
 
+\textbf{Note} that if you, the student, wish to run all the code
+yourself, you should download the \texttt{inputs} directory as a zipped
+file by going
+\href{https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip}{here}
+with a web browser and then clicking the big ``Download'' button on the
+right. Once you have downloaded that, unzip it and put the whole
+\texttt{inputs} directory in the current working directory where you are
+working with R.
+
 \section{Intro}\label{map-making-intro}
 
 For a long time, R has had a relatively simple mechanism, via the
@@ -4006,7 +4015,7 @@ connected!
 
 \subsection{State maps}\label{state-maps}
 
-We can also get a data frame of polygons that tell us above state
+We can also get a data frame of polygons that tell us about state
 boundaries:
 
 \begin{Shaded}
@@ -4228,12 +4237,20 @@ counties}\label{get-some-facts-about-the-counties}
   noted by hueykwik
   \href{https://github.com/eriqande/rep-res-course/issues/74}{in this
   issue}. So the code below is modified from what it used to be, but
-  seems to work now. Just as an aside, in the years since I put this
-  course together, things have changed quite a bit in the data analysis
-  world, and, as we are doing in this course in 2017, we are spending
-  almost all our time in the \href{http://r4ds.had.co.nz/}{tidyverse}.
+  seems to work now. Just as an aside, in the years since I first put
+  this course together (in 2014), things have changed quite a bit in the
+  data analysis world, and, as we are doing in this course again in
+  2017, we are spending almost all our time in the
+  \href{http://r4ds.had.co.nz/}{tidyverse}.
 \item
-  Watch this regex fun:
+  Watch this regex fun. Note that if you, the student, wish to run all
+  the code yourself, you should download the \texttt{inputs} directory
+  as a zipped file by going
+  \href{https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip}{here}
+  with a web browser and then clicking the big ``Download'' button on
+  the right. Once you have downloaded that, unzip it and put the whole
+  \texttt{inputs} directory in the current working directory where you
+  are working with R.
 \end{itemize}
 
 \begin{Shaded}
