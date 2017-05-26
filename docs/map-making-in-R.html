@@ -717,7 +717,7 @@ eb2</code></pre></div>
 <div id="how-ggmap-works" class="section level3">
 <h3><span class="header-section-number">8.3.2</span> How ggmap works</h3>
 <ul>
-<li>ggmap simplifies the process of downloading base maps from Google or Open Street Maps or Stamen Maps to use in the background of your plots.</li>
+<li>ggmap simplifies the process of downloading base maps from [Google Maps(<a href="https://www.google.com/maps" class="uri">https://www.google.com/maps</a>) or <a href="https://www.openstreetmap.org/">Open Street Map</a> or <a href="http://maps.stamen.com/#toner/12/37.7706/-122.3782">Stamen Maps</a> to use in the background of your plots.</li>
 <li>It also sets the axis scales, etc, in a nice way.<br />
 </li>
 <li>Once you have gotten your maps, you make a call with <code>ggmap()</code> much as you would with <code>ggplot()</code></li>
@@ -769,11 +769,12 @@ sisquoc</code></pre></div>
 </div>
 <div id="big-creek-in-big-sur" class="section level3">
 <h3><span class="header-section-number">8.3.4</span> Big Creek in Big Sur</h3>
-<p>I have been involved in some work at Big Creek, and would like to replace one of our maps with something better. So, out of curiosity, let’s see what Big Creek looks like with Google Maps</p>
+<p>I have been involved in some work at Big Creek, and would like to replace one of our maps with something better. So, out of curiosity, let’s see what Big Creek looks like with Google Maps.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_googlemap</span>(<span class="dt">center =</span> <span class="kw">c</span>(-<span class="fl">121.595</span>, <span class="fl">36.075</span>), <span class="dt">zoom =</span> <span class="dv">15</span>, <span class="dt">maptype =</span> <span class="st">&quot;terrain&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">ggmap</span>() </code></pre></div>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/staticmap?center=36.075,-121.595&amp;zoom=15&amp;size=640x640&amp;scale=2&amp;maptype=terrain</code></pre>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-88-1.png" width="672" /> Hmm…that is quite nice.</p>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-88-1.png" width="672" /></p>
+<p>Hmm…that is quite nice.</p>
 <div id="stamen-maps" class="section level4">
 <h4><span class="header-section-number">8.3.4.1</span> Stamen maps</h4>
 <p>Can we get the stamen maps to work? Yes, but, for field sites and such, they don’t seem nearly as useful as Google Maps. Here is some code but we don’t bother running it because it looks really bad anyway.</p>
@@ -795,7 +796,7 @@ sisquoc_stamen &lt;-<span class="st"> </span><span class="kw">get_stamenmap</spa
 <div id="how-about-a-bike-ride" class="section level3">
 <h3><span class="header-section-number">8.3.5</span> How about a bike ride?</h3>
 <ul>
-<li>I was riding my bike one day with a my phone and downloaded the GPS readings at short intervals.</li>
+<li>I was riding my bike one day with my phone and downloaded the GPS readings at short intervals.</li>
 <li><p>We can plot the route like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bike &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;inputs/bike-ride.csv&quot;</span>)
 <span class="kw">head</span>(bike)</code></pre></div>
@@ -934,7 +935,7 @@ bc_big &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class
 <li><code>map_data()</code> this function from <code>ggplot2</code> grabs map data from the <code>maps</code> package and returns it as a data frame <code>ggplot</code> can handle. Choices for the arguments are many. Some common ones are <code>&quot;states&quot;</code>, <code>&quot;counties&quot;</code>, <code>&quot;usa&quot;</code>, etc.</li>
 <li><code>geom_polygon()</code> plots boundaries from the maps package.</li>
 <li>Don’t forget: <code>group = group</code> in the aesthetics!</li>
-<li><code>coord_quickmap()</code> ggplot function to get a good aspect ratio (or do projections, if you want…)</li>
+<li><code>coord_quickmap()</code> ggplot function to get a good aspect ratio for a lat-long plot. (Note that if you want to do projections, with <code>maps</code> data you can use <code>coord_map()</code>…next week, maybe.)</li>
 <li>Zoom in without improper chopping with <code>coord_quickmap(xlim = ..., ylim = ...)</code></li>
 </ul>
 <p>Using <code>ggmap</code>:</p>
@@ -971,13 +972,14 @@ bc_big &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class
 ## 9      Florida Tallahassee 30.45180  -84.27277
 ## 10     Georgia     Atlanta 33.76000  -84.39000
 ## # ... with 40 more rows</code></pre>
-<p>You can quickly download the CSV file from <a href="https://www.dropbox.com/s/d3gehuzl4pdkntj/state_capitals.csv?dl=1">here</a>.</p>
+<p>You can quickly download the CSV file from <a href="https://www.dropbox.com/s/d3gehuzl4pdkntj/state_capitals.csv?dl=1">here</a>. But, if you downloaded the <code>inputs</code> directory and placed it in the right spot to run through the code above, you then already have this.</p>
 <p>Once you have that, try to put together a map that looks like this: <img src="bookdown-demo_files/figure-html/unnamed-chunk-97-1.png" width="672" /></p>
-<p>OK, now, to display your mad dplyr skills and mapping capabilities, do the gyrations necessary to do this: <img src="bookdown-demo_files/figure-html/unnamed-chunk-98-1.png" width="672" /></p>
+<p>OK, now, to display your mad dplyr skills and mapping capabilities, do the gyrations necessary to do this:</p>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-98-1.png" width="672" /></p>
 </div>
 <div id="short-assignment-of-plotting-with-ggmap" class="section level3">
 <h3><span class="header-section-number">8.4.2</span> Short assignment of plotting with ggmap()</h3>
-<p>Here are the locations of 357 Wilson’s warblers sampled in North America. You can download them from <a href="https://www.dropbox.com/s/fiq6zj0qsmj0dqa/breeding_wiwa_isotopes.rds?dl=1">here</a>.</p>
+<p>Here are the locations of 357 Wilson’s warblers sampled in North America. You can download them from <a href="https://www.dropbox.com/s/fiq6zj0qsmj0dqa/breeding_wiwa_isotopes.rds?dl=1">here</a> if you don’t already have the <code>inputs</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wiwa &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;inputs/breeding_wiwa_isotopes.rds&quot;</span>)
 
 <span class="co"># look at the range of the lat longs</span>

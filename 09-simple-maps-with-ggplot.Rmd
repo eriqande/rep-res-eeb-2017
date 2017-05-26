@@ -465,7 +465,7 @@ citation("ggmap")
     
 ### How ggmap works
 
-* ggmap simplifies the process of downloading base maps from Google or Open Street Maps or Stamen Maps
+* ggmap simplifies the process of downloading base maps from [Google Maps(https://www.google.com/maps) or [Open Street Map](https://www.openstreetmap.org/) or [Stamen Maps](http://maps.stamen.com/#toner/12/37.7706/-122.3782)
 to use in the background of your plots.
 * It also sets the axis scales, etc, in a nice way.  
 * Once you have gotten your maps, you make a call with `ggmap()` much as you would with `ggplot()`
@@ -517,11 +517,13 @@ get_googlemap(center = c(mean(sisquoc$lon), mean(sisquoc$lat)),
 
 I have been involved in some work at Big Creek, and would like to replace one of our
 maps with something better.  So, 
-out of curiosity, let's see what Big Creek looks like with Google Maps
+out of curiosity, let's see what Big Creek looks like with Google Maps.
+
 ```{r, cache=TRUE}
 get_googlemap(center = c(-121.595, 36.075), zoom = 15, maptype = "terrain") %>%
   ggmap() 
 ```
+
 Hmm...that is quite nice.
 
 #### Stamen maps
@@ -547,7 +549,7 @@ sisquoc_stamen <- get_stamenmap(bbox = bounds, maptype = "terrain", zoom = 16)
 
 ### How about a bike ride?
 
-* I was riding my bike one day with a my phone and downloaded the GPS readings at short intervals.
+* I was riding my bike one day with my phone and downloaded the GPS readings at short intervals.
 * We can plot the route like this:
     ```{r, cache=TRUE}
     bike <- read.csv("inputs/bike-ride.csv")
@@ -655,7 +657,8 @@ it as a data frame `ggplot` can handle.  Choices for the arguments are many.  So
 `"states"`, `"counties"`, `"usa"`, etc.
 - `geom_polygon()` plots boundaries from the maps package.
 - Don't forget: `group = group` in the aesthetics!
-- `coord_quickmap()` ggplot function to get a good aspect ratio (or do projections, if you want...)
+- `coord_quickmap()` ggplot function to get a good aspect ratio for a lat-long plot. (Note that 
+if you want to do projections, with `maps` data you can use `coord_map()`...next week, maybe.)
 - Zoom in without improper chopping with `coord_quickmap(xlim = ..., ylim = ...)`
 
 
@@ -679,7 +682,9 @@ It looks like this:
 ```{r}
 caps
 ```
-You can quickly download the CSV file from [here](https://www.dropbox.com/s/d3gehuzl4pdkntj/state_capitals.csv?dl=1).
+You can quickly download the CSV file from [here](https://www.dropbox.com/s/d3gehuzl4pdkntj/state_capitals.csv?dl=1).  But, if you 
+downloaded the `inputs` directory and placed it in the right spot 
+to run through the code above, you then already have this.
 
 Once you have that, try to put together a map that looks like this:
 ```{r, echo=FALSE}
@@ -703,6 +708,7 @@ ggplot() +
 
 OK, now, to display your mad dplyr skills and mapping capabilities, do the gyrations 
 necessary to do this:
+
 ```{r, echo=FALSE}
 s2 <- states %>%
   mutate(state = ifelse(region %in% c("arizona", "utah", "new mexico", "colorado"), region, "not-a-4-corner-state"))
@@ -721,7 +727,8 @@ ggplot() +
 ### Short assignment of plotting with ggmap()
 
 Here are the locations of 357 Wilson's warblers sampled in North America.  You can
-download them from [here](https://www.dropbox.com/s/fiq6zj0qsmj0dqa/breeding_wiwa_isotopes.rds?dl=1).
+download them from [here](https://www.dropbox.com/s/fiq6zj0qsmj0dqa/breeding_wiwa_isotopes.rds?dl=1) if
+you don't already have the `inputs`.
 ```{r}
 wiwa <- readRDS("inputs/breeding_wiwa_isotopes.rds")
 
@@ -736,7 +743,7 @@ wiwa
 ```
 Let's make a google_map with some of that info on it---namely the locations of the 
 samples colored by the State or Province that they are in.
-```{r, echo=FALSE}
+```{r, echo=FALSE, cache=TRUE}
 get_googlemap(center = c(-110, 49), zoom = 3, maptype = "hybrid") %>%
   ggmap() +
   geom_jitter(data = wiwa, mapping = aes(x = long, y = lat, colour = State))

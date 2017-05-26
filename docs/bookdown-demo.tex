@@ -4536,9 +4536,11 @@ Note, if you use it in a paper, please cite it:
 \begin{itemize}
 \tightlist
 \item
-  ggmap simplifies the process of downloading base maps from Google or
-  Open Street Maps or Stamen Maps to use in the background of your
-  plots.
+  ggmap simplifies the process of downloading base maps from {[}Google
+  Maps(\url{https://www.google.com/maps}) or
+  \href{https://www.openstreetmap.org/}{Open Street Map} or
+  \href{http://maps.stamen.com/\#toner/12/37.7706/-122.3782}{Stamen
+  Maps} to use in the background of your plots.
 \item
   It also sets the axis scales, etc, in a nice way.\\
 \item
@@ -4636,7 +4638,7 @@ This can be nice too\ldots{}
 
 I have been involved in some work at Big Creek, and would like to
 replace one of our maps with something better. So, out of curiosity,
-let's see what Big Creek looks like with Google Maps
+let's see what Big Creek looks like with Google Maps.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4650,6 +4652,7 @@ let's see what Big Creek looks like with Google Maps
 \end{verbatim}
 
 \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-88-1.pdf}
+
 Hmm\ldots{}that is quite nice.
 
 \subsubsection{Stamen maps}\label{stamen-maps}
@@ -4680,7 +4683,7 @@ we don't bother running it because it looks really bad anyway.
 
 \begin{itemize}
 \item
-  I was riding my bike one day with a my phone and downloaded the GPS
+  I was riding my bike one day with my phone and downloaded the GPS
   readings at short intervals.
 \item
   We can plot the route like this:
@@ -4963,7 +4966,9 @@ Using the \texttt{maps} package with \texttt{ggplot2}:
   Don't forget: \texttt{group\ =\ group} in the aesthetics!
 \item
   \texttt{coord\_quickmap()} ggplot function to get a good aspect ratio
-  (or do projections, if you want\ldots{})
+  for a lat-long plot. (Note that if you want to do projections, with
+  \texttt{maps} data you can use \texttt{coord\_map()}\ldots{}next week,
+  maybe.)
 \item
   Zoom in without improper chopping with
   \texttt{coord\_quickmap(xlim\ =\ ...,\ ylim\ =\ ...)}
@@ -5036,12 +5041,16 @@ It looks like this:
 
 You can quickly download the CSV file from
 \href{https://www.dropbox.com/s/d3gehuzl4pdkntj/state_capitals.csv?dl=1}{here}.
+But, if you downloaded the \texttt{inputs} directory and placed it in
+the right spot to run through the code above, you then already have
+this.
 
 Once you have that, try to put together a map that looks like this:
 \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-97-1.pdf}
 
 OK, now, to display your mad dplyr skills and mapping capabilities, do
 the gyrations necessary to do this:
+
 \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-98-1.pdf}
 
 \subsection{Short assignment of plotting with
@@ -5049,7 +5058,8 @@ ggmap()}\label{short-assignment-of-plotting-with-ggmap}
 
 Here are the locations of 357 Wilson's warblers sampled in North
 America. You can download them from
-\href{https://www.dropbox.com/s/fiq6zj0qsmj0dqa/breeding_wiwa_isotopes.rds?dl=1}{here}.
+\href{https://www.dropbox.com/s/fiq6zj0qsmj0dqa/breeding_wiwa_isotopes.rds?dl=1}{here}
+if you don't already have the \texttt{inputs}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
