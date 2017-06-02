@@ -1105,7 +1105,7 @@ These are answers I would use.
 \end{Shaded}
 
 \begin{verbatim}
-## Warning: Unknown or uninitialised column: 'x'.
+## Warning: Unknown column 'x'
 \end{verbatim}
 
 \begin{verbatim}
@@ -5157,8 +5157,10 @@ where, if you go to their website they will tell you that ``making and
 sharing beautiful maps'' is ``possible \emph{only} with ArcGIS online.''
 However, you \emph{can} make and share beautiful maps from similar data
 sets using R, which carries the advantage of being reproducible,
-open-source, free (as in speech), and free (as in beer). So, if you have
-the stomach for it, the R route for spatial data certainly seems to be a
+open-source, free (as in speech), and free (as in beer). It also, is not
+too terribly hard to learn to deal with spatial data in R, and it seems
+to be getting easier all the time. So, if you already are using R for
+data analysis, the R route for spatial data certainly seems to be a
 better approach than paying Esri 500 clams a year for an ArcGIS
 subscription.
 
@@ -5190,8 +5192,8 @@ already have them, you will want to get a few from CRAN:
 \end{Highlighting}
 \end{Shaded}
 
-and, thought \texttt{ggspatial} is available on CRAN, I recommend you
-get the development version from GitHub:
+and, though \texttt{ggspatial} is available on CRAN, I recommend you get
+the development version from GitHub:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5201,7 +5203,10 @@ get the development version from GitHub:
 
 When learning the functions in this spatial-data ecosystem, it is often
 difficult to keep straight which functions come from which packages, so
-I will often use namespace addressing to make that explicit here.
+I will often use namespace addressing (i.e., I will write
+\texttt{rgdal::readOGR} instead of just \texttt{readOGR}, or
+\texttt{ggspatial::geom\_spatial} instead of simply
+\texttt{geom\_spatial}, etc.) to make that explicit here.
 
 As always, let's load the tidyverse
 
@@ -5288,7 +5293,7 @@ These different files carry all the information. Some of them are text
 readable, like the \texttt{.prj} file, but many of the others are
 compressed binary files. Fortunately, we don't ever have to open them up
 and try to read them with a text editor, as we can just read them in
-with \texttt{rgda::readORG}.
+with \texttt{rgdal::readORG}.
 
 \subsection{Reading in Vector Spatial
 Data}\label{reading-in-vector-spatial-data}
@@ -5300,7 +5305,7 @@ be \texttt{"inputs/santa-cruz-county/Watersheds"}. The second argument
 (the \texttt{layer} parameter) is the prefix of the name of the files
 that you want to read. Above, all the files started with
 \texttt{Watersheds} so this second argument is \texttt{Watersheds}.
-Let's do it:
+Let's do it for the street lights, streams, and watersheds:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5396,8 +5401,11 @@ Before we start drilling down into these data sets to see how
 \texttt{Spatial\{Points,Lines,Polygons\}DataFrame}s are structured,
 let's just plot them quickly. We will use the \texttt{ggspatial} package
 which extends \texttt{ggplot2} to spatial data with a nice syntax.
-Basically, that package makes a new geom called \texttt{geom\_spatial()}
-that deals with plotting spatial points, lines, or polygons.
+Basically, that package provides a new geom called
+\texttt{geom\_spatial()} that deals with plotting spatial points, lines,
+or polygons. The same function \texttt{geom\_spatial} is used to plot
+points, lines, or polygons, It ``looks at''" the spatial data set it is
+provided to determine whether it should plot points, lines, or polygons.
 
 Here are the watershed boundaries:
 
@@ -5562,7 +5570,7 @@ are classified as INTERMITTENT:
 \end{Highlighting}
 \end{Shaded}
 
-While here were 1514 features in \texttt{streams}
+While there were 1514 features in \texttt{streams}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5602,6 +5610,7 @@ streams makes sense to us:
 \end{verbatim}
 
 \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-118-1.pdf}
+
 Yep, those are creeks that are mostly up higher in the watersheds.
 
 \section{Coordinate Reference
@@ -5759,6 +5768,10 @@ Behold the thin slice of shaded hillside background!
 
 \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-126-1.pdf}
 
+It is worth pointing out that you will very often use
+\texttt{coord\_map()} when working with \texttt{ggspatial}, especially
+when using Open Street Maps layers under them.
+
 Check this out, even faceting seems to work with ggspatial.
 
 \begin{Shaded}
@@ -5785,7 +5798,7 @@ Check this out, even faceting seems to work with ggspatial.
 \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-127-1.pdf}
 
 These background layers are received as a type of spatial data called a
-\emph{spatial raster}. You can think of rasters as digitial
+\emph{spatial raster}. You can think of rasters as digital
 ``images''---basically regular grids of pixels.\\
 \texttt{ggspatial} has exploited one of ggplot's facilities for
 efficiently plotting images to be able to efficiently plot rasters in
@@ -5797,10 +5810,9 @@ let's learn a little about rasters.
 
 \section{Spatial Raster Data}\label{spatial-raster-data}
 
-The package \texttt{rgdal} has some facilities for dealing with rasters,
-I think; however I am partial to the \texttt{raster} package written by
-Robert Hijmans (who was a collaborator with Kristen when they were both
-at Berkeley, check
+R has a fantastic package, called \texttt{raster}, written by Robert
+Hijmans (who was a collaborator with Kristen when they were both at
+Berkeley, check
 \href{http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2699.2006.01517.x/full}{this}
 out!). The \texttt{raster} package provides a nice interface for dealing
 with spatial raster types and doing a variety of operations with them.
@@ -5811,10 +5823,9 @@ avaiable through NOAA's
 Elevation Model Global Mosaic (Color Shaded Relief)}. I have already
 downloaded it to the \texttt{inputs} directory because, to be quite
 honest, obtaining it through R was not as straightforward as I would
-have hoped. This rasters has multiple layers. It is a color image so it
-has Red, Green, Blue layers (or ``bands'' as they are often called.)
-Accordingly we will want to use the \texttt{brick} function to read it
-in as a ``rasterBrick'':
+have hoped. This raster has multiple layers. It is a color image stored
+as a multi-layer (or ``band'') file. Accordingly we can use the
+\texttt{brick} function to read it in as a ``rasterBrick'':
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5867,9 +5878,12 @@ Diana's rockfish plots.
 
 There is another function in \texttt{ggspatial} called
 \texttt{annotation\_spraster} that plots a raster, but does not change
-the plot boundaries. This is very useful if you want only a piece of the
-background. Let's see it in action by grabbing Diana's rockfish data,
-but filtering it only to those points in the Stillwater Cove area.
+the plot boundaries. This is very useful if you have a lot of points
+that you wish to plot, and you want the plot boundaries to be sized to
+contain all your points, and you, accordingly, only want that particular
+piece of your background raster in the plot. Let's see it in action by
+grabbing Diana's rockfish data, but filtering it only to those points in
+the Stillwater Cove area.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -5911,6 +5925,54 @@ And here they are with the raster in the background:
 That is pretty cool. It might have been nice to have downloaded a higher
 resolution raster, which is available, but would have been quite large
 at the full, zoomed out scale.
+
+One very important thing to note here is that when you are using
+\texttt{ggspatial} you can still plot regular \texttt{ggplot2} geoms on
+top of it. We happened to have some points in a tibble (not, a
+SpatialPointsDataFrame) with Latitudes and Longitudes, so we just hucked
+'em on there using \texttt{geom\_point}.
+
+\section{Wrapping Up}\label{wrapping-up}
+
+Well, we merely scratched the surface of handling and plotting spatial
+data in R. There are a lot of resources out there:
+
+\begin{itemize}
+\tightlist
+\item
+  \href{http://rspatial.org/index.html}{RSpatial Book/Tutorial} This is
+  an outstanding contribution from Robert Hijmans (it appears). It looks
+  like it is still in progress, but it is quite complete and lucid.
+\item
+  \href{https://cran.r-project.org/doc/contrib/intro-spatial-rl.pdf}{A
+  CRAN tutorial on spatial data in R}
+\item
+  \href{https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/OverviewCoordinateReferenceSystems.pdf}{Melanie
+  Frazier's kick-ass into to coordinate reference systems}
+\item
+  \href{http://www.maths.lancs.ac.uk/~rowlings/Teaching/UseR2012/cheatsheet.html}{R
+  Spatial Cheatsheet} loaded with good reminders of how to do things
+\item
+  \href{http://www.nickeubank.com/wp-content/uploads/2015/10/gis_in_r_vector_cheatsheet.pdf}{Another
+  Cheat Sheet} Great to read through to quickly get a sense of what is
+  possible.
+\item
+  \href{http://www.seascapemodels.org/data/ArcGIS_to_R_Spatial_CheatSheet.pdf}{ArcGIS\_to\_R\_Spatial\_CheatShee}
+  another cheat sheet well-suited to people who have used the ArcGIS
+  point-and-click GUI.
+\item
+  \href{https://github.com/wegmann/RSdocs/raw/master/RSecology_cheatsheet/RS_ecology_refcard.pdf}{Remote
+  sensing in R reference card} Superb summary from the folks who bring
+  you the book
+  \href{https://www.amazon.com/Remote-Sensing-GIS-Ecologists-Software/dp/1784270229}{Remote
+  Sensing and GIS for Ecologists Using Open Source Software} which looks
+  like it would be a superb read if you really wanted to dive deeply
+  into this topic.
+\end{itemize}
+
+On top of that, we haven't even touched on interactive maps with R.
+Those interested in that should check out
+\href{https://rstudio.github.io/leaflet/}{Leaflet for R}.
 
 \bibliography{packages.bib,book.bib}
 

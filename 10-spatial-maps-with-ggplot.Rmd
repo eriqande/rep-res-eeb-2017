@@ -21,7 +21,9 @@ Esri's [ArcGIS](https://www.arcgis.com/features/index.html) package, where, if y
 website they will tell you that "making and sharing beautiful maps" is "possible _only_ with
 ArcGIS online."  However, you _can_ make and share beautiful maps from similar data sets using R,
 which carries the advantage of being reproducible, open-source, free (as in speech), and free 
-(as in beer).  So, if you have the stomach for it, the R route for spatial data certainly
+(as in beer).  It also, is not too terribly hard to learn to deal with spatial data in R, and it
+seems to be getting easier all the time.  So, if you already are using R for data analysis, 
+the R route for spatial data certainly
 seems to be a better approach than paying Esri 500 clams a year for an ArcGIS subscription.
 
 In this session we will cover only simple topics (keep in mind that your instructor is a 
@@ -39,14 +41,15 @@ them, you will want to get a few from CRAN:
 ```{r eval=FALSE}
 install.packages(c("sp", "rgdal", "raster"))
 ```
-and, thought `ggspatial` is available on CRAN, I recommend you get the development version from GitHub:
+and, though `ggspatial` is available on CRAN, I recommend you get the development version from GitHub:
 ```{r, eval=FALSE}
 devtools::install_github("paleolimbot/ggspatial")
 ```
 
 When learning the functions in this spatial-data ecosystem, it is often difficult to keep straight
-which functions come from which packages, so I will often use namespace addressing to make that
-explicit here.
+which functions come from which packages, so I will often use namespace addressing (i.e., I will
+write `rgdal::readOGR` instead of just `readOGR`, or `ggspatial::geom_spatial` instead of simply
+`geom_spatial`, etc.) to make that explicit here.
 
 As always, let's load the tidyverse
 ```{r}
@@ -102,14 +105,14 @@ dir("inputs/santa-cruz-county/Watersheds/")
 These different files carry all the information.  Some of them are text readable, like the `.prj` 
 file, but many of the others are compressed binary files.  Fortunately, we don't ever have to 
 open them up and try to read them with a text editor, as we can just read them in with 
-`rgda::readORG`.
+`rgdal::readORG`.
 
 ### Reading in Vector Spatial Data
 
 The `readOGR` function in `rgdal` does this for us.  It takes as the first argument (the `dsn` parameter) the _directory_ that holds the
 shapefile.  In the above case that would be `"inputs/santa-cruz-county/Watersheds"`.  The second argument (the `layer` parameter)
 is the prefix of the name of the files that you want to read.  Above, all the files started with `Watersheds` so this second argument
-is `Watersheds`.  Let's do it:
+is `Watersheds`.  Let's do it for the street lights, streams, and watersheds:
 ```{r}
 lights <- rgdal::readOGR(dsn = "inputs/santa-cruz-county/Street_Lights", layer = "Street_Lights")
 streams <- rgdal::readOGR(dsn = "inputs/santa-cruz-county/Streams", layer = "Streams")
@@ -146,8 +149,10 @@ stream_no_fail <- rgdal::readOGR(dsn = normalizePath("~/Documents/git-repos/rep-
 
 Before we start drilling down into these data sets to see how `Spatial{Points,Lines,Polygons}DataFrame`s are
 structured, let's just plot them quickly.  We will use the `ggspatial` package which extends `ggplot2` to
-spatial data with a nice syntax.  Basically, that package makes a new geom called `geom_spatial()` that
-deals with plotting spatial points, lines, or polygons.
+spatial data with a nice syntax.  Basically, that package provides a new geom called `geom_spatial()` that
+deals with plotting spatial points, lines, or polygons.  The same function `geom_spatial` is used to plot
+points, lines, or polygons, It "looks at"" the spatial data set it is provided to 
+determine whether it should plot points, lines, or polygons.
 
 Here are the watershed boundaries:
 ```{r, message=FALSE}
@@ -220,7 +225,7 @@ as_tibble(streams@data)
 
 And what about the `lines` slot?  Well, that is a spatial data object that holds the 
 coordinates that you would connect to make each line.  This is a list of things, in which
-each element corresponds to a row in `data`.
+each element corresponds to a row in `data`.  
 
 ### Subsetting Spatial*DataFrames
 
@@ -234,7 +239,7 @@ intermitt <- streams %>%
   subset(., STREAMTYPE == "INTERMITTENT")
 ```
 
-While here were 1514 features in `streams`
+While there were 1514 features in `streams`
 ```{r}
 length(streams)
 ```
@@ -250,6 +255,7 @@ ggplot() +
   ggspatial::geom_spatial(data = intermitt, colour = "orange") +
   coord_map()
 ```
+
 Yep, those are creeks that are mostly up higher in the watersheds.
 
 ## Coordinate Reference Systems
@@ -337,6 +343,8 @@ ggplot() +
   theme_void()
 ```
 
+It is worth pointing out that you will very often use `coord_map()` when working with `ggspatial`, especially
+when using Open Street Maps layers under them.
 
 Check this out, even faceting seems to work with ggspatial.
 
@@ -351,7 +359,7 @@ ggplot() +
 ```
 
 These background layers are received as a type of spatial data called a _spatial raster_.
-You can think of rasters as digitial "images"---basically regular grids of pixels.  
+You can think of rasters as digital "images"---basically regular grids of pixels.  
 `ggspatial` has exploited one of ggplot's facilities for efficiently plotting images
 to be able to efficiently plot rasters in the background.  It also provides a function,
 `geom_spraster()` that let's us do the same with spatial rasters from anywhere. This
@@ -360,8 +368,7 @@ coordinate reference systems.  Before we get into this, let's learn a little abo
 
 ## Spatial Raster Data 
 
-The package `rgdal` has some facilities for dealing with rasters, I think; however I am 
-partial to the `raster` package written by Robert Hijmans (who was a collaborator with 
+R has a fantastic package, called `raster`, written by Robert Hijmans (who was a collaborator with 
 Kristen when they were both at Berkeley, check 
 [this](http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2699.2006.01517.x/full) out!).  The 
 `raster` package provides a nice interface for dealing with spatial raster types and 
@@ -370,9 +377,9 @@ doing a variety of operations with them.
 We are going to start with an example: shaded relief of Carmel Bay avaiable through
 NOAA's [Digital Elevation Model Global Mosaic (Color Shaded Relief)](http://noaa.maps.arcgis.com/home/item.html?id=feb3c625dc094112bb5281c17679c769).
 I have already downloaded it to the `inputs` directory because, to be quite honest, obtaining
-it through R was not as straightforward as I would have hoped.  This rasters has multiple
-layers.  It is a color image so it has Red, Green, Blue layers (or "bands" as they are often
-called.)  Accordingly we will want to use the `brick` function to read it in as a "rasterBrick":
+it through R was not as straightforward as I would have hoped.  This raster has multiple
+layers.  It is a color image stored as a multi-layer (or "band") file.
+Accordingly we can use the `brick` function to read it in as a "rasterBrick":
 ```{r}
 carmel_bay <- raster::brick("inputs/carmel_bay_bathy.tif") 
 ```
@@ -398,7 +405,9 @@ plots.
 
 There is another function in `ggspatial` called `annotation_spraster` that plots a raster,
 but does not change the plot
-boundaries.  This is very useful if you want only a piece of the background.  Let's
+boundaries.  This is very useful if you have a lot of points that you wish to plot, and you want
+the plot boundaries to be sized to contain all your points, and you, accordingly, only want that
+particular piece of your background raster in the plot.  Let's
 see it in action by grabbing Diana's rockfish data, but filtering it only to those
 points in the Stillwater Cove area.
 ```{r}
@@ -426,6 +435,30 @@ ggplot() +
   coord_fixed()
 ```
 
-That is pretty cool.  It might have been nice to have downloaded a higher resolution raster, which is available, but would have been
-quite large at the full, zoomed out scale.
+That is pretty cool.  It might have been nice to have downloaded a higher resolution raster,
+which is available, but would have been quite large at the full, zoomed out scale.
+
+One very important thing to note here is that when you are using `ggspatial` you can still plot regular
+`ggplot2` geoms on top of it.  We happened to have some points in a tibble (not, a SpatialPointsDataFrame)
+with Latitudes and Longitudes, so we just hucked 'em on there using `geom_point`. 
+
+## Wrapping Up
+
+Well, we merely scratched the surface of handling and plotting spatial data in R.  There are a lot of resources out
+there:
+
+- [RSpatial Book/Tutorial](http://rspatial.org/index.html) This is an outstanding contribution from Robert Hijmans (it appears).
+It looks like it is still in progress, but it is quite complete and lucid. 
+- [A CRAN tutorial on spatial data in R](https://cran.r-project.org/doc/contrib/intro-spatial-rl.pdf)
+- [Melanie Frazier's kick-ass into to coordinate reference systems](https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/OverviewCoordinateReferenceSystems.pdf)
+- [R Spatial Cheatsheet](http://www.maths.lancs.ac.uk/~rowlings/Teaching/UseR2012/cheatsheet.html) loaded with good reminders of how to do things
+- [Another Cheat Sheet](http://www.nickeubank.com/wp-content/uploads/2015/10/gis_in_r_vector_cheatsheet.pdf) Great to read through to quickly get a sense of what is possible.
+- [ArcGIS_to_R_Spatial_CheatShee](http://www.seascapemodels.org/data/ArcGIS_to_R_Spatial_CheatSheet.pdf) another cheat sheet well-suited to people who have used the ArcGIS point-and-click GUI.
+- [Remote sensing in R reference card](https://github.com/wegmann/RSdocs/raw/master/RSecology_cheatsheet/RS_ecology_refcard.pdf) 
+Superb summary from the folks who bring you the book [Remote Sensing and GIS for Ecologists Using Open Source 
+Software](https://www.amazon.com/Remote-Sensing-GIS-Ecologists-Software/dp/1784270229) which looks like it would be a
+superb read if you really wanted to dive deeply into this topic.
+
+On top of that, we haven't even touched on interactive maps with R.  Those interested in that should
+check out [Leaflet for R](https://rstudio.github.io/leaflet/).
 
