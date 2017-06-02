@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Case Studies in Reproducible Research: a spring seminar at UCSC</title>
+  <meta name="description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook.">
+  <meta name="generator" content="bookdown 0.3.16 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Case Studies in Reproducible Research: a spring seminar at UCSC" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook." />
+  <meta name="github-repo" content="eriqande/rep-res-eeb-2017" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Case Studies in Reproducible Research: a spring seminar at UCSC" />
+  
+  <meta name="twitter:description" content="This is a bookdown that stores materials for a UCSC seminar on reproducible research with R. The output format for this example is bookdown::gitbook." />
+  
+
+<meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
+
+
+<meta name="date" content="2017-06-02">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="map-making-in-R.html">
+<link rel="next" href="references.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Case Studies in Reproducible Research</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Course Overview</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#meeting-times-location-requirements"><i class="fa fa-check"></i><b>1.1</b> Meeting Times, Location, Requirements</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#the-origin-of-this-seminar"><i class="fa fa-check"></i><b>1.2</b> The origin of this seminar</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#course-organizers"><i class="fa fa-check"></i><b>1.3</b> Course Organizers</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#course-goals"><i class="fa fa-check"></i><b>1.4</b> Course Goals</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#weekly-syllabus"><i class="fa fa-check"></i><b>1.5</b> Weekly Syllabus</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#week-1-introduction-and-getting-your-workspace-set-up"><i class="fa fa-check"></i><b>1.5.1</b> Week 1 — Introduction and Getting Your Workspace Set Up</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#week-2-rstudio-project-organization-using-git-and-github-quick-rmarkdown"><i class="fa fa-check"></i><b>1.5.2</b> Week 2 — RStudio project organization; using git and GitHub; Quick RMarkdown</a></li>
+<li class="chapter" data-level="1.5.3" data-path="index.html"><a href="index.html#week-3-tibbles.-reading-data-in.-data-rectangling"><i class="fa fa-check"></i><b>1.5.3</b> Week 3 — Tibbles. Reading data in. Data rectangling</a></li>
+<li class="chapter" data-level="1.5.4" data-path="index.html"><a href="index.html#week-4"><i class="fa fa-check"></i><b>1.5.4</b> Week 4 —</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="week1.html"><a href="week1.html"><i class="fa fa-check"></i><b>2</b> Week One Meeting</a><ul>
+<li class="chapter" data-level="2.1" data-path="week1.html"><a href="week1.html#software-installation"><i class="fa fa-check"></i><b>2.1</b> Software Installation</a></li>
+<li class="chapter" data-level="2.2" data-path="week1.html"><a href="week1.html#get-an-account-on-github"><i class="fa fa-check"></i><b>2.2</b> Get an account on GitHub</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="week1.html"><a href="week1.html#private-repositories"><i class="fa fa-check"></i><b>2.2.1</b> Private repositories</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="week1.html"><a href="week1.html#open-an-rstudio-project-from-github"><i class="fa fa-check"></i><b>2.3</b> Open an RStudio Project from GitHub</a></li>
+<li class="chapter" data-level="2.4" data-path="week1.html"><a href="week1.html#assignment-for-next-week-create-an-rstudio-project-with-your-own-data"><i class="fa fa-check"></i><b>2.4</b> Assignment for next week: Create an RStudio Project with Your Own Data</a></li>
+<li class="chapter" data-level="2.5" data-path="week1.html"><a href="week1.html#week2reading"><i class="fa fa-check"></i><b>2.5</b> Reading for next week</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="week2.html"><a href="week2.html"><i class="fa fa-check"></i><b>3</b> Week Two Meeting</a><ul>
+<li class="chapter" data-level="3.1" data-path="week2.html"><a href="week2.html#workflow-and-project-recap"><i class="fa fa-check"></i><b>3.1</b> Workflow and Project Recap</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="week2.html"><a href="week2.html#workflow-basics"><i class="fa fa-check"></i><b>3.1.1</b> Workflow: basics</a></li>
+<li class="chapter" data-level="3.1.2" data-path="week2.html"><a href="week2.html#workflow-projects"><i class="fa fa-check"></i><b>3.1.2</b> Workflow: projects</a></li>
+<li class="chapter" data-level="3.1.3" data-path="week2.html"><a href="week2.html#workflow-scripts"><i class="fa fa-check"></i><b>3.1.3</b> Workflow: scripts</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="week2.html"><a href="week2.html#lets-talk-about-the-pipe"><i class="fa fa-check"></i><b>3.2</b> Let’s talk about the pipe <code>%&gt;%</code></a></li>
+<li class="chapter" data-level="3.3" data-path="week2.html"><a href="week2.html#tibbles-and-rectangular-data"><i class="fa fa-check"></i><b>3.3</b> Tibbles and “rectangular” data</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="week2.html"><a href="week2.html#tibble-excercises"><i class="fa fa-check"></i><b>3.3.1</b> Tibble excercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="week2.html"><a href="week2.html#data-import"><i class="fa fa-check"></i><b>3.4</b> Data import</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="week2.html"><a href="week2.html#rstudios-gui-importer"><i class="fa fa-check"></i><b>3.4.1</b> RStudio’s GUI importer</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="week3.html"><a href="week3.html"><i class="fa fa-check"></i><b>4</b> Week Three Meeting</a><ul>
+<li class="chapter" data-level="4.1" data-path="week3.html"><a href="week3.html#git-basics"><i class="fa fa-check"></i><b>4.1</b> Git Basics</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="week3.html"><a href="week3.html#vcs"><i class="fa fa-check"></i><b>4.1.1</b> An overview of Version Control Systems (VCS)</a></li>
+<li class="chapter" data-level="4.1.2" data-path="week3.html"><a href="week3.html#git-versus-github"><i class="fa fa-check"></i><b>4.1.2</b> Git versus GitHub</a></li>
+<li class="chapter" data-level="4.1.3" data-path="week3.html"><a href="week3.html#git-thru-rstudio"><i class="fa fa-check"></i><b>4.1.3</b> Using git through RStudio</a></li>
+<li class="chapter" data-level="4.1.4" data-path="week3.html"><a href="week3.html#git-play"><i class="fa fa-check"></i><b>4.1.4</b> Go for it everyone!</a></li>
+<li class="chapter" data-level="4.1.5" data-path="week3.html"><a href="week3.html#git-how"><i class="fa fa-check"></i><b>4.1.5</b> How does git store and keep track of things</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="week3.html"><a href="week3.html#pushing-and-pulling-with-github"><i class="fa fa-check"></i><b>4.2</b> Pushing and Pulling With GitHub</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="week3.html"><a href="week3.html#creating-a-repository-on-github-and-the-initial-push"><i class="fa fa-check"></i><b>4.2.1</b> Creating a Repository on GitHub and the initial push</a></li>
+<li class="chapter" data-level="4.2.2" data-path="week3.html"><a href="week3.html#subsequent-pushes"><i class="fa fa-check"></i><b>4.2.2</b> Subsequent pushes</a></li>
+<li class="chapter" data-level="4.2.3" data-path="week3.html"><a href="week3.html#assign-collaborators"><i class="fa fa-check"></i><b>4.2.3</b> Assign collaborators</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="week3.html"><a href="week3.html#next-weeks-assignment"><i class="fa fa-check"></i><b>4.3</b> Next Week’s Assignment</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="week4.html"><a href="week4.html"><i class="fa fa-check"></i><b>5</b> Week Four Meeting</a><ul>
+<li class="chapter" data-level="5.1" data-path="week4.html"><a href="week4.html#knit-your-readme.rmd-files"><i class="fa fa-check"></i><b>5.1</b> Knit your README.Rmd files</a></li>
+<li class="chapter" data-level="5.2" data-path="week4.html"><a href="week4.html#changing-to-factors"><i class="fa fa-check"></i><b>5.2</b> Changing to factors</a></li>
+<li class="chapter" data-level="5.3" data-path="week4.html"><a href="week4.html#the-group_by-function"><i class="fa fa-check"></i><b>5.3</b> The <code>group_by()</code> function</a></li>
+<li class="chapter" data-level="5.4" data-path="week4.html"><a href="week4.html#how-do-i-learn-about-all-the-vectorized-functions-i-can-use-in-mutate-and-summarize"><i class="fa fa-check"></i><b>5.4</b> How do I learn about all the vectorized functions I can use in <code>mutate()</code> and <code>summarize()</code>?</a></li>
+<li class="chapter" data-level="5.5" data-path="week4.html"><a href="week4.html#next-weeks-assignment-1"><i class="fa fa-check"></i><b>5.5</b> Next Week’s Assignment</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="week5.html"><a href="week5.html"><i class="fa fa-check"></i><b>6</b> Week Five Meeting</a><ul>
+<li class="chapter" data-level="6.1" data-path="week5.html"><a href="week5.html#some-things-regarding-peoples-repositories"><i class="fa fa-check"></i><b>6.1</b> Some things regarding people’s repositories</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="week5.html"><a href="week5.html#data-compression"><i class="fa fa-check"></i><b>6.1.1</b> Data Compression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="week5.html"><a href="week5.html#a-quick-aside-about-missing-data"><i class="fa fa-check"></i><b>6.2</b> A quick aside about missing data</a></li>
+<li class="chapter" data-level="6.3" data-path="week5.html"><a href="week5.html#brief-highlights-of-the-joins-chapter"><i class="fa fa-check"></i><b>6.3</b> Brief Highlights of the Joins Chapter</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="week5.html"><a href="week5.html#a-few-thoughts-on-keys"><i class="fa fa-check"></i><b>6.3.1</b> A few thoughts on keys</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="week5.html"><a href="week5.html#an-example-of-using-some-joins"><i class="fa fa-check"></i><b>6.4</b> An example of using some joins</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="week5.html"><a href="week5.html#when-would-i-use-right_join"><i class="fa fa-check"></i><b>6.4.1</b> When would I use <code>right_join()</code>?</a></li>
+<li class="chapter" data-level="6.4.2" data-path="week5.html"><a href="week5.html#what-about-that-inner_join"><i class="fa fa-check"></i><b>6.4.2</b> What about that <code>inner_join()</code></a></li>
+<li class="chapter" data-level="6.4.3" data-path="week5.html"><a href="week5.html#an-anti_join-example"><i class="fa fa-check"></i><b>6.4.3</b> An anti_join example</a></li>
+<li class="chapter" data-level="6.4.4" data-path="week5.html"><a href="week5.html#just-for-fun-lets-see-a-full_join"><i class="fa fa-check"></i><b>6.4.4</b> Just for fun, let’s see a full_join()</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="week5.html"><a href="week5.html#working-with-r-notebooks"><i class="fa fa-check"></i><b>6.5</b> Working with R Notebooks</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="week5.html"><a href="week5.html#open-your-own-r-notebook"><i class="fa fa-check"></i><b>6.5.1</b> Open your own R Notebook</a></li>
+<li class="chapter" data-level="6.5.2" data-path="week5.html"><a href="week5.html#working-with-r-notebooks-1"><i class="fa fa-check"></i><b>6.5.2</b> Working with R Notebooks</a></li>
+<li class="chapter" data-level="6.5.3" data-path="week5.html"><a href="week5.html#some-caveats-about-notebooks"><i class="fa fa-check"></i><b>6.5.3</b> Some caveats about notebooks</a></li>
+<li class="chapter" data-level="6.5.4" data-path="week5.html"><a href="week5.html#opening-a-.nb.html-file-in-rstudio"><i class="fa fa-check"></i><b>6.5.4</b> Opening a .nb.html file in Rstudio</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="week5.html"><a href="week5.html#for-next-week"><i class="fa fa-check"></i><b>6.6</b> For Next Week:</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html"><i class="fa fa-check"></i><b>7</b> Week 6 meeting: using ggplot2</a><ul>
+<li class="chapter" data-level="7.0.1" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#your-mission"><i class="fa fa-check"></i><b>7.0.1</b> Your Mission</a></li>
+<li class="chapter" data-level="7.1" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#some-lecture-notes-from-a-few-years-ago"><i class="fa fa-check"></i><b>7.1</b> Some lecture notes from a few years ago</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#goals-for-this-hour"><i class="fa fa-check"></i><b>7.1.1</b> Goals for this hour:</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#about-ggplot2"><i class="fa fa-check"></i><b>7.2</b> About ggplot2</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#basics"><i class="fa fa-check"></i><b>7.2.1</b> Basics</a></li>
+<li class="chapter" data-level="7.2.2" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#what-is-this-grammar-of-graphics"><i class="fa fa-check"></i><b>7.2.2</b> What is this grammar of graphics?</a></li>
+<li class="chapter" data-level="7.2.3" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#ggplot2"><i class="fa fa-check"></i><b>7.2.3</b> ggplot2</a></li>
+<li class="chapter" data-level="7.2.4" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#components-of-the-grammar-of-graphics"><i class="fa fa-check"></i><b>7.2.4</b> Components of the grammar of graphics</a></li>
+<li class="chapter" data-level="7.2.5" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#in-a-nutshell"><i class="fa fa-check"></i><b>7.2.5</b> In a nutshell</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#pv-example"><i class="fa fa-check"></i><b>7.3</b> An example, please</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#a-pole-vaulting-example"><i class="fa fa-check"></i><b>7.3.1</b> A pole vaulting example</a></li>
+<li class="chapter" data-level="7.3.2" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#a-first-ggplot"><i class="fa fa-check"></i><b>7.3.2</b> A first ggplot</a></li>
+<li class="chapter" data-level="7.3.3" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#ggplots-system-of-defaults"><i class="fa fa-check"></i><b>7.3.3</b> ggplot’s system of defaults</a></li>
+<li class="chapter" data-level="7.3.4" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#how-many-geoms-are-there"><i class="fa fa-check"></i><b>7.3.4</b> How many geoms are there?</a></li>
+<li class="chapter" data-level="7.3.5" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#getting-even-sillier"><i class="fa fa-check"></i><b>7.3.5</b> Getting even sillier</a></li>
+<li class="chapter" data-level="7.3.6" data-path="ggplot2-intro-lecture.html"><a href="ggplot2-intro-lecture.html#more-add-some-text-to-it"><i class="fa fa-check"></i><b>7.3.6</b> More! Add some text to it!</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="map-making-in-R.html"><a href="map-making-in-R.html"><i class="fa fa-check"></i><b>8</b> Week 7: Making Simple Maps with R</a><ul>
+<li class="chapter" data-level="8.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#map-making-intro"><i class="fa fa-check"></i><b>8.1</b> Intro</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#todays-goals"><i class="fa fa-check"></i><b>8.1.1</b> Today’s Goals</a></li>
+<li class="chapter" data-level="8.1.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#prerequisites"><i class="fa fa-check"></i><b>8.1.2</b> Prerequisites</a></li>
+<li class="chapter" data-level="8.1.3" data-path="map-making-in-R.html"><a href="map-making-in-R.html#load-up-a-few-of-the-libraries-we-will-use"><i class="fa fa-check"></i><b>8.1.3</b> Load up a few of the libraries we will use</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#maps-package-and-ggplot"><i class="fa fa-check"></i><b>8.2</b> Plotting maps-package maps with ggplot</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#the-main-players"><i class="fa fa-check"></i><b>8.2.1</b> The main players:</a></li>
+<li class="chapter" data-level="8.2.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#maps-in-the-maps-package"><i class="fa fa-check"></i><b>8.2.2</b> Maps in the maps package</a></li>
+<li class="chapter" data-level="8.2.3" data-path="map-making-in-R.html"><a href="map-making-in-R.html#makin-data-frames-from-map-outlines"><i class="fa fa-check"></i><b>8.2.3</b> Makin’ data frames from map outlines</a></li>
+<li class="chapter" data-level="8.2.4" data-path="map-making-in-R.html"><a href="map-making-in-R.html#the-structure-of-those-data-frames"><i class="fa fa-check"></i><b>8.2.4</b> The structure of those data frames</a></li>
+<li class="chapter" data-level="8.2.5" data-path="map-making-in-R.html"><a href="map-making-in-R.html#plot-the-usa-map"><i class="fa fa-check"></i><b>8.2.5</b> Plot the USA map</a></li>
+<li class="chapter" data-level="8.2.6" data-path="map-making-in-R.html"><a href="map-making-in-R.html#state-maps"><i class="fa fa-check"></i><b>8.2.6</b> State maps</a></li>
+<li class="chapter" data-level="8.2.7" data-path="map-making-in-R.html"><a href="map-making-in-R.html#zoom-in"><i class="fa fa-check"></i><b>8.2.7</b> zoom in?</a></li>
+<li class="chapter" data-level="8.2.8" data-path="map-making-in-R.html"><a href="map-making-in-R.html#true-zoom."><i class="fa fa-check"></i><b>8.2.8</b> True zoom.</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="map-making-in-R.html"><a href="map-making-in-R.html#ggmap-hooray"><i class="fa fa-check"></i><b>8.3</b> ggmap</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#three-examples"><i class="fa fa-check"></i><b>8.3.1</b> Three examples</a></li>
+<li class="chapter" data-level="8.3.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#how-ggmap-works"><i class="fa fa-check"></i><b>8.3.2</b> How ggmap works</a></li>
+<li class="chapter" data-level="8.3.3" data-path="map-making-in-R.html"><a href="map-making-in-R.html#sisquoctober"><i class="fa fa-check"></i><b>8.3.3</b> Sisquoctober</a></li>
+<li class="chapter" data-level="8.3.4" data-path="map-making-in-R.html"><a href="map-making-in-R.html#big-creek-in-big-sur"><i class="fa fa-check"></i><b>8.3.4</b> Big Creek in Big Sur</a></li>
+<li class="chapter" data-level="8.3.5" data-path="map-making-in-R.html"><a href="map-making-in-R.html#how-about-a-bike-ride"><i class="fa fa-check"></i><b>8.3.5</b> How about a bike ride?</a></li>
+<li class="chapter" data-level="8.3.6" data-path="map-making-in-R.html"><a href="map-making-in-R.html#fish-sampling-locations"><i class="fa fa-check"></i><b>8.3.6</b> Fish sampling locations</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="map-making-in-R.html"><a href="map-making-in-R.html#in-class-review-and-short-assignment"><i class="fa fa-check"></i><b>8.4</b> In-class review and short assignment</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="map-making-in-R.html"><a href="map-making-in-R.html#short-assignment-of-plotting-with-maps"><i class="fa fa-check"></i><b>8.4.1</b> Short assignment of plotting with <code>maps</code></a></li>
+<li class="chapter" data-level="8.4.2" data-path="map-making-in-R.html"><a href="map-making-in-R.html#short-assignment-of-plotting-with-ggmap"><i class="fa fa-check"></i><b>8.4.2</b> Short assignment of plotting with ggmap()</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html"><i class="fa fa-check"></i><b>9</b> Plotting “Spatial” Data with ggplot</a><ul>
+<li class="chapter" data-level="9.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#point-and-vector-data-types"><i class="fa fa-check"></i><b>9.1</b> Point and Vector Data Types</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#some-example-vector-data"><i class="fa fa-check"></i><b>9.1.1</b> Some example vector data</a></li>
+<li class="chapter" data-level="9.1.2" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#reading-in-vector-spatial-data"><i class="fa fa-check"></i><b>9.1.2</b> Reading in Vector Spatial Data</a></li>
+<li class="chapter" data-level="9.1.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#quick-visualization-of-our-vector-data"><i class="fa fa-check"></i><b>9.1.3</b> Quick Visualization of our Vector Data</a></li>
+<li class="chapter" data-level="9.1.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#the-structure-of-spatialdataframes"><i class="fa fa-check"></i><b>9.1.4</b> The Structure of Spatial*DataFrames</a></li>
+<li class="chapter" data-level="9.1.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#subsetting-spatialdataframes"><i class="fa fa-check"></i><b>9.1.5</b> Subsetting Spatial*DataFrames</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#coordinate-reference-systems"><i class="fa fa-check"></i><b>9.2</b> Coordinate Reference Systems</a></li>
+<li class="chapter" data-level="9.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#plotting-things-with-ggspatial"><i class="fa fa-check"></i><b>9.3</b> Plotting things with ggspatial</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#want-a-background"><i class="fa fa-check"></i><b>9.3.1</b> Want a background?</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#spatial-raster-data"><i class="fa fa-check"></i><b>9.4</b> Spatial Raster Data</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Case Studies in Reproducible Research: a spring seminar at UCSC</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="plotting-spatial-data-with-ggplot" class="section level1">
+<h1><span class="header-section-number">Chapter 9</span> Plotting “Spatial” Data with ggplot</h1>
+<p><strong>Note</strong> that if you, the student, wish to run all the code yourself, you should download the <code>inputs</code> directory as a zipped file by going <a href="https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip">here</a> with a web browser and then clicking the big “Download” button on the right. Once you have downloaded that, unzip it and put the whole <code>inputs</code> directory in the current working directory where you are working with R.</p>
+<p>Today we are going to take a very cursory look at R’s facilities for handling <em>spatial data</em> and ways that it can be plotted using ggplot. When we say “spatial data” we mean data that are associated with a geographical location on the earth, and typically tied to a specific coordinate system that describes their location. Why is this important? It turns out that almost all of the geographical information that you can come by on the Internet is of this type, and furthermore, it is usually stored in a fairly specialized form that will look like Greek to the newcomer. Fortunately, R has a few specialized packages that make it easy to interact with this sort of data, to read it in and write it out, and perform spatial operations.</p>
+<p>For years, these types of tasks were typically carried out with proprietary software like Esri’s <a href="https://www.arcgis.com/features/index.html">ArcGIS</a> package, where, if you go to their website they will tell you that “making and sharing beautiful maps” is “possible <em>only</em> with ArcGIS online.” However, you <em>can</em> make and share beautiful maps from similar data sets using R, which carries the advantage of being reproducible, open-source, free (as in speech), and free (as in beer). So, if you have the stomach for it, the R route for spatial data certainly seems to be a better approach than paying Esri 500 clams a year for an ArcGIS subscription.</p>
+<p>In this session we will cover only simple topics (keep in mind that your instructor is a statistical geneticist that only plays with making maps in R on the side), and we will focus almost exclusively on plotting data rather than on spatial operations (like testing if points are in polygons, or clipping, etc). The topics will be:</p>
+<ol style="list-style-type: decimal">
+<li>Vector data types</li>
+<li>Coordinate reference systems</li>
+<li>Plotting vector data types using <code>ggplot</code></li>
+<li>Raster data types</li>
+</ol>
+<p>You will need a few packages to work with these data. If you don’t already have them, you will want to get a few from CRAN:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;sp&quot;</span>, <span class="st">&quot;rgdal&quot;</span>, <span class="st">&quot;raster&quot;</span>))</code></pre></div>
+<p>and, thought <code>ggspatial</code> is available on CRAN, I recommend you get the development version from GitHub:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&quot;paleolimbot/ggspatial&quot;</span>)</code></pre></div>
+<p>When learning the functions in this spatial-data ecosystem, it is often difficult to keep straight which functions come from which packages, so I will often use namespace addressing to make that explicit here.</p>
+<p>As always, let’s load the tidyverse</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(rgdal)</code></pre></div>
+<pre><code>## Loading required package: sp</code></pre>
+<pre><code>## rgdal: version: 1.2-7, (SVN revision 660)
+##  Geospatial Data Abstraction Library extensions to R successfully loaded
+##  Loaded GDAL runtime: GDAL 2.1.2, released 2016/10/24
+##  Path to GDAL shared files: /Library/Frameworks/R.framework/Versions/3.3/Resources/library/rgdal/gdal
+##  Loaded PROJ.4 runtime: Rel. 4.9.1, 04 March 2015, [PJ_VERSION: 491]
+##  Path to PROJ.4 shared files: /Library/Frameworks/R.framework/Versions/3.3/Resources/library/rgdal/proj
+##  Linking to sp version: 1.2-4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sp)
+<span class="kw">library</span>(ggspatial)</code></pre></div>
+<div id="point-and-vector-data-types" class="section level2">
+<h2><span class="header-section-number">9.1</span> Point and Vector Data Types</h2>
+<p>Geospatial <em>point</em> data is fairly straightforward—each datum can be represented as a point on the earth. There are two other main types of what are called “vector” geospatial data. These are <em>spatial lines</em> and <em>spatial polygons</em>. Spatial lines are just a series of points which, when connected together, form a line. Spatial polygons are just a series of points which, when connected together (and with the last point getting connected back to the first one) subtend an area. In addition to being tied to locations on the earth, each point, or line, or polygon is typically also associated with some other data. For example, a polygon could be the boundary of a county (like we saw in the previous lecture) in which case it could be associated with a name, an area, and a population size, etc. A line might represent a section of a stream, in which case it could be associated with the name of the river, the number of fish per mile, and its average flow, etc.</p>
+<p>Data of this sort are often stored in what are called <em>shapefiles</em>. As <a href="https://en.wikipedia.org/wiki/Shapefile">Wikipedia</a> states it, “The shapefile format is a popular geospatial vector data format for geographic information system (GIS) software. It is developed and regulated by Esri as a (mostly) open specification for data interoperability among Esri and other GIS software products. The shapefile format can spatially describe vector features: points, lines, and polygons, representing, for example, water wells, rivers, and lakes.”</p>
+<p>Data of this type can be read into R using <code>rgdal::readOGR</code>. Once it has been read into R, point, line, or polygon data are stored as objects of class: <code>SpatialPointsDataFrame</code>, <code>SpatialLinesDataFrame</code> or <code>SpatialPolygonDataFrame</code>, respectively.</p>
+<div id="some-example-vector-data" class="section level3">
+<h3><span class="header-section-number">9.1.1</span> Some example vector data</h3>
+<p>I have downloaded several small data sets about Santa Cruz that are available, free and open, from the <a href="http://www.co.santa-cruz.ca.us/Departments/GeographicInformationSystems(GIS).aspx">county GIS website</a>.</p>
+<p>I have them in the <code>inputs</code> directory of the course webpage repository. Follow the instructions at the top of this lecture to get them all. The data sets that we will play with are:</p>
+<ul>
+<li>Street_Lights — spatial points giving the location of street lights in the county</li>
+<li>Streams — spatial lines showing rivers and tributaries</li>
+<li>Watersheds — spatial polygons showing watershed boundaries</li>
+</ul>
+<p>Shapefiles are actually directories that contain a number of different files with different extensions inside them. Let’s look at the Watersheds shapefile for an example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dir</span>(<span class="st">&quot;inputs/santa-cruz-county/Watersheds/&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;Watersheds.cpg&quot; &quot;Watersheds.dbf&quot; &quot;Watersheds.prj&quot; &quot;Watersheds.shp&quot;
+## [5] &quot;Watersheds.shx&quot;</code></pre>
+<p>These different files carry all the information. Some of them are text readable, like the <code>.prj</code> file, but many of the others are compressed binary files. Fortunately, we don’t ever have to open them up and try to read them with a text editor, as we can just read them in with <code>rgda::readORG</code>.</p>
+</div>
+<div id="reading-in-vector-spatial-data" class="section level3">
+<h3><span class="header-section-number">9.1.2</span> Reading in Vector Spatial Data</h3>
+<p>The <code>readOGR</code> function in <code>rgdal</code> does this for us. It takes as the first argument (the <code>dsn</code> parameter) the <em>directory</em> that holds the shapefile. In the above case that would be <code>&quot;inputs/santa-cruz-county/Watersheds&quot;</code>. The second argument (the <code>layer</code> parameter) is the prefix of the name of the files that you want to read. Above, all the files started with <code>Watersheds</code> so this second argument is <code>Watersheds</code>. Let’s do it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lights &lt;-<span class="st"> </span>rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">&quot;inputs/santa-cruz-county/Street_Lights&quot;</span>, <span class="dt">layer =</span> <span class="st">&quot;Street_Lights&quot;</span>)</code></pre></div>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;inputs/santa-cruz-county/Street_Lights&quot;, layer: &quot;Street_Lights&quot;
+## with 2959 features
+## It has 36 fields
+## Integer64 fields read as strings:  OBJECTID OP_SCHED</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">streams &lt;-<span class="st"> </span>rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">&quot;inputs/santa-cruz-county/Streams&quot;</span>, <span class="dt">layer =</span> <span class="st">&quot;Streams&quot;</span>)</code></pre></div>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;inputs/santa-cruz-county/Streams&quot;, layer: &quot;Streams&quot;
+## with 1514 features
+## It has 8 fields
+## Integer64 fields read as strings:  OBJECTID</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">watersheds &lt;-<span class="st"> </span>rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">&quot;inputs/santa-cruz-county/Watersheds&quot;</span>, <span class="dt">layer =</span> <span class="st">&quot;Watersheds&quot;</span>)</code></pre></div>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;inputs/santa-cruz-county/Watersheds&quot;, layer: &quot;Watersheds&quot;
+## with 17 features
+## It has 6 fields
+## Integer64 fields read as strings:  OBJECTID COUNT_</code></pre>
+<p>When the data are read in, a message about what is in the data set is printed.</p>
+<p>Note that the files inside the directory will not always have the same name as the directory. For example, inside the “Salmon_Streams” shapefile directory you have:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dir</span>(<span class="st">&quot;inputs/santa-cruz-county/Salmon_Streams&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;Fishery_Resource.cpg&quot; &quot;Fishery_Resource.dbf&quot; &quot;Fishery_Resource.prj&quot;
+## [4] &quot;Fishery_Resource.shp&quot; &quot;Fishery_Resource.shx&quot;</code></pre>
+<p><strong>Exercise:</strong> read the Salmon_Streams data into a variable called <code>salmon_streams</code>.</p>
+<p>A side-note here: <code>readOGR</code> does not seem to do proper tilde expansion of file names, so trying to read something on your hard drive that you might usually do, with a tilde giving your home directory, will fail:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this fails</span>
+stream_fail &lt;-<span class="st"> </span>rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">&quot;~/Documents/git-repos/rep-res-eeb-2017/inputs/santa-cruz-county/Streams&quot;</span>, 
+                              <span class="dt">layer =</span> <span class="st">&quot;Streams&quot;</span>)</code></pre></div>
+<p>If you want to do that, you need to wrap the directory path inside the <code>normalizePath()</code> function, like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this doesn&#39;t fail on my laptop</span>
+stream_no_fail &lt;-<span class="st"> </span>rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="kw">normalizePath</span>(<span class="st">&quot;~/Documents/git-repos/rep-res-eeb-2017/inputs/santa-cruz-county/Streams&quot;</span>), 
+                              <span class="dt">layer =</span> <span class="st">&quot;Streams&quot;</span>)</code></pre></div>
+</div>
+<div id="quick-visualization-of-our-vector-data" class="section level3">
+<h3><span class="header-section-number">9.1.3</span> Quick Visualization of our Vector Data</h3>
+<p>Before we start drilling down into these data sets to see how <code>Spatial{Points,Lines,Polygons}DataFrame</code>s are structured, let’s just plot them quickly. We will use the <code>ggspatial</code> package which extends <code>ggplot2</code> to spatial data with a nice syntax. Basically, that package makes a new geom called <code>geom_spatial()</code> that deals with plotting spatial points, lines, or polygons.</p>
+<p>Here are the watershed boundaries:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> watersheds, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_void</span>() +
+<span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-110-1.png" width="672" /></p>
+<p>OK, that is pretty cool. See that these are, as we expect, polygons.</p>
+<p>Let’s do the streams:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> streams, <span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_void</span>() +
+<span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-111-1.png" width="672" /></p>
+<p>Yep, those are lines!</p>
+<p>Finally, let’s plot the street lights, but we will put them over the top of the watersheds so that we have a little context for them.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> watersheds, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> lights, <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>) +
+<span class="st">  </span><span class="kw">theme_void</span>() +
+<span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-112-1.png" width="672" /></p>
+<p>OK, those are points. That makes sense.</p>
+</div>
+<div id="the-structure-of-spatialdataframes" class="section level3">
+<h3><span class="header-section-number">9.1.4</span> The Structure of Spatial*DataFrames</h3>
+<p>When we write <code>Spatial*DataFrames</code> we mean, collecively, <code>SpatialPointsDataFrames</code>, <code>SpatialLinesDataFrames</code>, and <code>SpatialPolygonsDataFrames</code>. These are the types of objects that R uses to store spatial information. Each of these is what is called an S4 object type. S4 objects are like lists in R, but instead of having elements you access with <code>$</code>, you have information in “slots” that you access with <code>@</code>. (What?! OK, don’t worry too much, you won’t typically ever have to access these slots using <code>@</code>, but I do want to use it to talk about the underlying structure of these beasts.)</p>
+<p>First, let’s look at the slot names in these three different types of Spatial Data Frames:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># spatial points</span>
+<span class="kw">slotNames</span>(lights)</code></pre></div>
+<pre><code>## [1] &quot;data&quot;        &quot;coords.nrs&quot;  &quot;coords&quot;      &quot;bbox&quot;        &quot;proj4string&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># spatial lines</span>
+<span class="kw">slotNames</span>(streams)</code></pre></div>
+<pre><code>## [1] &quot;data&quot;        &quot;lines&quot;       &quot;bbox&quot;        &quot;proj4string&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># spatial polygons</span>
+<span class="kw">slotNames</span>(watersheds)</code></pre></div>
+<pre><code>## [1] &quot;data&quot;        &quot;polygons&quot;    &quot;plotOrder&quot;   &quot;bbox&quot;        &quot;proj4string&quot;</code></pre>
+<p>Aha! They all have:</p>
+<ul>
+<li><code>data</code> which is a data frame of information about each feature</li>
+<li><code>bbox</code> which is information about the spatial extent of features in the file</li>
+<li><code>proj4string</code> which holds information about the projection (coordinate reference system)</li>
+</ul>
+<p>Then, the spatial points have <code>coords</code> while the spatial lines have <code>lines</code> and the spatial polygons have <code>polygons</code>.</p>
+<p>Let us look more closely at the <code>data</code> slot in <code>streams</code>. This is just a data frame, and so we can look at it as a tibble:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as_tibble</span>(streams@data)</code></pre></div>
+<pre><code>## # A tibble: 1,514 × 8
+##    OBJECTID       STREAM_NM   STREAMTYPE  GNIS_ID     ID ENABLED  Named
+## *    &lt;fctr&gt;          &lt;fctr&gt;       &lt;fctr&gt;   &lt;fctr&gt; &lt;fctr&gt;  &lt;fctr&gt; &lt;fctr&gt;
+## 1         1     Adams Creek INTERMITTENT       NA      0      NA    Yes
+## 2         2      Alba Creek    PERENNIAL 00218063      1      NA    Yes
+## 3         3     Amaya Creek    PERENNIAL 00218217      2      NA    Yes
+## 4         4 Ano Nuevo Creek    PERENNIAL 00254567      3      NA    Yes
+## 5         5     Aptos Creek    PERENNIAL 00254571      4      NA    Yes
+## 6         6 Archibald Creek INTERMITTENT 00218350      5      NA    Yes
+## 7         7   Baldwin Creek    PERENNIAL 00218614      6      NA    Yes
+## 8         8     Bates Creek    PERENNIAL 00218726      7      NA    Yes
+## 9         9      Bean Creek    PERENNIAL 00218782      8      NA    Yes
+## 10       10   Bennett Creek    PERENNIAL 00219040      9      NA    Yes
+## # ... with 1,504 more rows, and 1 more variables: SHAPESTLen &lt;dbl&gt;</code></pre>
+<p>And what about the <code>lines</code> slot? Well, that is a spatial data object that holds the coordinates that you would connect to make each line. This is a list of things, in which each element corresponds to a row in <code>data</code>.</p>
+</div>
+<div id="subsetting-spatialdataframes" class="section level3">
+<h3><span class="header-section-number">9.1.5</span> Subsetting Spatial*DataFrames</h3>
+<p>If you want to pick out only some of the features in a Spatial*DataFrame, based on the values in the <code>data</code>, you can use <code>subset</code>. It works a little like <code>filter</code> from the tidyverse.</p>
+<p>For an example, let’s see if we can keep only those stream segments that are classified as INTERMITTENT:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">intermitt &lt;-<span class="st"> </span>streams %&gt;%
+<span class="st">  </span><span class="kw">subset</span>(., STREAMTYPE ==<span class="st"> &quot;INTERMITTENT&quot;</span>)</code></pre></div>
+<p>While here were 1514 features in <code>streams</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(streams)</code></pre></div>
+<pre><code>## [1] 1514</code></pre>
+<p>In <code>intermitt</code> there are only 290:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(intermitt)</code></pre></div>
+<pre><code>## [1] 290</code></pre>
+<p>We can plot those to see if the spatial distribution of intermittent streams makes sense to us:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> intermitt, <span class="dt">colour =</span> <span class="st">&quot;orange&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
+<pre><code>## Converting coordinates to lat/lon</code></pre>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-118-1.png" width="672" /> Yep, those are creeks that are mostly up higher in the watersheds.</p>
+</div>
+</div>
+<div id="coordinate-reference-systems" class="section level2">
+<h2><span class="header-section-number">9.2</span> Coordinate Reference Systems</h2>
+<p>I am not going to say too much about this. Anna Nisi directed me to a fantastic three-page primer on CRSs in R, and I direct people <a href="https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/OverviewCoordinateReferenceSystems.pdf">there</a>.</p>
+<p><code>ggspatial</code> by default converts everything to lat/lon coordinates, so you can almost get away with ignoring it, but you should read about it.</p>
+<p>To learn about the CRS of a Spatial*DataFrame you can do like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">proj4string</span>(streams)</code></pre></div>
+<pre><code>## [1] &quot;+proj=lcc +lat_1=37.06666666666667 +lat_2=38.43333333333333 +lat_0=36.5 +lon_0=-120.5 +x_0=2000000 +y_0=500000.0000000002 +datum=NAD83 +units=us-ft +no_defs +ellps=GRS80 +towgs84=0,0,0&quot;</code></pre>
+<p>That shows us it is a Lambert Conformal Conic projection (“lcc”).</p>
+<p>If we wanted to transform the coordinate reference system to something else, we can do like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">streams_lat_lon &lt;-<span class="st"> </span><span class="kw">spTransform</span>(streams, <span class="kw">CRS</span>(<span class="st">&quot;+init=epsg:4326&quot;</span>))</code></pre></div>
+<p>Check it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">proj4string</span>(streams_lat_lon)</code></pre></div>
+<pre><code>## [1] &quot;+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0&quot;</code></pre>
+<p>Yep, that is right.</p>
+</div>
+<div id="plotting-things-with-ggspatial" class="section level2">
+<h2><span class="header-section-number">9.3</span> Plotting things with ggspatial</h2>
+<p>For a good primer on <code>ggspatial</code> find the README at its <a href="https://github.com/paleolimbot/ggspatial">GitHub Page</a></p>
+<p>The ggspatial package lets you plot spatial objects using a gpplot-like syntax. You can map aesthetics to the columns in the <code>data</code> slot. For example, let’s plot <code>streams</code> and color them by STREAMTYPE:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> streams, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">colour =</span> STREAMTYPE)) +
+<span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-122-1.png" width="672" /></p>
+<p>That’s cool.</p>
+<p><strong>Exercises</strong></p>
+<ol style="list-style-type: decimal">
+<li>Look at the <code>data</code> field of <code>watersheds</code></li>
+<li>Then plot the watersheds in different colors like this: <img src="bookdown-demo_files/figure-html/unnamed-chunk-123-1.png" width="672" /></li>
+</ol>
+<div id="want-a-background" class="section level3">
+<h3><span class="header-section-number">9.3.1</span> Want a background?</h3>
+<p>How about an open streets background layer? You can add it with a <code>ggspatial::geom_osm()</code> layer. Different types of maps are available:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># different types of OSM maps available:</span>
+rosm::<span class="kw">osm.types</span>()</code></pre></div>
+<pre><code>##  [1] &quot;osm&quot;                    &quot;opencycle&quot;             
+##  [3] &quot;hotstyle&quot;               &quot;loviniahike&quot;           
+##  [5] &quot;loviniacycle&quot;           &quot;hikebike&quot;              
+##  [7] &quot;hillshade&quot;              &quot;osmgrayscale&quot;          
+##  [9] &quot;stamenbw&quot;               &quot;stamenwatercolor&quot;      
+## [11] &quot;osmtransport&quot;           &quot;thunderforestlandscape&quot;
+## [13] &quot;thunderforestoutdoors&quot;  &quot;cartodark&quot;             
+## [15] &quot;cartolight&quot;</code></pre>
+<p>So, let’s put a hillshade background on:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_osm</span>(<span class="dt">type =</span> <span class="st">&quot;hillshade&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> streams, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">colour =</span> STREAMTYPE), <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">coord_map</span>() +
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<pre><code>## Converting coordinates to lat/lon</code></pre>
+<pre><code>## Zoom: 10</code></pre>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-125-1.png" width="672" /></p>
+<p>Cowabunga!</p>
+<p>Using ggspatial with open street maps is a bit nicer than using <code>ggmap</code> because we are not bound to having square plots and it looks like it figures out the appropriate zoom for the backgound, etc. Behold the thin slice of shaded hillside background!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_osm</span>(<span class="dt">type =</span> <span class="st">&quot;hillshade&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> streams, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">colour =</span> STREAMTYPE), <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">coord_map</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(-<span class="fl">122.3</span>, -<span class="fl">121.6</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="fl">37.0</span>, <span class="fl">37.1</span>)) +
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<pre><code>## Converting coordinates to lat/lon</code></pre>
+<pre><code>## Zoom: 12</code></pre>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-126-1.png" width="672" /></p>
+<p>Check this out, even faceting seems to work with ggspatial.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_osm</span>(<span class="dt">type =</span> <span class="st">&quot;hillshade&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> streams, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">colour =</span> STREAMTYPE), <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">coord_map</span>() +
+<span class="st">  </span><span class="kw">theme_void</span>() +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>STREAMTYPE)</code></pre></div>
+<pre><code>## Converting coordinates to lat/lon</code></pre>
+<pre><code>## Zoom: 10
+## Zoom: 10
+## Zoom: 10</code></pre>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
+<p>These background layers are received as a type of spatial data called a <em>spatial raster</em>. You can think of rasters as digitial “images”—basically regular grids of pixels.<br />
+<code>ggspatial</code> has exploited one of ggplot’s facilities for efficiently plotting images to be able to efficiently plot rasters in the background. It also provides a function, <code>geom_spraster()</code> that let’s us do the same with spatial rasters from anywhere. This is a great feature that also let’s us plot rasters that have been projected to different coordinate reference systems. Before we get into this, let’s learn a little about rasters.</p>
+</div>
+</div>
+<div id="spatial-raster-data" class="section level2">
+<h2><span class="header-section-number">9.4</span> Spatial Raster Data</h2>
+<p>The package <code>rgdal</code> has some facilities for dealing with rasters, I think; however I am partial to the <code>raster</code> package written by Robert Hijmans (who was a collaborator with Kristen when they were both at Berkeley, check <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2699.2006.01517.x/full">this</a> out!). The <code>raster</code> package provides a nice interface for dealing with spatial raster types and doing a variety of operations with them.</p>
+<p>We are going to start with an example: shaded relief of Carmel Bay avaiable through NOAA’s <a href="http://noaa.maps.arcgis.com/home/item.html?id=feb3c625dc094112bb5281c17679c769">Digital Elevation Model Global Mosaic (Color Shaded Relief)</a>. I have already downloaded it to the <code>inputs</code> directory because, to be quite honest, obtaining it through R was not as straightforward as I would have hoped. This rasters has multiple layers. It is a color image so it has Red, Green, Blue layers (or “bands” as they are often called.) Accordingly we will want to use the <code>brick</code> function to read it in as a “rasterBrick”:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">carmel_bay &lt;-<span class="st"> </span>raster::<span class="kw">brick</span>(<span class="st">&quot;inputs/carmel_bay_bathy.tif&quot;</span>) </code></pre></div>
+<p>Once we have done that we can read about it by printing it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">carmel_bay</code></pre></div>
+<pre><code>## class       : RasterBrick 
+## dimensions  : 1800, 1800, 3240000, 3  (nrow, ncol, ncell, nlayers)
+## resolution  : 8.333333e-05, 8.333333e-05  (x, y)
+## extent      : -122, -121.85, 36.5, 36.65  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+## data source : /Users/eriq/Documents/git-repos/rep-res-eeb-2017/inputs/carmel_bay_bathy.tif 
+## names       : carmel_bay_bathy.1, carmel_bay_bathy.2, carmel_bay_bathy.3 
+## min values  :                  0,                  4,                  0 
+## max values  :                230,                242,                253</code></pre>
+<p>That tells us a lot of useful things, like (from the “dimensions” line) there are 3 layers, each with 3.24 million cells, on a grid that is 1800 x 1800 cells. It also gives us information about the coordinate reference system (on the “coord. ref.” line).</p>
+<p>That is all well and good. Now, let us see what that looks like. <code>ggspatial</code> has the function <code>geom_spraster_rgb()</code> for plotting the entire extent of a three-banded raster, interpreting the bands as red, green and blue.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span>ggspatial::<span class="kw">geom_spraster_rgb</span>(carmel_bay) +
+<span class="st">  </span><span class="kw">coord_fixed</span>()</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-130-1.png" width="1152" /></p>
+<p>That is pretty, and could conceivably make a nice background for some of Diana’s rockfish plots.</p>
+<p>There is another function in <code>ggspatial</code> called <code>annotation_spraster</code> that plots a raster, but does not change the plot boundaries. This is very useful if you want only a piece of the background. Let’s see it in action by grabbing Diana’s rockfish data, but filtering it only to those points in the Stillwater Cove area.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sebastes_stillwater &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;inputs/sebastes_locations.rds&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(LATITUDE_M &gt;<span class="st"> </span><span class="fl">36.55</span>, 
+         LATITUDE_M &lt;<span class="st"> </span><span class="fl">36.575</span>,
+         LONGITUDE_M &gt;<span class="st"> </span>-<span class="fl">121.975</span>,
+         LONGITUDE_M &lt;<span class="st"> </span>-<span class="fl">121.925</span>)</code></pre></div>
+<p>Then plot those. Here they are by themselves:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sebastes_stillwater, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> LONGITUDE_M, <span class="dt">y =</span> LATITUDE_M)) +
+<span class="st">  </span><span class="kw">coord_quickmap</span>()</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-132-1.png" width="672" /></p>
+<p>And here they are with the raster in the background:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span>ggspatial::<span class="kw">annotation_spraster</span>(carmel_bay, <span class="dt">interpolate =</span> <span class="ot">TRUE</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sebastes_stillwater, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> LONGITUDE_M, <span class="dt">y =</span> LATITUDE_M), 
+             <span class="dt">colour =</span> <span class="st">&quot;yellow&quot;</span>,
+             <span class="dt">alpha =</span> <span class="fl">0.3</span>) +
+<span class="st">  </span><span class="kw">coord_fixed</span>()</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-133-1.png" width="1152" /></p>
+<p>That is pretty cool. It might have been nice to have downloaded a higher resolution raster, which is available, but would have been quite large at the full, zoomed out scale.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="map-making-in-R.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/10-spatial-maps-with-ggplot.Rmd",
+"text": "Edit"
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

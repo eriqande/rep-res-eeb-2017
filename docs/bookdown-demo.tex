@@ -125,7 +125,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2017-05-26}
+  \date{2017-06-02}
 
 \usepackage{booktabs}
 \usepackage{amsthm}
@@ -1105,7 +1105,7 @@ These are answers I would use.
 \end{Shaded}
 
 \begin{verbatim}
-## Warning: Unknown column 'x'
+## Warning: Unknown or uninitialised column: 'x'.
 \end{verbatim}
 
 \begin{verbatim}
@@ -5126,32 +5126,791 @@ latitude and longitude coordinates: Alaska gets all inflated. Next week,
 if everyone really wants to see how we might overcome that using the
 Natural Earth Data rasters, we might just be able to do so.
 
-\chapter{in development}\label{in-development}
+\chapter{\texorpdfstring{Plotting ``Spatial'' Data with
+ggplot}{Plotting Spatial Data with ggplot}}\label{plotting-spatial-data-with-ggplot}
 
-Yo! Here is info about the california hydrologic regions:
+\textbf{Note} that if you, the student, wish to run all the code
+yourself, you should download the \texttt{inputs} directory as a zipped
+file by going
+\href{https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip}{here}
+with a web browser and then clicking the big ``Download'' button on the
+right. Once you have downloaded that, unzip it and put the whole
+\texttt{inputs} directory in the current working directory where you are
+working with R.
 
-\url{https://www.arcgis.com/home/item.html?id=7a495cfa71ca4616aba58c5e915eef2c}
+Today we are going to take a very cursory look at R's facilities for
+handling \emph{spatial data} and ways that it can be plotted using
+ggplot. When we say ``spatial data'' we mean data that are associated
+with a geographical location on the earth, and typically tied to a
+specific coordinate system that describes their location. Why is this
+important? It turns out that almost all of the geographical information
+that you can come by on the Internet is of this type, and furthermore,
+it is usually stored in a fairly specialized form that will look like
+Greek to the newcomer. Fortunately, R has a few specialized packages
+that make it easy to interact with this sort of data, to read it in and
+write it out, and perform spatial operations.
 
-THey can be downloaded as shape files here
-\url{https://mpsl.mlml.calstate.edu/GIS-shapefile-layers}.
+For years, these types of tasks were typically carried out with
+proprietary software like Esri's
+\href{https://www.arcgis.com/features/index.html}{ArcGIS} package,
+where, if you go to their website they will tell you that ``making and
+sharing beautiful maps'' is ``possible \emph{only} with ArcGIS online.''
+However, you \emph{can} make and share beautiful maps from similar data
+sets using R, which carries the advantage of being reproducible,
+open-source, free (as in speech), and free (as in beer). So, if you have
+the stomach for it, the R route for spatial data certainly seems to be a
+better approach than paying Esri 500 clams a year for an ArcGIS
+subscription.
+
+In this session we will cover only simple topics (keep in mind that your
+instructor is a statistical geneticist that only plays with making maps
+in R on the side), and we will focus almost exclusively on plotting data
+rather than on spatial operations (like testing if points are in
+polygons, or clipping, etc). The topics will be:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Vector data types
+\item
+  Coordinate reference systems
+\item
+  Plotting vector data types using \texttt{ggplot}
+\item
+  Raster data types
+\end{enumerate}
+
+You will need a few packages to work with these data. If you don't
+already have them, you will want to get a few from CRAN:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(raster)}
-\KeywordTok{library}\NormalTok{(tidyverse)}
-\KeywordTok{library}\NormalTok{(rgdal)}
-\KeywordTok{library}\NormalTok{(ggspatial)  }\CommentTok{# use GitHub version}
-
-
-\NormalTok{ws_dir <-}\StringTok{ }\KeywordTok{normalizePath}\NormalTok{(}\StringTok{"~/Documents/MapStuff/GISlayers_calw221_shp"}\NormalTok{)}
-
-\NormalTok{calw <-}\StringTok{ }\KeywordTok{readOGR}\NormalTok{(}\DataTypeTok{dsn =} \NormalTok{ws_dir, }
-        \DataTypeTok{layer =} \StringTok{"calw221"}\NormalTok{)}
-
-\KeywordTok{ggplot}\NormalTok{() +}
-\StringTok{  }\KeywordTok{geom_spatial}\NormalTok{(calw, }\DataTypeTok{colour =} \StringTok{"white"}\NormalTok{)}
+\KeywordTok{install.packages}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"sp"}\NormalTok{, }\StringTok{"rgdal"}\NormalTok{, }\StringTok{"raster"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
+
+and, thought \texttt{ggspatial} is available on CRAN, I recommend you
+get the development version from GitHub:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{devtools::}\KeywordTok{install_github}\NormalTok{(}\StringTok{"paleolimbot/ggspatial"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+When learning the functions in this spatial-data ecosystem, it is often
+difficult to keep straight which functions come from which packages, so
+I will often use namespace addressing to make that explicit here.
+
+As always, let's load the tidyverse
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(rgdal)}
+\KeywordTok{library}\NormalTok{(sp)}
+\KeywordTok{library}\NormalTok{(ggspatial)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Point and Vector Data Types}\label{point-and-vector-data-types}
+
+Geospatial \emph{point} data is fairly straightforward---each datum can
+be represented as a point on the earth. There are two other main types
+of what are called ``vector'' geospatial data. These are \emph{spatial
+lines} and \emph{spatial polygons}. Spatial lines are just a series of
+points which, when connected together, form a line. Spatial polygons are
+just a series of points which, when connected together (and with the
+last point getting connected back to the first one) subtend an area. In
+addition to being tied to locations on the earth, each point, or line,
+or polygon is typically also associated with some other data. For
+example, a polygon could be the boundary of a county (like we saw in the
+previous lecture) in which case it could be associated with a name, an
+area, and a population size, etc. A line might represent a section of a
+stream, in which case it could be associated with the name of the river,
+the number of fish per mile, and its average flow, etc.
+
+Data of this sort are often stored in what are called \emph{shapefiles}.
+As \href{https://en.wikipedia.org/wiki/Shapefile}{Wikipedia} states it,
+``The shapefile format is a popular geospatial vector data format for
+geographic information system (GIS) software. It is developed and
+regulated by Esri as a (mostly) open specification for data
+interoperability among Esri and other GIS software products. The
+shapefile format can spatially describe vector features: points, lines,
+and polygons, representing, for example, water wells, rivers, and
+lakes.''
+
+Data of this type can be read into R using \texttt{rgdal::readOGR}. Once
+it has been read into R, point, line, or polygon data are stored as
+objects of class: \texttt{SpatialPointsDataFrame},
+\texttt{SpatialLinesDataFrame} or \texttt{SpatialPolygonDataFrame},
+respectively.
+
+\subsection{Some example vector data}\label{some-example-vector-data}
+
+I have downloaded several small data sets about Santa Cruz that are
+available, free and open, from the
+\href{http://www.co.santa-cruz.ca.us/Departments/GeographicInformationSystems(GIS).aspx}{county
+GIS website}.
+
+I have them in the \texttt{inputs} directory of the course webpage
+repository. Follow the instructions at the top of this lecture to get
+them all. The data sets that we will play with are:
+
+\begin{itemize}
+\tightlist
+\item
+  Street\_Lights --- spatial points giving the location of street lights
+  in the county
+\item
+  Streams --- spatial lines showing rivers and tributaries
+\item
+  Watersheds --- spatial polygons showing watershed boundaries
+\end{itemize}
+
+Shapefiles are actually directories that contain a number of different
+files with different extensions inside them. Let's look at the
+Watersheds shapefile for an example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dir}\NormalTok{(}\StringTok{"inputs/santa-cruz-county/Watersheds/"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Watersheds.cpg" "Watersheds.dbf" "Watersheds.prj" "Watersheds.shp"
+## [5] "Watersheds.shx"
+\end{verbatim}
+
+These different files carry all the information. Some of them are text
+readable, like the \texttt{.prj} file, but many of the others are
+compressed binary files. Fortunately, we don't ever have to open them up
+and try to read them with a text editor, as we can just read them in
+with \texttt{rgda::readORG}.
+
+\subsection{Reading in Vector Spatial
+Data}\label{reading-in-vector-spatial-data}
+
+The \texttt{readOGR} function in \texttt{rgdal} does this for us. It
+takes as the first argument (the \texttt{dsn} parameter) the
+\emph{directory} that holds the shapefile. In the above case that would
+be \texttt{"inputs/santa-cruz-county/Watersheds"}. The second argument
+(the \texttt{layer} parameter) is the prefix of the name of the files
+that you want to read. Above, all the files started with
+\texttt{Watersheds} so this second argument is \texttt{Watersheds}.
+Let's do it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lights <-}\StringTok{ }\NormalTok{rgdal::}\KeywordTok{readOGR}\NormalTok{(}\DataTypeTok{dsn =} \StringTok{"inputs/santa-cruz-county/Street_Lights"}\NormalTok{, }\DataTypeTok{layer =} \StringTok{"Street_Lights"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## OGR data source with driver: ESRI Shapefile 
+## Source: "inputs/santa-cruz-county/Street_Lights", layer: "Street_Lights"
+## with 2959 features
+## It has 36 fields
+## Integer64 fields read as strings:  OBJECTID OP_SCHED
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{streams <-}\StringTok{ }\NormalTok{rgdal::}\KeywordTok{readOGR}\NormalTok{(}\DataTypeTok{dsn =} \StringTok{"inputs/santa-cruz-county/Streams"}\NormalTok{, }\DataTypeTok{layer =} \StringTok{"Streams"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## OGR data source with driver: ESRI Shapefile 
+## Source: "inputs/santa-cruz-county/Streams", layer: "Streams"
+## with 1514 features
+## It has 8 fields
+## Integer64 fields read as strings:  OBJECTID
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{watersheds <-}\StringTok{ }\NormalTok{rgdal::}\KeywordTok{readOGR}\NormalTok{(}\DataTypeTok{dsn =} \StringTok{"inputs/santa-cruz-county/Watersheds"}\NormalTok{, }\DataTypeTok{layer =} \StringTok{"Watersheds"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## OGR data source with driver: ESRI Shapefile 
+## Source: "inputs/santa-cruz-county/Watersheds", layer: "Watersheds"
+## with 17 features
+## It has 6 fields
+## Integer64 fields read as strings:  OBJECTID COUNT_
+\end{verbatim}
+
+When the data are read in, a message about what is in the data set is
+printed.
+
+Note that the files inside the directory will not always have the same
+name as the directory. For example, inside the ``Salmon\_Streams''
+shapefile directory you have:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dir}\NormalTok{(}\StringTok{"inputs/santa-cruz-county/Salmon_Streams"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Fishery_Resource.cpg" "Fishery_Resource.dbf" "Fishery_Resource.prj"
+## [4] "Fishery_Resource.shp" "Fishery_Resource.shx"
+\end{verbatim}
+
+\textbf{Exercise:} read the Salmon\_Streams data into a variable called
+\texttt{salmon\_streams}.
+
+A side-note here: \texttt{readOGR} does not seem to do proper tilde
+expansion of file names, so trying to read something on your hard drive
+that you might usually do, with a tilde giving your home directory, will
+fail:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# this fails}
+\NormalTok{stream_fail <-}\StringTok{ }\NormalTok{rgdal::}\KeywordTok{readOGR}\NormalTok{(}\DataTypeTok{dsn =} \StringTok{"~/Documents/git-repos/rep-res-eeb-2017/inputs/santa-cruz-county/Streams"}\NormalTok{, }
+                              \DataTypeTok{layer =} \StringTok{"Streams"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+If you want to do that, you need to wrap the directory path inside the
+\texttt{normalizePath()} function, like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# this doesn't fail on my laptop}
+\NormalTok{stream_no_fail <-}\StringTok{ }\NormalTok{rgdal::}\KeywordTok{readOGR}\NormalTok{(}\DataTypeTok{dsn =} \KeywordTok{normalizePath}\NormalTok{(}\StringTok{"~/Documents/git-repos/rep-res-eeb-2017/inputs/santa-cruz-county/Streams"}\NormalTok{), }
+                              \DataTypeTok{layer =} \StringTok{"Streams"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Quick Visualization of our Vector
+Data}\label{quick-visualization-of-our-vector-data}
+
+Before we start drilling down into these data sets to see how
+\texttt{Spatial\{Points,Lines,Polygons\}DataFrame}s are structured,
+let's just plot them quickly. We will use the \texttt{ggspatial} package
+which extends \texttt{ggplot2} to spatial data with a nice syntax.
+Basically, that package makes a new geom called \texttt{geom\_spatial()}
+that deals with plotting spatial points, lines, or polygons.
+
+Here are the watershed boundaries:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\NormalTok{ggspatial::}\KeywordTok{geom_spatial}\NormalTok{(}\DataTypeTok{data =} \NormalTok{watersheds, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{theme_void}\NormalTok{() +}
+\StringTok{  }\KeywordTok{coord_map}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-110-1.pdf}
+
+OK, that is pretty cool. See that these are, as we expect, polygons.
+
+Let's do the streams:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\NormalTok{ggspatial::}\KeywordTok{geom_spatial}\NormalTok{(}\DataTypeTok{data =} \NormalTok{streams, }\DataTypeTok{colour =} \StringTok{"blue"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{theme_void}\NormalTok{() +}
+\StringTok{  }\KeywordTok{coord_map}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-111-1.pdf}
+
+Yep, those are lines!
+
+Finally, let's plot the street lights, but we will put them over the top
+of the watersheds so that we have a little context for them.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\NormalTok{ggspatial::}\KeywordTok{geom_spatial}\NormalTok{(}\DataTypeTok{data =} \NormalTok{watersheds, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{) +}
+\StringTok{  }\NormalTok{ggspatial::}\KeywordTok{geom_spatial}\NormalTok{(}\DataTypeTok{data =} \NormalTok{lights, }\DataTypeTok{colour =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.4}\NormalTok{) +}
+\StringTok{  }\KeywordTok{theme_void}\NormalTok{() +}
+\StringTok{  }\KeywordTok{coord_map}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-112-1.pdf}
+
+OK, those are points. That makes sense.
+
+\subsection{The Structure of
+Spatial*DataFrames}\label{the-structure-of-spatialdataframes}
+
+When we write \texttt{Spatial*DataFrames} we mean, collecively,
+\texttt{SpatialPointsDataFrames}, \texttt{SpatialLinesDataFrames}, and
+\texttt{SpatialPolygonsDataFrames}. These are the types of objects that
+R uses to store spatial information. Each of these is what is called an
+S4 object type. S4 objects are like lists in R, but instead of having
+elements you access with \texttt{\$}, you have information in ``slots''
+that you access with \texttt{@}. (What?! OK, don't worry too much, you
+won't typically ever have to access these slots using \texttt{@}, but I
+do want to use it to talk about the underlying structure of these
+beasts.)
+
+First, let's look at the slot names in these three different types of
+Spatial Data Frames:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# spatial points}
+\KeywordTok{slotNames}\NormalTok{(lights)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "data"        "coords.nrs"  "coords"      "bbox"        "proj4string"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# spatial lines}
+\KeywordTok{slotNames}\NormalTok{(streams)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "data"        "lines"       "bbox"        "proj4string"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# spatial polygons}
+\KeywordTok{slotNames}\NormalTok{(watersheds)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "data"        "polygons"    "plotOrder"   "bbox"        "proj4string"
+\end{verbatim}
+
+Aha! They all have:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{data} which is a data frame of information about each feature
+\item
+  \texttt{bbox} which is information about the spatial extent of
+  features in the file
+\item
+  \texttt{proj4string} which holds information about the projection
+  (coordinate reference system)
+\end{itemize}
+
+Then, the spatial points have \texttt{coords} while the spatial lines
+have \texttt{lines} and the spatial polygons have \texttt{polygons}.
+
+Let us look more closely at the \texttt{data} slot in \texttt{streams}.
+This is just a data frame, and so we can look at it as a tibble:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{as_tibble}\NormalTok{(streams@data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1,514 × 8
+##    OBJECTID       STREAM_NM   STREAMTYPE  GNIS_ID     ID ENABLED  Named
+## *    <fctr>          <fctr>       <fctr>   <fctr> <fctr>  <fctr> <fctr>
+## 1         1     Adams Creek INTERMITTENT       NA      0      NA    Yes
+## 2         2      Alba Creek    PERENNIAL 00218063      1      NA    Yes
+## 3         3     Amaya Creek    PERENNIAL 00218217      2      NA    Yes
+## 4         4 Ano Nuevo Creek    PERENNIAL 00254567      3      NA    Yes
+## 5         5     Aptos Creek    PERENNIAL 00254571      4      NA    Yes
+## 6         6 Archibald Creek INTERMITTENT 00218350      5      NA    Yes
+## 7         7   Baldwin Creek    PERENNIAL 00218614      6      NA    Yes
+## 8         8     Bates Creek    PERENNIAL 00218726      7      NA    Yes
+## 9         9      Bean Creek    PERENNIAL 00218782      8      NA    Yes
+## 10       10   Bennett Creek    PERENNIAL 00219040      9      NA    Yes
+## # ... with 1,504 more rows, and 1 more variables: SHAPESTLen <dbl>
+\end{verbatim}
+
+And what about the \texttt{lines} slot? Well, that is a spatial data
+object that holds the coordinates that you would connect to make each
+line. This is a list of things, in which each element corresponds to a
+row in \texttt{data}.
+
+\subsection{Subsetting
+Spatial*DataFrames}\label{subsetting-spatialdataframes}
+
+If you want to pick out only some of the features in a
+Spatial*DataFrame, based on the values in the \texttt{data}, you can use
+\texttt{subset}. It works a little like \texttt{filter} from the
+tidyverse.
+
+For an example, let's see if we can keep only those stream segments that
+are classified as INTERMITTENT:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{intermitt <-}\StringTok{ }\NormalTok{streams %>%}
+\StringTok{  }\KeywordTok{subset}\NormalTok{(., STREAMTYPE ==}\StringTok{ "INTERMITTENT"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+While here were 1514 features in \texttt{streams}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{length}\NormalTok{(streams)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1514
+\end{verbatim}
+
+In \texttt{intermitt} there are only 290:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{length}\NormalTok{(intermitt)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 290
+\end{verbatim}
+
+We can plot those to see if the spatial distribution of intermittent
+streams makes sense to us:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\NormalTok{ggspatial::}\KeywordTok{geom_spatial}\NormalTok{(}\DataTypeTok{data =} \NormalTok{intermitt, }\DataTypeTok{colour =} \StringTok{"orange"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{coord_map}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Converting coordinates to lat/lon
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-118-1.pdf}
+Yep, those are creeks that are mostly up higher in the watersheds.
+
+\section{Coordinate Reference
+Systems}\label{coordinate-reference-systems}
+
+I am not going to say too much about this. Anna Nisi directed me to a
+fantastic three-page primer on CRSs in R, and I direct people
+\href{https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/OverviewCoordinateReferenceSystems.pdf}{there}.
+
+\texttt{ggspatial} by default converts everything to lat/lon
+coordinates, so you can almost get away with ignoring it, but you should
+read about it.
+
+To learn about the CRS of a Spatial*DataFrame you can do like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{proj4string}\NormalTok{(streams)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "+proj=lcc +lat_1=37.06666666666667 +lat_2=38.43333333333333 +lat_0=36.5 +lon_0=-120.5 +x_0=2000000 +y_0=500000.0000000002 +datum=NAD83 +units=us-ft +no_defs +ellps=GRS80 +towgs84=0,0,0"
+\end{verbatim}
+
+That shows us it is a Lambert Conformal Conic projection (``lcc'').
+
+If we wanted to transform the coordinate reference system to something
+else, we can do like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{streams_lat_lon <-}\StringTok{ }\KeywordTok{spTransform}\NormalTok{(streams, }\KeywordTok{CRS}\NormalTok{(}\StringTok{"+init=epsg:4326"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Check it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{proj4string}\NormalTok{(streams_lat_lon)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+\end{verbatim}
+
+Yep, that is right.
+
+\section{Plotting things with
+ggspatial}\label{plotting-things-with-ggspatial}
+
+For a good primer on \texttt{ggspatial} find the README at its
+\href{https://github.com/paleolimbot/ggspatial}{GitHub Page}
+
+The ggspatial package lets you plot spatial objects using a gpplot-like
+syntax. You can map aesthetics to the columns in the \texttt{data} slot.
+For example, let's plot \texttt{streams} and color them by STREAMTYPE:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\NormalTok{ggspatial::}\KeywordTok{geom_spatial}\NormalTok{(}\DataTypeTok{data =} \NormalTok{streams, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{colour =} \NormalTok{STREAMTYPE)) +}
+\StringTok{  }\KeywordTok{coord_map}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-122-1.pdf}
+
+That's cool.
+
+\textbf{Exercises}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Look at the \texttt{data} field of \texttt{watersheds}
+\item
+  Then plot the watersheds in different colors like this:
+  \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-123-1.pdf}
+\end{enumerate}
+
+\subsection{Want a background?}\label{want-a-background}
+
+How about an open streets background layer? You can add it with a
+\texttt{ggspatial::geom\_osm()} layer. Different types of maps are
+available:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# different types of OSM maps available:}
+\NormalTok{rosm::}\KeywordTok{osm.types}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "osm"                    "opencycle"             
+##  [3] "hotstyle"               "loviniahike"           
+##  [5] "loviniacycle"           "hikebike"              
+##  [7] "hillshade"              "osmgrayscale"          
+##  [9] "stamenbw"               "stamenwatercolor"      
+## [11] "osmtransport"           "thunderforestlandscape"
+## [13] "thunderforestoutdoors"  "cartodark"             
+## [15] "cartolight"
+\end{verbatim}
+
+So, let's put a hillshade background on:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\KeywordTok{geom_osm}\NormalTok{(}\DataTypeTok{type =} \StringTok{"hillshade"}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\NormalTok{ggspatial::}\KeywordTok{geom_spatial}\NormalTok{(}\DataTypeTok{data =} \NormalTok{streams, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{colour =} \NormalTok{STREAMTYPE), }\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{) +}
+\StringTok{  }\KeywordTok{coord_map}\NormalTok{() +}
+\StringTok{  }\KeywordTok{theme_void}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Converting coordinates to lat/lon
+\end{verbatim}
+
+\begin{verbatim}
+## Zoom: 10
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-125-1.pdf}
+
+Cowabunga!
+
+Using ggspatial with open street maps is a bit nicer than using
+\texttt{ggmap} because we are not bound to having square plots and it
+looks like it figures out the appropriate zoom for the backgound, etc.
+Behold the thin slice of shaded hillside background!
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\KeywordTok{geom_osm}\NormalTok{(}\DataTypeTok{type =} \StringTok{"hillshade"}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\NormalTok{ggspatial::}\KeywordTok{geom_spatial}\NormalTok{(}\DataTypeTok{data =} \NormalTok{streams, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{colour =} \NormalTok{STREAMTYPE), }\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{) +}
+\StringTok{  }\KeywordTok{coord_map}\NormalTok{(}\DataTypeTok{xlim =} \KeywordTok{c}\NormalTok{(-}\FloatTok{122.3}\NormalTok{, -}\FloatTok{121.6}\NormalTok{), }\DataTypeTok{ylim =} \KeywordTok{c}\NormalTok{(}\FloatTok{37.0}\NormalTok{, }\FloatTok{37.1}\NormalTok{)) +}
+\StringTok{  }\KeywordTok{theme_void}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Converting coordinates to lat/lon
+\end{verbatim}
+
+\begin{verbatim}
+## Zoom: 12
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-126-1.pdf}
+
+Check this out, even faceting seems to work with ggspatial.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\KeywordTok{geom_osm}\NormalTok{(}\DataTypeTok{type =} \StringTok{"hillshade"}\NormalTok{) +}\StringTok{ }
+\StringTok{  }\NormalTok{ggspatial::}\KeywordTok{geom_spatial}\NormalTok{(}\DataTypeTok{data =} \NormalTok{streams, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{colour =} \NormalTok{STREAMTYPE), }\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{) +}
+\StringTok{  }\KeywordTok{coord_map}\NormalTok{() +}
+\StringTok{  }\KeywordTok{theme_void}\NormalTok{() +}
+\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(~}\StringTok{ }\NormalTok{STREAMTYPE)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Converting coordinates to lat/lon
+\end{verbatim}
+
+\begin{verbatim}
+## Zoom: 10
+## Zoom: 10
+## Zoom: 10
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-127-1.pdf}
+
+These background layers are received as a type of spatial data called a
+\emph{spatial raster}. You can think of rasters as digitial
+``images''---basically regular grids of pixels.\\
+\texttt{ggspatial} has exploited one of ggplot's facilities for
+efficiently plotting images to be able to efficiently plot rasters in
+the background. It also provides a function, \texttt{geom\_spraster()}
+that let's us do the same with spatial rasters from anywhere. This is a
+great feature that also let's us plot rasters that have been projected
+to different coordinate reference systems. Before we get into this,
+let's learn a little about rasters.
+
+\section{Spatial Raster Data}\label{spatial-raster-data}
+
+The package \texttt{rgdal} has some facilities for dealing with rasters,
+I think; however I am partial to the \texttt{raster} package written by
+Robert Hijmans (who was a collaborator with Kristen when they were both
+at Berkeley, check
+\href{http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2699.2006.01517.x/full}{this}
+out!). The \texttt{raster} package provides a nice interface for dealing
+with spatial raster types and doing a variety of operations with them.
+
+We are going to start with an example: shaded relief of Carmel Bay
+avaiable through NOAA's
+\href{http://noaa.maps.arcgis.com/home/item.html?id=feb3c625dc094112bb5281c17679c769}{Digital
+Elevation Model Global Mosaic (Color Shaded Relief)}. I have already
+downloaded it to the \texttt{inputs} directory because, to be quite
+honest, obtaining it through R was not as straightforward as I would
+have hoped. This rasters has multiple layers. It is a color image so it
+has Red, Green, Blue layers (or ``bands'' as they are often called.)
+Accordingly we will want to use the \texttt{brick} function to read it
+in as a ``rasterBrick'':
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{carmel_bay <-}\StringTok{ }\NormalTok{raster::}\KeywordTok{brick}\NormalTok{(}\StringTok{"inputs/carmel_bay_bathy.tif"}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+Once we have done that we can read about it by printing it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{carmel_bay}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class       : RasterBrick 
+## dimensions  : 1800, 1800, 3240000, 3  (nrow, ncol, ncell, nlayers)
+## resolution  : 8.333333e-05, 8.333333e-05  (x, y)
+## extent      : -122, -121.85, 36.5, 36.65  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+## data source : /Users/eriq/Documents/git-repos/rep-res-eeb-2017/inputs/carmel_bay_bathy.tif 
+## names       : carmel_bay_bathy.1, carmel_bay_bathy.2, carmel_bay_bathy.3 
+## min values  :                  0,                  4,                  0 
+## max values  :                230,                242,                253
+\end{verbatim}
+
+That tells us a lot of useful things, like (from the ``dimensions''
+line) there are 3 layers, each with 3.24 million cells, on a grid that
+is 1800 x 1800 cells. It also gives us information about the coordinate
+reference system (on the ``coord. ref.'' line).
+
+That is all well and good. Now, let us see what that looks like.
+\texttt{ggspatial} has the function \texttt{geom\_spraster\_rgb()} for
+plotting the entire extent of a three-banded raster, interpreting the
+bands as red, green and blue.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\NormalTok{ggspatial::}\KeywordTok{geom_spraster_rgb}\NormalTok{(carmel_bay) +}
+\StringTok{  }\KeywordTok{coord_fixed}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-130-1.pdf}
+
+That is pretty, and could conceivably make a nice background for some of
+Diana's rockfish plots.
+
+There is another function in \texttt{ggspatial} called
+\texttt{annotation\_spraster} that plots a raster, but does not change
+the plot boundaries. This is very useful if you want only a piece of the
+background. Let's see it in action by grabbing Diana's rockfish data,
+but filtering it only to those points in the Stillwater Cove area.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sebastes_stillwater <-}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\StringTok{"inputs/sebastes_locations.rds"}\NormalTok{) %>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(LATITUDE_M >}\StringTok{ }\FloatTok{36.55}\NormalTok{, }
+         \NormalTok{LATITUDE_M <}\StringTok{ }\FloatTok{36.575}\NormalTok{,}
+         \NormalTok{LONGITUDE_M >}\StringTok{ }\NormalTok{-}\FloatTok{121.975}\NormalTok{,}
+         \NormalTok{LONGITUDE_M <}\StringTok{ }\NormalTok{-}\FloatTok{121.925}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Then plot those. Here they are by themselves:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{sebastes_stillwater, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{LONGITUDE_M, }\DataTypeTok{y =} \NormalTok{LATITUDE_M)) +}
+\StringTok{  }\KeywordTok{coord_quickmap}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-132-1.pdf}
+
+And here they are with the raster in the background:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() +}
+\StringTok{  }\NormalTok{ggspatial::}\KeywordTok{annotation_spraster}\NormalTok{(carmel_bay, }\DataTypeTok{interpolate =} \OtherTok{TRUE}\NormalTok{) +}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{data =} \NormalTok{sebastes_stillwater, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \NormalTok{LONGITUDE_M, }\DataTypeTok{y =} \NormalTok{LATITUDE_M), }
+             \DataTypeTok{colour =} \StringTok{"yellow"}\NormalTok{,}
+             \DataTypeTok{alpha =} \FloatTok{0.3}\NormalTok{) +}
+\StringTok{  }\KeywordTok{coord_fixed}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-133-1.pdf}
+
+That is pretty cool. It might have been nice to have downloaded a higher
+resolution raster, which is available, but would have been quite large
+at the full, zoomed out scale.
 
 \bibliography{packages.bib,book.bib}
 

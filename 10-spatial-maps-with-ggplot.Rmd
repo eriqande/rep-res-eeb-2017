@@ -1,28 +1,431 @@
-# in development
+# Plotting "Spatial" Data with ggplot
 
-Yo! Here is info about  the california hydrologic regions:
+**Note** that if you, the student, wish to run all the code
+yourself, you should download the `inputs` directory as a zipped file by going [here](https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip) with a web browser and
+then clicking the big "Download" button on the right.  Once you have downloaded that, 
+unzip it and put the whole `inputs` directory in the current working directory where you are
+working with R. 
 
-https://www.arcgis.com/home/item.html?id=7a495cfa71ca4616aba58c5e915eef2c
+Today we are going to take a very cursory look at R's facilities for handling _spatial data_
+and ways that it can be plotted using ggplot.  When we say "spatial data" we mean data that
+are associated with a geographical location on the earth, and typically 
+tied to a specific coordinate system that describes their location.  Why is this important?
+It turns out that almost all of the geographical information that you can come by on the
+Internet is of this type, and furthermore, it is usually stored in a fairly specialized
+form that will look like Greek to the newcomer.  Fortunately, R has a few specialized packages
+that make it easy to interact with this sort of data, to read it in and write it out, and 
+perform spatial operations.  
 
-THey can be downloaded as shape files here 
-[https://mpsl.mlml.calstate.edu/GIS-shapefile-layers](https://mpsl.mlml.calstate.edu/GIS-shapefile-layers).
+For years, these types of tasks were typically carried out with proprietary software like
+Esri's [ArcGIS](https://www.arcgis.com/features/index.html) package, where, if you go to their
+website they will tell you that "making and sharing beautiful maps" is "possible _only_ with
+ArcGIS online."  However, you _can_ make and share beautiful maps from similar data sets using R,
+which carries the advantage of being reproducible, open-source, free (as in speech), and free 
+(as in beer).  So, if you have the stomach for it, the R route for spatial data certainly
+seems to be a better approach than paying Esri 500 clams a year for an ArcGIS subscription.
 
+In this session we will cover only simple topics (keep in mind that your instructor is a 
+statistical geneticist that only plays with making maps in R on the side), and we will focus
+almost exclusively on plotting data rather than on spatial operations (like testing if points 
+are in polygons, or clipping, etc).  The topics will be:
 
+1. Vector data types
+1. Coordinate reference systems
+1. Plotting vector data types using `ggplot`
+1. Raster data types
 
-
+You will need a few packages to work with these data.  If you don't already have 
+them, you will want to get a few from CRAN:
+```{r eval=FALSE}
+install.packages(c("sp", "rgdal", "raster"))
+```
+and, thought `ggspatial` is available on CRAN, I recommend you get the development version from GitHub:
 ```{r, eval=FALSE}
-library(raster)
+devtools::install_github("paleolimbot/ggspatial")
+```
+
+When learning the functions in this spatial-data ecosystem, it is often difficult to keep straight
+which functions come from which packages, so I will often use namespace addressing to make that
+explicit here.
+
+As always, let's load the tidyverse
+```{r}
 library(tidyverse)
 library(rgdal)
-library(ggspatial)  # use GitHub version
-
-
-ws_dir <- normalizePath("~/Documents/MapStuff/GISlayers_calw221_shp")
-
-calw <- readOGR(dsn = ws_dir, 
-        layer = "calw221")
-
-ggplot() +
-  geom_spatial(calw, colour = "white")
-
+library(sp)
+library(ggspatial)
 ```
+
+## Point and Vector Data Types
+
+Geospatial _point_ data is fairly straightforward---each datum can be represented as a point
+on the earth.  There are two other main types of what are called "vector" geospatial data.  These
+are _spatial lines_ and _spatial polygons_.  Spatial lines are just a series of points which,
+when connected together, form a line.  Spatial polygons are just a series of points which, when
+connected together (and with the last point getting connected back to the first one) subtend 
+an area.  In addition to being tied to locations on the earth, each point, or line, or polygon
+is typically also associated with some other data.  For example,
+a polygon could be the boundary of a county (like we saw in the previous lecture) in which case 
+it could be associated with a name, an area, and a population size, etc.  A line
+might represent a section of a stream, in which case it could be associated with 
+the name of the river, the number of fish per mile, and its average flow, etc.
+
+Data of this sort are often stored in what are called _shapefiles_.  As [Wikipedia](https://en.wikipedia.org/wiki/Shapefile) 
+states it, "The shapefile format is a popular geospatial vector data format for 
+geographic information system (GIS) software. It is developed and regulated by Esri
+as a (mostly) open specification for data interoperability among Esri and other
+GIS software products. The shapefile format can spatially describe vector features: 
+points, lines, and polygons, representing, for example, water wells, rivers, and lakes."
+
+Data of this type can be read into R using `rgdal::readOGR`.  Once it has been read into R,
+point, line, or polygon data are stored as objects of class: `SpatialPointsDataFrame`,
+`SpatialLinesDataFrame` or `SpatialPolygonDataFrame`, respectively.
+
+### Some example vector data
+
+I have downloaded several small data sets about Santa Cruz that are available,
+free and open, from the [county GIS website](http://www.co.santa-cruz.ca.us/Departments/GeographicInformationSystems(GIS).aspx).
+
+I have them in the `inputs` directory of the course webpage repository.  Follow the instructions
+at the top of this lecture to get them all.  The data sets that we will play with are:
+
+- Street_Lights --- spatial points giving the location of street lights in the county
+- Streams --- spatial lines showing rivers and tributaries
+- Watersheds --- spatial polygons showing watershed boundaries
+
+Shapefiles are actually directories that contain a number of different files with different
+extensions inside them.
+Let's look at the Watersheds shapefile for an example:
+```{r}
+dir("inputs/santa-cruz-county/Watersheds/")
+```
+These different files carry all the information.  Some of them are text readable, like the `.prj` 
+file, but many of the others are compressed binary files.  Fortunately, we don't ever have to 
+open them up and try to read them with a text editor, as we can just read them in with 
+`rgda::readORG`.
+
+### Reading in Vector Spatial Data
+
+The `readOGR` function in `rgdal` does this for us.  It takes as the first argument (the `dsn` parameter) the _directory_ that holds the
+shapefile.  In the above case that would be `"inputs/santa-cruz-county/Watersheds"`.  The second argument (the `layer` parameter)
+is the prefix of the name of the files that you want to read.  Above, all the files started with `Watersheds` so this second argument
+is `Watersheds`.  Let's do it:
+```{r}
+lights <- rgdal::readOGR(dsn = "inputs/santa-cruz-county/Street_Lights", layer = "Street_Lights")
+streams <- rgdal::readOGR(dsn = "inputs/santa-cruz-county/Streams", layer = "Streams")
+watersheds <- rgdal::readOGR(dsn = "inputs/santa-cruz-county/Watersheds", layer = "Watersheds")
+```
+When the data are read in, a message about what is in the data set is printed.
+
+Note that the files inside the directory will not always have the same name as the directory. 
+For example, inside the "Salmon_Streams" shapefile directory you have:
+```{r}
+dir("inputs/santa-cruz-county/Salmon_Streams")
+```
+
+**Exercise:** read the Salmon_Streams data into a variable called `salmon_streams`.
+
+A side-note here: `readOGR` does not seem to do proper tilde expansion of file names, so trying 
+to read something on your hard drive that you might usually do, with a 
+tilde giving your home directory, will fail:
+```{r, eval=FALSE}
+# this fails
+stream_fail <- rgdal::readOGR(dsn = "~/Documents/git-repos/rep-res-eeb-2017/inputs/santa-cruz-county/Streams", 
+                              layer = "Streams")
+```
+If you want to do that, you need to wrap the directory path inside the `normalizePath()` function, like
+this:
+```{r eval=FALSE}
+# this doesn't fail on my laptop
+stream_no_fail <- rgdal::readOGR(dsn = normalizePath("~/Documents/git-repos/rep-res-eeb-2017/inputs/santa-cruz-county/Streams"), 
+                              layer = "Streams")
+```
+
+
+### Quick Visualization of our Vector Data
+
+Before we start drilling down into these data sets to see how `Spatial{Points,Lines,Polygons}DataFrame`s are
+structured, let's just plot them quickly.  We will use the `ggspatial` package which extends `ggplot2` to
+spatial data with a nice syntax.  Basically, that package makes a new geom called `geom_spatial()` that
+deals with plotting spatial points, lines, or polygons.
+
+Here are the watershed boundaries:
+```{r, message=FALSE}
+ggplot() +
+  ggspatial::geom_spatial(data = watersheds, fill = NA, colour = "black") +
+  theme_void() +
+  coord_map()
+```
+
+OK, that is pretty cool.  See that these are, as we expect, polygons.
+
+Let's do the streams:
+```{r, message=FALSE}
+ggplot() +
+  ggspatial::geom_spatial(data = streams, colour = "blue") +
+  theme_void() +
+  coord_map()
+```
+
+Yep, those are lines!
+
+Finally, let's plot the street lights, but we will put them over the top of the watersheds
+so that we have a little context for them.
+```{r, message=FALSE}
+ggplot() +
+  ggspatial::geom_spatial(data = watersheds, fill = NA, colour = "black") +
+  ggspatial::geom_spatial(data = lights, colour = "red", alpha = 0.4) +
+  theme_void() +
+  coord_map()
+```
+
+OK, those are points. That makes sense.
+
+### The Structure of Spatial*DataFrames
+
+When we write `Spatial*DataFrames` we mean, collecively, `SpatialPointsDataFrames`,
+`SpatialLinesDataFrames`, and `SpatialPolygonsDataFrames`.  These are the types of objects
+that R uses to store spatial information.  Each of these is what is called an 
+S4 object type.  S4 objects are like lists in R, but instead of having elements you access
+with `$`, you have information in "slots" that you access with `@`.  (What?!  OK, don't worry too
+much, you won't typically ever have to access these slots using `@`, but I do want to use it to
+talk about the underlying structure of these beasts.)
+
+First, let's look at the slot names in these three different types of Spatial Data Frames:
+```{r}
+# spatial points
+slotNames(lights)
+
+# spatial lines
+slotNames(streams)
+
+# spatial polygons
+slotNames(watersheds)
+```
+
+Aha! They all have:
+
+- `data` which is a data frame of information about each feature
+- `bbox` which is information about the spatial extent of features in the file
+- `proj4string` which holds information about the projection (coordinate reference system)
+
+Then, the spatial points have `coords` while the spatial lines have `lines` and the spatial 
+polygons have `polygons`.
+
+Let us look more closely at the `data` slot in `streams`.  This is just a data frame, and 
+so we can look at it as a tibble:
+```{r}
+as_tibble(streams@data)
+```
+
+And what about the `lines` slot?  Well, that is a spatial data object that holds the 
+coordinates that you would connect to make each line.  This is a list of things, in which
+each element corresponds to a row in `data`.
+
+### Subsetting Spatial*DataFrames
+
+If you want to pick out only some of the features in a Spatial*DataFrame, based on 
+the values in the `data`, you can use `subset`.  It works a little like `filter` from the 
+tidyverse.
+
+For an example, let's see if we can keep only those stream segments that are classified as INTERMITTENT:
+```{r}
+intermitt <- streams %>%
+  subset(., STREAMTYPE == "INTERMITTENT")
+```
+
+While here were 1514 features in `streams`
+```{r}
+length(streams)
+```
+
+In `intermitt` there are only 290:
+```{r}
+length(intermitt)
+```
+
+We can plot those to see if the spatial distribution of intermittent streams makes sense to us:
+```{r}
+ggplot() +
+  ggspatial::geom_spatial(data = intermitt, colour = "orange") +
+  coord_map()
+```
+Yep, those are creeks that are mostly up higher in the watersheds.
+
+## Coordinate Reference Systems
+
+I am not going to say too much about this.  Anna Nisi directed me to a fantastic
+three-page primer on CRSs in R, and I direct people
+[there](https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/OverviewCoordinateReferenceSystems.pdf).
+
+`ggspatial` by default converts everything to lat/lon coordinates, so you can almost get away with
+ignoring it, but you should read about it.
+
+To learn about the CRS of a Spatial*DataFrame you can do like this:
+```{r}
+proj4string(streams)
+```
+That shows us it is a Lambert Conformal Conic projection ("lcc").
+
+If we wanted to transform the coordinate reference system to something else, we can do 
+like this:
+```{r}
+streams_lat_lon <- spTransform(streams, CRS("+init=epsg:4326"))
+```
+Check it:
+```{r}
+proj4string(streams_lat_lon)
+```
+
+Yep, that is right.
+
+
+## Plotting things with ggspatial
+
+For a good primer on `ggspatial` find the README at its [GitHub Page](https://github.com/paleolimbot/ggspatial)
+
+The ggspatial package lets you plot spatial objects using a gpplot-like syntax.  You can map aesthetics to the 
+columns in the `data` slot.  For example, let's plot `streams` and color them by STREAMTYPE:
+```{r, message=FALSE}
+ggplot() +
+  ggspatial::geom_spatial(data = streams, mapping = aes(colour = STREAMTYPE)) +
+  coord_map()
+```
+
+That's cool.
+
+**Exercises**
+
+1. Look at the `data` field of `watersheds`
+1. Then plot the watersheds in different colors like this:
+```{r, message=FALSE, echo=FALSE}
+ggplot() +
+  geom_spatial(data = watersheds, aes(fill = NAME), alpha = 0.9) +
+  coord_map() +
+  theme_void()
+```
+
+### Want a background?
+How about an open streets background layer?  You can add it with a
+`ggspatial::geom_osm()` layer.  Different types of maps are available:
+```{r}
+# different types of OSM maps available:
+rosm::osm.types()
+```
+
+So, let's put a hillshade background on:
+```{r, cache=TRUE}
+ggplot() +
+  geom_osm(type = "hillshade") + 
+  ggspatial::geom_spatial(data = streams, mapping = aes(colour = STREAMTYPE), alpha = 0.5) +
+  coord_map() +
+  theme_void()
+  
+```
+
+Cowabunga!
+
+Using ggspatial with open street maps is a bit nicer than using `ggmap` because 
+we are not bound to having square plots and it looks like it figures out the appropriate
+zoom for the backgound, etc.  Behold the thin slice of shaded
+hillside background!
+```{r, cache=TRUE}
+ggplot() +
+  geom_osm(type = "hillshade") + 
+  ggspatial::geom_spatial(data = streams, mapping = aes(colour = STREAMTYPE), alpha = 0.5) +
+  coord_map(xlim = c(-122.3, -121.6), ylim = c(37.0, 37.1)) +
+  theme_void()
+```
+
+
+Check this out, even faceting seems to work with ggspatial.
+
+```{r, cache=TRUE}
+ggplot() +
+  geom_osm(type = "hillshade") + 
+  ggspatial::geom_spatial(data = streams, mapping = aes(colour = STREAMTYPE), alpha = 0.5) +
+  coord_map() +
+  theme_void() +
+  facet_wrap(~ STREAMTYPE)
+  
+```
+
+These background layers are received as a type of spatial data called a _spatial raster_.
+You can think of rasters as digitial "images"---basically regular grids of pixels.  
+`ggspatial` has exploited one of ggplot's facilities for efficiently plotting images
+to be able to efficiently plot rasters in the background.  It also provides a function,
+`geom_spraster()` that let's us do the same with spatial rasters from anywhere. This
+is a great feature that also let's us plot rasters that have been projected to different
+coordinate reference systems.  Before we get into this, let's learn a little about rasters.
+
+## Spatial Raster Data 
+
+The package `rgdal` has some facilities for dealing with rasters, I think; however I am 
+partial to the `raster` package written by Robert Hijmans (who was a collaborator with 
+Kristen when they were both at Berkeley, check 
+[this](http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2699.2006.01517.x/full) out!).  The 
+`raster` package provides a nice interface for dealing with spatial raster types and 
+doing a variety of operations with them.  
+
+We are going to start with an example: shaded relief of Carmel Bay avaiable through
+NOAA's [Digital Elevation Model Global Mosaic (Color Shaded Relief)](http://noaa.maps.arcgis.com/home/item.html?id=feb3c625dc094112bb5281c17679c769).
+I have already downloaded it to the `inputs` directory because, to be quite honest, obtaining
+it through R was not as straightforward as I would have hoped.  This rasters has multiple
+layers.  It is a color image so it has Red, Green, Blue layers (or "bands" as they are often
+called.)  Accordingly we will want to use the `brick` function to read it in as a "rasterBrick":
+```{r}
+carmel_bay <- raster::brick("inputs/carmel_bay_bathy.tif") 
+```
+Once we have done that we can read about it by printing it:
+```{r}
+carmel_bay
+```
+That tells us a lot of useful things, like (from the "dimensions" line) there are 3 layers, each with 3.24 million 
+cells, on a grid that is 1800 x 1800 cells.  It also gives us information about
+the coordinate reference system (on the "coord. ref." line).
+
+That is all well and good.  Now, let us see what that looks like.  `ggspatial` has the function
+`geom_spraster_rgb()` for plotting the entire extent of a three-banded raster, interpreting
+the bands as red, green and blue. 
+```{r, cache=TRUE, fig.width = 12, fig.height=12}
+ggplot() +
+  ggspatial::geom_spraster_rgb(carmel_bay) +
+  coord_fixed()
+```
+
+That is pretty, and could conceivably make a nice background for some of Diana's rockfish
+plots.
+
+There is another function in `ggspatial` called `annotation_spraster` that plots a raster,
+but does not change the plot
+boundaries.  This is very useful if you want only a piece of the background.  Let's
+see it in action by grabbing Diana's rockfish data, but filtering it only to those
+points in the Stillwater Cove area.
+```{r}
+sebastes_stillwater <- readRDS("inputs/sebastes_locations.rds") %>%
+  filter(LATITUDE_M > 36.55, 
+         LATITUDE_M < 36.575,
+         LONGITUDE_M > -121.975,
+         LONGITUDE_M < -121.925)
+```
+
+Then plot those.  Here they are by themselves:
+```{r}
+ggplot() +
+  geom_point(data = sebastes_stillwater, mapping = aes(x = LONGITUDE_M, y = LATITUDE_M)) +
+  coord_quickmap()
+```
+
+And here they are with the raster in the background:
+```{r, fig.width=12, fig.height=12, cache=TRUE}
+ggplot() +
+  ggspatial::annotation_spraster(carmel_bay, interpolate = TRUE) +
+  geom_point(data = sebastes_stillwater, mapping = aes(x = LONGITUDE_M, y = LATITUDE_M), 
+             colour = "yellow",
+             alpha = 0.3) +
+  coord_fixed()
+```
+
+That is pretty cool.  It might have been nice to have downloaded a higher resolution raster, which is available, but would have been
+quite large at the full, zoomed out scale.
+
