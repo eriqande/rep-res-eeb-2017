@@ -71,6 +71,8 @@ devtools::install_github("dkahle/ggmap")
 library(tidyverse)
 library(mapdata)
 library(maps)
+library(stringr)
+library(viridis)
 ```
 
 
@@ -330,9 +332,6 @@ then clicking the big "Download" button on the right.  Once you have downloaded 
 unzip it and put the whole `inputs` directory in the current working directory where you are
 working with R. 
 ```{r, warning=FALSE, message=FALSE}
-    library(stringr)
-    library(dplyr)
-
     # make a data frame
     x <- readLines("inputs/ca-counties-wikipedia.txt")
     pop_and_area <- str_match(x, "^([a-zA-Z ]+)County\t.*\t([0-9,]{2,10})\t([0-9,]{2,10}) sq mi$")[, -1] %>%
@@ -342,7 +341,7 @@ working with R.
              population = as.numeric(str_replace_all(V2, ",", "")),
              area = as.numeric(str_replace_all(V3, ",", ""))
       ) %>%
-      select(subregion, population, area) %>%
+      dplyr::select(subregion, population, area) %>%
       tbl_df()
     
     head(pop_and_area)
@@ -385,10 +384,8 @@ elbow_room1 + scale_fill_gradient(trans = "log10")
 
  
 #### Still not great
-I personally like more color than `ggplot` uses in its default gradient.  In that respect I gravitate more 
-toward Matlab's default color gradient.  Can we do something similar with `ggplot`?  (It turns out we can...my apologies
-to those purists who would tell me that rainbow colors are not good for showing quantitative scales---I think that in some cases they work reasonaly well...for example the following...of course, there are times
-when they work abysmally, as well.)
+I personally like more color than `ggplot` uses in its default gradient.  In that respect I have traditionally gravitated more 
+toward rainbow scales, like this: 
 ```{r}
 eb2 <- elbow_room1 + 
     scale_fill_gradientn(colours = rev(rainbow(7)),
@@ -397,7 +394,28 @@ eb2 <- elbow_room1 +
 eb2
 ```
 
-That is reasonably cool.
+That is reasonably cool.  However, there are many that will tell you 
+that rainbow colors are not good for showing quantitative scales.  I think that in some cases 
+rainbow scales can work reasonaly well...for example I think it is easier to read off 
+rought density figures using the map above than the one using the default blue-black ggplot
+scale...of course, there are times
+when rainbow scales work abysmally.)
+
+Another issue with color scales is how well they can be detected by people with different
+varieties of color blindness.  There is a fantastic package called `viridis` (note that we loaded
+it in the first code block), that provides a color scale that is well-perceived by people
+with many different types of color blindness. It also looks great.  The `viridis` package
+provides `scale_fill_viridis` and `scale_colour_viridis` which can be used quite easily.
+
+```{r}
+eb2 <- elbow_room1 + 
+  scale_fill_viridis(breaks = c(2, 4, 10, 100, 1000, 10000),
+                         trans = "log10")
+eb2
+```
+
+That looks quite nice.  For more information about `viridis` read the [intro vignette](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html) on CRAN.
+
 
 
 
@@ -490,7 +508,7 @@ the zoom right.
 #### Google's "Terrain-map" style
 
 This is a nice choice for natural areas where you want to see some topography:
-```{r, cache=TRUE}
+```{r sisquoc-ggmap, cache=TRUE}
 
 get_googlemap(center = c(mean(sisquoc$lon), mean(sisquoc$lat)), zoom = 15) %>%
   ggmap() +
@@ -502,7 +520,7 @@ get_googlemap(center = c(mean(sisquoc$lon), mean(sisquoc$lat)), zoom = 15) %>%
 #### Google's "Satellite" maptype
 
 This can be nice too...
-```{r, cache=TRUE}
+```{r sisquoc-satellite, cache=TRUE}
 get_googlemap(center = c(mean(sisquoc$lon), mean(sisquoc$lat)), 
               zoom = 15,
               maptype = "satellite") %>%
@@ -519,7 +537,7 @@ I have been involved in some work at Big Creek, and would like to replace one of
 maps with something better.  So, 
 out of curiosity, let's see what Big Creek looks like with Google Maps.
 
-```{r, cache=TRUE}
+```{r big-creek-ggmap, cache=TRUE}
 get_googlemap(center = c(-121.595, 36.075), zoom = 15, maptype = "terrain") %>%
   ggmap() 
 ```
@@ -551,7 +569,7 @@ sisquoc_stamen <- get_stamenmap(bbox = bounds, maptype = "terrain", zoom = 16)
 
 * I was riding my bike one day with my phone and downloaded the GPS readings at short intervals.
 * We can plot the route like this:
-    ```{r, cache=TRUE}
+    ```{r bike-ride-ggmap, cache=TRUE}
     bike <- read.csv("inputs/bike-ride.csv")
     head(bike)
 
@@ -613,7 +631,7 @@ then down to area within subregions.
 * Let us try to use `make_bbox()` to see if it will work better when used on a large scale.
 Note: in order to use an approximate bounding box, we have to use `get_map()` rather than
 `get_googlemap()`. Doing so looks like this...
-```{r, cache=TRUE}
+```{r bc_big, cache=TRUE}
 # compute the bounding box
 bc_bbox <- make_bbox(lat = latitude, lon = longitude, data = bc)
 bc_bbox
@@ -635,7 +653,7 @@ the three reddish points are clearly aberrant ones at the mouths of rivers.
 * We should be able to color these all by region to some extent (it might get overwhelming), but let
 us have a go with it.
 * Notice that region names are unique overall (not just within N or S) so we can just color by region name.
-```{r}
+```{r bc_big2, cache = TRUE}
 ggmap(bc_big) + 
   geom_point(data = bc, mapping = aes(x = longitude, y = latitude, color = region))
 ```
@@ -743,7 +761,7 @@ wiwa
 ```
 Let's make a google_map with some of that info on it---namely the locations of the 
 samples colored by the State or Province that they are in.
-```{r, echo=FALSE, cache=TRUE}
+```{r stealth-map, echo=FALSE, cache=TRUE}
 get_googlemap(center = c(-110, 49), zoom = 3, maptype = "hybrid") %>%
   ggmap() +
   geom_jitter(data = wiwa, mapping = aes(x = long, y = lat, colour = State))

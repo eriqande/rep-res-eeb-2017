@@ -6,8 +6,9 @@ then clicking the big "Download" button on the right.  Once you have downloaded 
 unzip it and put the whole `inputs` directory in the current working directory where you are
 working with R. 
 
-Today we are going to take a very cursory look at R's facilities for handling _spatial data_
-and ways that it can be plotted using ggplot.  When we say "spatial data" we mean data that
+Today we are going to take a very cursory look at R's "old-school" facilities for handling _spatial data_
+and ways that it can be plotted using ggplot.  
+When we say "spatial data" we mean data that
 are associated with a geographical location on the earth, and typically 
 tied to a specific coordinate system that describes their location.  Why is this important?
 It turns out that almost all of the geographical information that you can come by on the
@@ -16,12 +17,20 @@ form that will look like Greek to the newcomer.  Fortunately, R has a few specia
 that make it easy to interact with this sort of data, to read it in and write it out, and 
 perform spatial operations.  
 
-For years, these types of tasks were typically carried out with proprietary software like
-Esri's [ArcGIS](https://www.arcgis.com/features/index.html) package, where, if you go to their
+I say "old-school" in the previous paragraph because within the last year there
+has been some lovely development on a package called `sf` for handling "Simple Feature" data,
+and development for handling simple features in `ggplot2`.  "Simple Features" is a standard for
+handling geospatial data in relational data bases, and, as such, it is more appropriate to 
+tidy interactions.  I would not be surprised if `sf` were to eventually supersede much of what
+is described here, but I had already written this before I found `sf`, so I'll leave it in here
+and will have a later session on simple features.
+
+For years, geospatial tasks were typically carried out with proprietary software like
+Esri's [ArcGIS](https://www.arcgis.com/features/index.html), where, if you go to their
 website they will tell you that "making and sharing beautiful maps" is "possible _only_ with
 ArcGIS online."  However, you _can_ make and share beautiful maps from similar data sets using R,
 which carries the advantage of being reproducible, open-source, free (as in speech), and free 
-(as in beer).  It also, is not too terribly hard to learn to deal with spatial data in R, and it
+(as in beer).  It also is not too terribly hard to learn to deal with spatial data in R, and it
 seems to be getting easier all the time.  So, if you already are using R for data analysis, 
 the R route for spatial data certainly
 seems to be a better approach than paying Esri 500 clams a year for an ArcGIS subscription.
@@ -58,6 +67,14 @@ library(rgdal)
 library(sp)
 library(ggspatial)
 ```
+
+Additionally, we will load the `raster` package.  Although, as its name suggests, it is focused primarily
+on `raster` data, it turns out that it also provides a few convenient functions for doing operations
+on vector spatial data. 
+```{r}
+library(raster)
+```
+
 
 ## Point and Vector Data Types
 
@@ -144,7 +161,29 @@ stream_no_fail <- rgdal::readOGR(dsn = normalizePath("~/Documents/git-repos/rep-
                               layer = "Streams")
 ```
 
+### Reading Shapefiles Take Two
 
+The `rgdal` package has the capability to read many different formats.  If you are just reading 
+ESRI Shapefiles, then you can use a simpler, "convenience" function from the `raster` package:
+```{r}
+streams <- raster::shapefile("inputs/santa-cruz-county/Streams/Streams.shp")
+```
+By default it doesn't print a message. Note that the way it works is you provide it the full name
+of the file with `.shp` extension.  You still have to have all the companion files with the
+other extensions (.cpg, .dbf, .shx, etc.) in the same directory, though, so don't go throwing those
+extra files away!
+
+Also, note that `shapefile` does proper tilde expansion:
+```{r, eval = FALSE}
+# this works!
+streams <- raster::shapefile("~/Documents/git-repos/rep-res-eeb-2017/inputs/santa-cruz-county/Streams/Streams.shp")
+```
+
+Finally, it is worth noting that when the `raster` package is loaded, `Spatial` objects print in a 
+nice, informative fashion:
+```{r}
+watersheds
+```
 ### Quick Visualization of our Vector Data
 
 Before we start drilling down into these data sets to see how `Spatial{Points,Lines,Polygons}DataFrame`s are
@@ -320,7 +359,7 @@ rosm::osm.types()
 ```
 
 So, let's put a hillshade background on:
-```{r, cache=TRUE}
+```{r hillshade-rosm, cache=TRUE}
 ggplot() +
   geom_osm(type = "hillshade") + 
   ggspatial::geom_spatial(data = streams, mapping = aes(colour = STREAMTYPE), alpha = 0.5) +
@@ -335,7 +374,7 @@ Using ggspatial with open street maps is a bit nicer than using `ggmap` because
 we are not bound to having square plots and it looks like it figures out the appropriate
 zoom for the backgound, etc.  Behold the thin slice of shaded
 hillside background!
-```{r, cache=TRUE}
+```{r more-rosm, cache=TRUE}
 ggplot() +
   geom_osm(type = "hillshade") + 
   ggspatial::geom_spatial(data = streams, mapping = aes(colour = STREAMTYPE), alpha = 0.5) +
@@ -348,9 +387,9 @@ when using Open Street Maps layers under them.
 
 Check this out, even faceting seems to work with ggspatial.
 
-```{r, cache=TRUE}
+```{r another-rosm, cache=TRUE}
 ggplot() +
-  geom_osm(type = "hillshade") + 
+  ggspatial::geom_osm(type = "hillshade") + 
   ggspatial::geom_spatial(data = streams, mapping = aes(colour = STREAMTYPE), alpha = 0.5) +
   coord_map() +
   theme_void() +
@@ -358,13 +397,70 @@ ggplot() +
   
 ```
 
+## Simple Intersection of Spatial Objects
+
+During class time, a number of the students that work in the Scott Creek drainage wanted 
+to somehow subset the `streams` data to include only those streams that are in the 
+Big Creek watershed.  However, there is no column in the `streams` data 
+that gives us the watershed it is in.  Fortunately, we can deal with this problem
+by doing a _geometrical intersection_.  That is, we can find all the stream segements
+that are inside the Scott Creek watershed's polygon.  At its crudest level, this is
+done using the `rgeos` package, which interfaces with the GEOS (Geometry Engine - Open Source)
+library.  Unfortunately, using the functions from `rgeos` it appears that the the `@data`
+portion of a Spatial*DataFrame get dropped or otherwise lost in the mix.  That is not acceptable.
+Happily, Robert Hijmans has provided some nice functions in the `raster` package that behave the way 
+we hope they might.  He has a nice reference about this [here](http://rspatial.org/spatial/rst/7-vectmanip.html).
+
+So, what we are going to to is first make a spatial object that has the polygon representing Scott Creek:
+```{r}
+scott_shed <- subset(watersheds, NAME == "Scott")
+```
+Then, we use `raster::intersect()` to get the streams that intersection with `scott_shed`
+```{r}
+scott_streams <- raster::intersect(streams, scott_shed)
+```
+Note that we use name-space addressing (`raster::`) here because `dplyr` also has 
+an `intersect()` function, so it pays to be explicit. 
+
+That leaves us with 81 stream features:
+```{r}
+scott_streams
+```
+It is worth noting that the attributes (`@data` columns) from the Scott Creek watersheds feature did
+not get joined onto the result (We will see in a later session that the `intersection()` function from
+`sf` works more as we would expect after living blissfully in the `tidyerse` for this last quarter).
+
+We can plot the streams, and their surrounding watershed, like this:
+```{r}
+ggplot() +
+  ggspatial::geom_spatial(scott_streams, aes(colour = STREAMTYPE)) +
+  ggspatial::geom_spatial(scott_shed, colour = "black", fill = NA) +
+  coord_map() + 
+  theme_void()
+```
+
+That is nice.  Let's see how it looks with an Open Street Maps hillshade background.
+```{r}
+ggplot() +
+  ggspatial::geom_osm(type = "hillshade") + 
+  ggspatial::geom_spatial(scott_streams, aes(colour = STREAMTYPE)) +
+  ggspatial::geom_spatial(scott_shed, colour = "black", fill = NA) +
+  coord_map() + 
+  theme_void()
+```
+
+Some might note that this hillshade background is not as sharp and crisp as it
+might be.  We will, in a future session take up how to make our own hillshade
+layers from high-resolution USGS digital elevation models.  
+
+
 These background layers are received as a type of spatial data called a _spatial raster_.
 You can think of rasters as digital "images"---basically regular grids of pixels.  
 `ggspatial` has exploited one of ggplot's facilities for efficiently plotting images
 to be able to efficiently plot rasters in the background.  It also provides a function,
 `geom_spraster()` that let's us do the same with spatial rasters from anywhere. This
 is a great feature that also let's us plot rasters that have been projected to different
-coordinate reference systems.  Before we get into this, let's learn a little about rasters.
+coordinate reference systems.  Before we get into this, we want to learn a little about rasters.
 
 ## Spatial Raster Data 
 
@@ -394,7 +490,7 @@ the coordinate reference system (on the "coord. ref." line).
 That is all well and good.  Now, let us see what that looks like.  `ggspatial` has the function
 `geom_spraster_rgb()` for plotting the entire extent of a three-banded raster, interpreting
 the bands as red, green and blue. 
-```{r, cache=TRUE, fig.width = 12, fig.height=12}
+```{r geom_spraster, cache=TRUE, fig.width = 12, fig.height=12}
 ggplot() +
   ggspatial::geom_spraster_rgb(carmel_bay) +
   coord_fixed()
@@ -426,7 +522,7 @@ ggplot() +
 ```
 
 And here they are with the raster in the background:
-```{r, fig.width=12, fig.height=12, cache=TRUE}
+```{r annotation-spraster, fig.width=12, fig.height=12, cache=TRUE}
 ggplot() +
   ggspatial::annotation_spraster(carmel_bay, interpolate = TRUE) +
   geom_point(data = sebastes_stillwater, mapping = aes(x = LONGITUDE_M, y = LATITUDE_M), 

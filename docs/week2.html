@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-06-02">
+<meta name="date" content="2017-06-08">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -47,6 +47,20 @@
 
 
 
+<script src="libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<link href="libs/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-0.7.7/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<link href="libs/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
+<script src="libs/leaflet-label-0.2.2/leaflet.label.js"></script>
+<script src="libs/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
+<script src="libs/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
+<script src="libs/leaflet-binding-1.1.0/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.0.27/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin-1.1.0/leaflet-providers-plugin.js"></script>
+<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
 
 
 <style type="text/css">
@@ -236,16 +250,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#point-and-vector-data-types"><i class="fa fa-check"></i><b>9.1</b> Point and Vector Data Types</a><ul>
 <li class="chapter" data-level="9.1.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#some-example-vector-data"><i class="fa fa-check"></i><b>9.1.1</b> Some example vector data</a></li>
 <li class="chapter" data-level="9.1.2" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#reading-in-vector-spatial-data"><i class="fa fa-check"></i><b>9.1.2</b> Reading in Vector Spatial Data</a></li>
-<li class="chapter" data-level="9.1.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#quick-visualization-of-our-vector-data"><i class="fa fa-check"></i><b>9.1.3</b> Quick Visualization of our Vector Data</a></li>
-<li class="chapter" data-level="9.1.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#the-structure-of-spatialdataframes"><i class="fa fa-check"></i><b>9.1.4</b> The Structure of Spatial*DataFrames</a></li>
-<li class="chapter" data-level="9.1.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#subsetting-spatialdataframes"><i class="fa fa-check"></i><b>9.1.5</b> Subsetting Spatial*DataFrames</a></li>
+<li class="chapter" data-level="9.1.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#reading-shapefiles-take-two"><i class="fa fa-check"></i><b>9.1.3</b> Reading Shapefiles Take Two</a></li>
+<li class="chapter" data-level="9.1.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#quick-visualization-of-our-vector-data"><i class="fa fa-check"></i><b>9.1.4</b> Quick Visualization of our Vector Data</a></li>
+<li class="chapter" data-level="9.1.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#the-structure-of-spatialdataframes"><i class="fa fa-check"></i><b>9.1.5</b> The Structure of Spatial*DataFrames</a></li>
+<li class="chapter" data-level="9.1.6" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#subsetting-spatialdataframes"><i class="fa fa-check"></i><b>9.1.6</b> Subsetting Spatial*DataFrames</a></li>
 </ul></li>
 <li class="chapter" data-level="9.2" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#coordinate-reference-systems"><i class="fa fa-check"></i><b>9.2</b> Coordinate Reference Systems</a></li>
 <li class="chapter" data-level="9.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#plotting-things-with-ggspatial"><i class="fa fa-check"></i><b>9.3</b> Plotting things with ggspatial</a><ul>
 <li class="chapter" data-level="9.3.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#want-a-background"><i class="fa fa-check"></i><b>9.3.1</b> Want a background?</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#spatial-raster-data"><i class="fa fa-check"></i><b>9.4</b> Spatial Raster Data</a></li>
-<li class="chapter" data-level="9.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#wrapping-up"><i class="fa fa-check"></i><b>9.5</b> Wrapping Up</a></li>
+<li class="chapter" data-level="9.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#simple-intersection-of-spatial-objects"><i class="fa fa-check"></i><b>9.4</b> Simple Intersection of Spatial Objects</a></li>
+<li class="chapter" data-level="9.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#spatial-raster-data"><i class="fa fa-check"></i><b>9.5</b> Spatial Raster Data</a></li>
+<li class="chapter" data-level="9.6" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#wrapping-up"><i class="fa fa-check"></i><b>9.6</b> Wrapping Up</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html"><i class="fa fa-check"></i><b>10</b> A Tidy Approach to Spatial Data: Simple Features</a><ul>
+<li class="chapter" data-level="10.1" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#prelims"><i class="fa fa-check"></i><b>10.1</b> Prelims</a></li>
+<li class="chapter" data-level="10.2" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#reading-spatial-data-into-sf-objects"><i class="fa fa-check"></i><b>10.2</b> Reading spatial data into sf objects</a></li>
+<li class="chapter" data-level="10.3" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#plotting-sf-objects"><i class="fa fa-check"></i><b>10.3</b> Plotting sf objects</a></li>
+<li class="chapter" data-level="10.4" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#geometric-operations"><i class="fa fa-check"></i><b>10.4</b> Geometric operations</a></li>
+<li class="chapter" data-level="10.5" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#interactive-plotting-with-leaflet-via-the-mapview-package"><i class="fa fa-check"></i><b>10.5</b> Interactive plotting with leaflet via the <code>mapview</code> package</a><ul>
+<li class="chapter" data-level="10.5.1" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#mapping-attributes"><i class="fa fa-check"></i><b>10.5.1</b> Mapping attributes</a></li>
+<li class="chapter" data-level="10.5.2" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#adding-layers"><i class="fa fa-check"></i><b>10.5.2</b> Adding layers</a></li>
+<li class="chapter" data-level="10.5.3" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#saving-maps"><i class="fa fa-check"></i><b>10.5.3</b> Saving maps</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#adding-map-tiles-from-other-sources"><i class="fa fa-check"></i><b>10.6</b> Adding map tiles from other sources</a></li>
+<li class="chapter" data-level="10.7" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#more-info"><i class="fa fa-check"></i><b>10.7</b> More info</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -491,17 +520,17 @@ df$x</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">abc =</span> <span class="dv">1</span>, <span class="dt">xyz =</span> <span class="st">&quot;a&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">as_tibble</span>()
 df$x</code></pre></div>
-<pre><code>## Warning: Unknown column &#39;x&#39;</code></pre>
+<pre><code>## Warning: Unknown or uninitialised column: &#39;x&#39;.</code></pre>
 <pre><code>## NULL</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df$xyz</code></pre></div>
 <pre><code>## [1] &quot;a&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="st">&quot;xyz&quot;</span>]</code></pre></div>
-<pre><code>## # A tibble: 1 × 1
+<pre><code>## # A tibble: 1 x 1
 ##     xyz
 ##   &lt;chr&gt;
 ## 1     a</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df[, <span class="kw">c</span>(<span class="st">&quot;abc&quot;</span>, <span class="st">&quot;xyz&quot;</span>)]</code></pre></div>
-<pre><code>## # A tibble: 1 × 2
+<pre><code>## # A tibble: 1 x 2
 ##     abc   xyz
 ##   &lt;dbl&gt; &lt;chr&gt;
 ## 1     1     a</code></pre>
@@ -518,18 +547,18 @@ var &lt;-<span class="st"> &quot;mpg&quot;</span>
 
 <span class="co"># this will get the &quot;mpg&quot; column out but retain it as a tibble</span>
 mtcars_t[, var]</code></pre></div>
-<pre><code>## # A tibble: 32 × 1
+<pre><code>## # A tibble: 32 x 1
 ##      mpg
 ##    &lt;dbl&gt;
-## 1   21.0
-## 2   21.0
-## 3   22.8
-## 4   21.4
-## 5   18.7
-## 6   18.1
-## 7   14.3
-## 8   24.4
-## 9   22.8
+##  1  21.0
+##  2  21.0
+##  3  22.8
+##  4  21.4
+##  5  18.7
+##  6  18.1
+##  7  14.3
+##  8  24.4
+##  9  22.8
 ## 10  19.2
 ## # ... with 22 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># and this will just grab the column as a vector</span>
@@ -553,18 +582,18 @@ mtcars_t[[var]]</code></pre></div>
 <li><p>Use <code>mutate</code> (we haven’t talked about this yet) with backticks</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">annoying %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="st">`</span><span class="dt">3</span><span class="st">`</span> =<span class="st"> `</span><span class="dt">2</span><span class="st">`</span> /<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>)</code></pre></div>
-<pre><code>## # A tibble: 10 × 3
+<pre><code>## # A tibble: 10 x 3
 ##      `1`       `2`      `3`
 ##    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1      1  1.725450 1.725450
-## 2      2  5.182598 2.591299
-## 3      3  5.517888 1.839296
-## 4      4  8.894382 2.223596
-## 5      5  8.740021 1.748004
-## 6      6 12.153600 2.025600
-## 7      7 11.878134 1.696876
-## 8      8 16.885478 2.110685
-## 9      9 19.429848 2.158872
+##  1     1  1.725450 1.725450
+##  2     2  5.182598 2.591299
+##  3     3  5.517888 1.839296
+##  4     4  8.894382 2.223596
+##  5     5  8.740021 1.748004
+##  6     6 12.153600 2.025600
+##  7     7 11.878134 1.696876
+##  8     8 16.885478 2.110685
+##  9     9 19.429848 2.158872
 ## 10    10 19.439987 1.943999</code></pre></li>
 <li><p>Use <code>rename</code> (we haven’t talked about this yet) with backticks</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">annoying %&gt;%
@@ -572,18 +601,18 @@ mtcars_t[[var]]</code></pre></div>
 <span class="st">  </span><span class="kw">rename</span>(<span class="dt">one =</span> <span class="st">`</span><span class="dt">1</span><span class="st">`</span>, 
          <span class="dt">two =</span> <span class="st">`</span><span class="dt">2</span><span class="st">`</span>,
          <span class="dt">three =</span> <span class="st">`</span><span class="dt">3</span><span class="st">`</span>)</code></pre></div>
-<pre><code>## # A tibble: 10 × 3
+<pre><code>## # A tibble: 10 x 3
 ##      one       two    three
 ##    &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1      1  1.725450 1.725450
-## 2      2  5.182598 2.591299
-## 3      3  5.517888 1.839296
-## 4      4  8.894382 2.223596
-## 5      5  8.740021 1.748004
-## 6      6 12.153600 2.025600
-## 7      7 11.878134 1.696876
-## 8      8 16.885478 2.110685
-## 9      9 19.429848 2.158872
+##  1     1  1.725450 1.725450
+##  2     2  5.182598 2.591299
+##  3     3  5.517888 1.839296
+##  4     4  8.894382 2.223596
+##  5     5  8.740021 1.748004
+##  6     6 12.153600 2.025600
+##  7     7 11.878134 1.696876
+##  8     8 16.885478 2.110685
+##  9     9 19.429848 2.158872
 ## 10    10 19.439987 1.943999</code></pre></li>
 </ol></li>
 <li><p>Look it up with <code>?enframe</code>. It turns out that <code>enframe()</code> is super useful.<br />
@@ -595,7 +624,7 @@ v</code></pre></div>
 ##  1  3  4 10</code></pre>
 <p>If you want to deal with this type of vector in the tidyverse, you can enframe it into a tibble:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">enframe</span>(v)</code></pre></div>
-<pre><code>## # A tibble: 4 × 2
+<pre><code>## # A tibble: 4 x 2
 ##    name value
 ##   &lt;chr&gt; &lt;dbl&gt;
 ## 1     a     1

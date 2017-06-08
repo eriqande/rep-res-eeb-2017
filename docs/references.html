@@ -25,14 +25,14 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-06-02">
+<meta name="date" content="2017-06-08">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="plotting-spatial-data-with-ggplot.html">
+<link rel="prev" href="a-tidy-approach-to-spatial-data-simple-features.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -47,6 +47,20 @@
 
 
 
+<script src="libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<link href="libs/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-0.7.7/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<link href="libs/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
+<script src="libs/leaflet-label-0.2.2/leaflet.label.js"></script>
+<script src="libs/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
+<script src="libs/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
+<script src="libs/leaflet-binding-1.1.0/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.0.27/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin-1.1.0/leaflet-providers-plugin.js"></script>
+<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
 
 
 <style type="text/css">
@@ -236,16 +250,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#point-and-vector-data-types"><i class="fa fa-check"></i><b>9.1</b> Point and Vector Data Types</a><ul>
 <li class="chapter" data-level="9.1.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#some-example-vector-data"><i class="fa fa-check"></i><b>9.1.1</b> Some example vector data</a></li>
 <li class="chapter" data-level="9.1.2" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#reading-in-vector-spatial-data"><i class="fa fa-check"></i><b>9.1.2</b> Reading in Vector Spatial Data</a></li>
-<li class="chapter" data-level="9.1.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#quick-visualization-of-our-vector-data"><i class="fa fa-check"></i><b>9.1.3</b> Quick Visualization of our Vector Data</a></li>
-<li class="chapter" data-level="9.1.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#the-structure-of-spatialdataframes"><i class="fa fa-check"></i><b>9.1.4</b> The Structure of Spatial*DataFrames</a></li>
-<li class="chapter" data-level="9.1.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#subsetting-spatialdataframes"><i class="fa fa-check"></i><b>9.1.5</b> Subsetting Spatial*DataFrames</a></li>
+<li class="chapter" data-level="9.1.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#reading-shapefiles-take-two"><i class="fa fa-check"></i><b>9.1.3</b> Reading Shapefiles Take Two</a></li>
+<li class="chapter" data-level="9.1.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#quick-visualization-of-our-vector-data"><i class="fa fa-check"></i><b>9.1.4</b> Quick Visualization of our Vector Data</a></li>
+<li class="chapter" data-level="9.1.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#the-structure-of-spatialdataframes"><i class="fa fa-check"></i><b>9.1.5</b> The Structure of Spatial*DataFrames</a></li>
+<li class="chapter" data-level="9.1.6" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#subsetting-spatialdataframes"><i class="fa fa-check"></i><b>9.1.6</b> Subsetting Spatial*DataFrames</a></li>
 </ul></li>
 <li class="chapter" data-level="9.2" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#coordinate-reference-systems"><i class="fa fa-check"></i><b>9.2</b> Coordinate Reference Systems</a></li>
 <li class="chapter" data-level="9.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#plotting-things-with-ggspatial"><i class="fa fa-check"></i><b>9.3</b> Plotting things with ggspatial</a><ul>
 <li class="chapter" data-level="9.3.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#want-a-background"><i class="fa fa-check"></i><b>9.3.1</b> Want a background?</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#spatial-raster-data"><i class="fa fa-check"></i><b>9.4</b> Spatial Raster Data</a></li>
-<li class="chapter" data-level="9.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#wrapping-up"><i class="fa fa-check"></i><b>9.5</b> Wrapping Up</a></li>
+<li class="chapter" data-level="9.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#simple-intersection-of-spatial-objects"><i class="fa fa-check"></i><b>9.4</b> Simple Intersection of Spatial Objects</a></li>
+<li class="chapter" data-level="9.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#spatial-raster-data"><i class="fa fa-check"></i><b>9.5</b> Spatial Raster Data</a></li>
+<li class="chapter" data-level="9.6" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#wrapping-up"><i class="fa fa-check"></i><b>9.6</b> Wrapping Up</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html"><i class="fa fa-check"></i><b>10</b> A Tidy Approach to Spatial Data: Simple Features</a><ul>
+<li class="chapter" data-level="10.1" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#prelims"><i class="fa fa-check"></i><b>10.1</b> Prelims</a></li>
+<li class="chapter" data-level="10.2" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#reading-spatial-data-into-sf-objects"><i class="fa fa-check"></i><b>10.2</b> Reading spatial data into sf objects</a></li>
+<li class="chapter" data-level="10.3" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#plotting-sf-objects"><i class="fa fa-check"></i><b>10.3</b> Plotting sf objects</a></li>
+<li class="chapter" data-level="10.4" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#geometric-operations"><i class="fa fa-check"></i><b>10.4</b> Geometric operations</a></li>
+<li class="chapter" data-level="10.5" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#interactive-plotting-with-leaflet-via-the-mapview-package"><i class="fa fa-check"></i><b>10.5</b> Interactive plotting with leaflet via the <code>mapview</code> package</a><ul>
+<li class="chapter" data-level="10.5.1" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#mapping-attributes"><i class="fa fa-check"></i><b>10.5.1</b> Mapping attributes</a></li>
+<li class="chapter" data-level="10.5.2" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#adding-layers"><i class="fa fa-check"></i><b>10.5.2</b> Adding layers</a></li>
+<li class="chapter" data-level="10.5.3" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#saving-maps"><i class="fa fa-check"></i><b>10.5.3</b> Saving maps</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#adding-map-tiles-from-other-sources"><i class="fa fa-check"></i><b>10.6</b> Adding map tiles from other sources</a></li>
+<li class="chapter" data-level="10.7" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#more-info"><i class="fa fa-check"></i><b>10.7</b> More info</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -277,7 +306,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="plotting-spatial-data-with-ggplot.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="a-tidy-approach-to-spatial-data-simple-features.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>

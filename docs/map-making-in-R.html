@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-06-02">
+<meta name="date" content="2017-06-08">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -47,6 +47,20 @@
 
 
 
+<script src="libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<link href="libs/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-0.7.7/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<link href="libs/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
+<script src="libs/leaflet-label-0.2.2/leaflet.label.js"></script>
+<script src="libs/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
+<script src="libs/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
+<script src="libs/leaflet-binding-1.1.0/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.0.27/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin-1.1.0/leaflet-providers-plugin.js"></script>
+<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
 
 
 <style type="text/css">
@@ -236,16 +250,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#point-and-vector-data-types"><i class="fa fa-check"></i><b>9.1</b> Point and Vector Data Types</a><ul>
 <li class="chapter" data-level="9.1.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#some-example-vector-data"><i class="fa fa-check"></i><b>9.1.1</b> Some example vector data</a></li>
 <li class="chapter" data-level="9.1.2" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#reading-in-vector-spatial-data"><i class="fa fa-check"></i><b>9.1.2</b> Reading in Vector Spatial Data</a></li>
-<li class="chapter" data-level="9.1.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#quick-visualization-of-our-vector-data"><i class="fa fa-check"></i><b>9.1.3</b> Quick Visualization of our Vector Data</a></li>
-<li class="chapter" data-level="9.1.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#the-structure-of-spatialdataframes"><i class="fa fa-check"></i><b>9.1.4</b> The Structure of Spatial*DataFrames</a></li>
-<li class="chapter" data-level="9.1.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#subsetting-spatialdataframes"><i class="fa fa-check"></i><b>9.1.5</b> Subsetting Spatial*DataFrames</a></li>
+<li class="chapter" data-level="9.1.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#reading-shapefiles-take-two"><i class="fa fa-check"></i><b>9.1.3</b> Reading Shapefiles Take Two</a></li>
+<li class="chapter" data-level="9.1.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#quick-visualization-of-our-vector-data"><i class="fa fa-check"></i><b>9.1.4</b> Quick Visualization of our Vector Data</a></li>
+<li class="chapter" data-level="9.1.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#the-structure-of-spatialdataframes"><i class="fa fa-check"></i><b>9.1.5</b> The Structure of Spatial*DataFrames</a></li>
+<li class="chapter" data-level="9.1.6" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#subsetting-spatialdataframes"><i class="fa fa-check"></i><b>9.1.6</b> Subsetting Spatial*DataFrames</a></li>
 </ul></li>
 <li class="chapter" data-level="9.2" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#coordinate-reference-systems"><i class="fa fa-check"></i><b>9.2</b> Coordinate Reference Systems</a></li>
 <li class="chapter" data-level="9.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#plotting-things-with-ggspatial"><i class="fa fa-check"></i><b>9.3</b> Plotting things with ggspatial</a><ul>
 <li class="chapter" data-level="9.3.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#want-a-background"><i class="fa fa-check"></i><b>9.3.1</b> Want a background?</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#spatial-raster-data"><i class="fa fa-check"></i><b>9.4</b> Spatial Raster Data</a></li>
-<li class="chapter" data-level="9.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#wrapping-up"><i class="fa fa-check"></i><b>9.5</b> Wrapping Up</a></li>
+<li class="chapter" data-level="9.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#simple-intersection-of-spatial-objects"><i class="fa fa-check"></i><b>9.4</b> Simple Intersection of Spatial Objects</a></li>
+<li class="chapter" data-level="9.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#spatial-raster-data"><i class="fa fa-check"></i><b>9.5</b> Spatial Raster Data</a></li>
+<li class="chapter" data-level="9.6" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#wrapping-up"><i class="fa fa-check"></i><b>9.6</b> Wrapping Up</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html"><i class="fa fa-check"></i><b>10</b> A Tidy Approach to Spatial Data: Simple Features</a><ul>
+<li class="chapter" data-level="10.1" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#prelims"><i class="fa fa-check"></i><b>10.1</b> Prelims</a></li>
+<li class="chapter" data-level="10.2" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#reading-spatial-data-into-sf-objects"><i class="fa fa-check"></i><b>10.2</b> Reading spatial data into sf objects</a></li>
+<li class="chapter" data-level="10.3" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#plotting-sf-objects"><i class="fa fa-check"></i><b>10.3</b> Plotting sf objects</a></li>
+<li class="chapter" data-level="10.4" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#geometric-operations"><i class="fa fa-check"></i><b>10.4</b> Geometric operations</a></li>
+<li class="chapter" data-level="10.5" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#interactive-plotting-with-leaflet-via-the-mapview-package"><i class="fa fa-check"></i><b>10.5</b> Interactive plotting with leaflet via the <code>mapview</code> package</a><ul>
+<li class="chapter" data-level="10.5.1" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#mapping-attributes"><i class="fa fa-check"></i><b>10.5.1</b> Mapping attributes</a></li>
+<li class="chapter" data-level="10.5.2" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#adding-layers"><i class="fa fa-check"></i><b>10.5.2</b> Adding layers</a></li>
+<li class="chapter" data-level="10.5.3" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#saving-maps"><i class="fa fa-check"></i><b>10.5.3</b> Saving maps</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#adding-map-tiles-from-other-sources"><i class="fa fa-check"></i><b>10.6</b> Adding map tiles from other sources</a></li>
+<li class="chapter" data-level="10.7" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#more-info"><i class="fa fa-check"></i><b>10.7</b> More info</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -311,7 +340,10 @@ devtools::<span class="kw">install_github</span>(<span class="st">&quot;dkahle/g
 <pre><code>## The following object is masked from &#39;package:purrr&#39;:
 ## 
 ##     map</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(maps)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(maps)
+<span class="kw">library</span>(stringr)
+<span class="kw">library</span>(viridis)</code></pre></div>
+<pre><code>## Loading required package: viridisLite</code></pre>
 </div>
 </div>
 <div id="maps-package-and-ggplot" class="section level2">
@@ -581,10 +613,7 @@ ca_base +<span class="st"> </span><span class="kw">theme_void</span>()</code></p
 <li>2016 Edit! I had originally pumped the matrix resulting from the <code>str_match</code> below through a few other <code>stringr</code> function (like <code>str_replace_all</code>) which, apparently, in an older version of <code>stringr</code> maintained the matrix form, but in a newer version, squashed everything into a vector. This was kindly noted by hueykwik <a href="https://github.com/eriqande/rep-res-course/issues/74">in this issue</a>. So the code below is modified from what it used to be, but seems to work now. Just as an aside, in the years since I first put this course together (in 2014), things have changed quite a bit in the data analysis world, and, as we are doing in this course again in 2017, we are spending almost all our time in the <a href="http://r4ds.had.co.nz/">tidyverse</a>.</li>
 <li>Watch this regex fun. Note that if you, the student, wish to run all the code yourself, you should download the <code>inputs</code> directory as a zipped file by going <a href="https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip">here</a> with a web browser and then clicking the big “Download” button on the right. Once you have downloaded that, unzip it and put the whole <code>inputs</code> directory in the current working directory where you are working with R.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="kw">library</span>(stringr)
-    <span class="kw">library</span>(dplyr)
-
-    <span class="co"># make a data frame</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="co"># make a data frame</span>
     x &lt;-<span class="st"> </span><span class="kw">readLines</span>(<span class="st">&quot;inputs/ca-counties-wikipedia.txt&quot;</span>)
     pop_and_area &lt;-<span class="st"> </span><span class="kw">str_match</span>(x, <span class="st">&quot;^([a-zA-Z ]+)County</span><span class="ch">\t</span><span class="st">.*</span><span class="ch">\t</span><span class="st">([0-9,]{2,10})</span><span class="ch">\t</span><span class="st">([0-9,]{2,10}) sq mi$&quot;</span>)[, -<span class="dv">1</span>] %&gt;%
 <span class="st">      </span><span class="kw">na.omit</span>() %&gt;%
@@ -593,11 +622,11 @@ ca_base +<span class="st"> </span><span class="kw">theme_void</span>()</code></p
              <span class="dt">population =</span> <span class="kw">as.numeric</span>(<span class="kw">str_replace_all</span>(V2, <span class="st">&quot;,&quot;</span>, <span class="st">&quot;&quot;</span>)),
              <span class="dt">area =</span> <span class="kw">as.numeric</span>(<span class="kw">str_replace_all</span>(V3, <span class="st">&quot;,&quot;</span>, <span class="st">&quot;&quot;</span>))
       ) %&gt;%
-<span class="st">      </span><span class="kw">select</span>(subregion, population, area) %&gt;%
+<span class="st">      </span>dplyr::<span class="kw">select</span>(subregion, population, area) %&gt;%
 <span class="st">      </span><span class="kw">tbl_df</span>()
     
     <span class="kw">head</span>(pop_and_area)</code></pre></div>
-<pre><code>## # A tibble: 6 × 3
+<pre><code>## # A tibble: 6 x 3
 ##   subregion population  area
 ##       &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt;
 ## 1   alameda    1578891   738
@@ -650,14 +679,21 @@ elbow_room1 </code></pre></div>
 </div>
 <div id="still-not-great" class="section level4">
 <h4><span class="header-section-number">8.2.6.8</span> Still not great</h4>
-<p>I personally like more color than <code>ggplot</code> uses in its default gradient. In that respect I gravitate more toward Matlab’s default color gradient. Can we do something similar with <code>ggplot</code>? (It turns out we can…my apologies to those purists who would tell me that rainbow colors are not good for showing quantitative scales—I think that in some cases they work reasonaly well…for example the following…of course, there are times when they work abysmally, as well.)</p>
+<p>I personally like more color than <code>ggplot</code> uses in its default gradient. In that respect I have traditionally gravitated more toward rainbow scales, like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eb2 &lt;-<span class="st"> </span>elbow_room1 +<span class="st"> </span>
 <span class="st">    </span><span class="kw">scale_fill_gradientn</span>(<span class="dt">colours =</span> <span class="kw">rev</span>(<span class="kw">rainbow</span>(<span class="dv">7</span>)),
                          <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>),
                          <span class="dt">trans =</span> <span class="st">&quot;log10&quot;</span>)
 eb2</code></pre></div>
 <p><img src="bookdown-demo_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
-<p>That is reasonably cool.</p>
+<p>That is reasonably cool. However, there are many that will tell you that rainbow colors are not good for showing quantitative scales. I think that in some cases rainbow scales can work reasonaly well…for example I think it is easier to read off rought density figures using the map above than the one using the default blue-black ggplot scale…of course, there are times when rainbow scales work abysmally.)</p>
+<p>Another issue with color scales is how well they can be detected by people with different varieties of color blindness. There is a fantastic package called <code>viridis</code> (note that we loaded it in the first code block), that provides a color scale that is well-perceived by people with many different types of color blindness. It also looks great. The <code>viridis</code> package provides <code>scale_fill_viridis</code> and <code>scale_colour_viridis</code> which can be used quite easily.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eb2 &lt;-<span class="st"> </span>elbow_room1 +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_fill_viridis</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>),
+                         <span class="dt">trans =</span> <span class="st">&quot;log10&quot;</span>)
+eb2</code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
+<p>That looks quite nice. For more information about <code>viridis</code> read the <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html">intro vignette</a> on CRAN.</p>
 </div>
 </div>
 <div id="zoom-in" class="section level3">
@@ -665,7 +701,7 @@ eb2</code></pre></div>
 <p>Note that the scale of these maps from package <code>maps</code> are not great. We can zoom in to the Bay region, and it sort of works scale-wise, but if we wanted to zoom in more, it would be tough.</p>
 <p>Let’s try!</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eb2 +<span class="st"> </span><span class="kw">xlim</span>(-<span class="dv">123</span>, -<span class="fl">121.0</span>) +<span class="st"> </span><span class="kw">ylim</span>(<span class="dv">36</span>, <span class="dv">38</span>)</code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-81-1.png" width="672" /></p>
 <ul>
 <li>Whoa! That is an epic fail. Why?</li>
 <li>Recall that <code>geom_polygon()</code> connects the end point of a <code>group</code> to its starting point.</li>
@@ -681,7 +717,7 @@ eb2</code></pre></div>
 <li>If you want to keep all the data the same but just zoom in, you can use the <code>xlim</code> and <code>ylim</code> arguments to <code>coord_cartesian()</code>. Though, to keep the aspect ratio correct we must use <code>coord_quickmap()</code> instead of <code>coord_cartesian()</code>.</li>
 <li><p>This chops stuff off but doesn’t discard it from the data set:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eb2 +<span class="st"> </span><span class="kw">coord_quickmap</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(-<span class="dv">123</span>, -<span class="fl">121.0</span>),  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">36</span>, <span class="dv">38</span>))</code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-81-1.png" width="672" /></p></li>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-82-1.png" width="672" /></p></li>
 </ul>
 <p>Side Note: The coastline in the <code>maps</code> package is pretty low-resolution, and looks like a heap of bird droppings when you zoom way in on it.</p>
 <p>If you want to get much more accurate coastlines, you can use better data sources like NOAA’s <a href="https://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html">GSHHS</a>: A Global Self-consistent, Hierarchical, High-resolution Geography Database. I have a blog post about that at <a href="http://eriqande.github.io/2014/12/17/compare-map-resolutions.html" class="uri">http://eriqande.github.io/2014/12/17/compare-map-resolutions.html</a>.</p>
@@ -765,7 +801,7 @@ sisquoc</code></pre></div>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> sisquoc, <span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">angle =</span> <span class="dv">60</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, 
             <span class="dt">color =</span> <span class="st">&quot;yellow&quot;</span>, <span class="dt">nudge_x =</span> .<span class="dv">0001</span>, <span class="dt">nudge_y =</span> .<span class="dv">0004</span>, <span class="dt">size =</span> <span class="fl">4.5</span>)</code></pre></div>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/staticmap?center=34.753117,-119.751324&amp;zoom=15&amp;size=640x640&amp;scale=2&amp;maptype=terrain</code></pre>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-86-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/sisquoc-ggmap-1.png" width="672" /></p>
 </div>
 <div id="googles-satellite-maptype" class="section level4">
 <h4><span class="header-section-number">8.3.3.2</span> Google’s “Satellite” maptype</h4>
@@ -778,7 +814,7 @@ sisquoc</code></pre></div>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> sisquoc, <span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">angle =</span> <span class="dv">60</span>, <span class="dt">hjust =</span> <span class="dv">0</span>, 
             <span class="dt">color =</span> <span class="st">&quot;yellow&quot;</span>, <span class="dt">nudge_x =</span> .<span class="dv">0001</span>, <span class="dt">nudge_y =</span> .<span class="dv">0004</span>, <span class="dt">size =</span> <span class="fl">4.5</span>)</code></pre></div>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/staticmap?center=34.753117,-119.751324&amp;zoom=15&amp;size=640x640&amp;scale=2&amp;maptype=satellite</code></pre>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-87-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/sisquoc-satellite-1.png" width="672" /></p>
 </div>
 </div>
 <div id="big-creek-in-big-sur" class="section level3">
@@ -787,7 +823,7 @@ sisquoc</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_googlemap</span>(<span class="dt">center =</span> <span class="kw">c</span>(-<span class="fl">121.595</span>, <span class="fl">36.075</span>), <span class="dt">zoom =</span> <span class="dv">15</span>, <span class="dt">maptype =</span> <span class="st">&quot;terrain&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">ggmap</span>() </code></pre></div>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/staticmap?center=36.075,-121.595&amp;zoom=15&amp;size=640x640&amp;scale=2&amp;maptype=terrain</code></pre>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-88-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/big-creek-ggmap-1.png" width="672" /></p>
 <p>Hmm…that is quite nice.</p>
 <div id="stamen-maps" class="section level4">
 <h4><span class="header-section-number">8.3.4.1</span> Stamen maps</h4>
@@ -826,7 +862,7 @@ sisquoc_stamen &lt;-<span class="st"> </span><span class="kw">get_stamenmap</spa
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggmap</span>(bikemap1) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> bike, <span class="kw">aes</span>(<span class="dt">colour =</span> elevation), <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">lineend =</span> <span class="st">&quot;round&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">scale_color_gradientn</span>(<span class="dt">colours =</span> <span class="kw">rainbow</span>(<span class="dv">7</span>), <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">25</span>, <span class="dv">200</span>, <span class="dt">by =</span> <span class="dv">25</span>))</code></pre></div>
-<img src="bookdown-demo_files/figure-html/unnamed-chunk-90-1.png" width="672" /></li>
+<img src="bookdown-demo_files/figure-html/bike-ride-ggmap-1.png" width="672" /></li>
 <li>See how we have mapped elevation to the color of the path using our rainbow colors again.</li>
 <li>Note that getting the right zoom and position for the map is sort of trial and error. You can go to google maps to figure out where the center should be: double click a location to get the lat-long of any spot.</li>
 <li><p>There is a <code>make_bbox</code> function that is supposed to expedite figuring out the zoom, but it has never really worked well for me with Google maps at large zooms. We will see it in action, below, however.</p></li>
@@ -841,18 +877,18 @@ sisquoc_stamen &lt;-<span class="st"> </span><span class="kw">get_stamenmap</spa
 <span class="co"># look at some of it:</span>
 bc %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(state_or_province:sub_location, longitude, latitude)</code></pre></div>
-<pre><code>## # A tibble: 1,113 × 9
+<pre><code>## # A tibble: 1,113 x 9
 ##    state_or_province water_type sector region  area location sub_location
 ##                &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;
-## 1                  2          M      S     22  016   THOR IS           01
-## 2                  2          M      N     26  012   MITC BY           18
-## 3                  2          M      S     22  015   HARW IS           02
-## 4                  2          M      N     26  006   HOPK PT           01
-## 5                  2          M      S     23  017   TENT IS           06
-## 6                  2          M      S     28  23A   NAHM BY           02
-## 7                  2          M      N     26  006   GIL IS            06
-## 8                  2          M      S     27  024   CLEL IS           06
-## 9                  2          M      S     27  23B   SAND IS           04
+##  1                 2          M      S     22  016   THOR IS           01
+##  2                 2          M      N     26  012   MITC BY           18
+##  3                 2          M      S     22  015   HARW IS           02
+##  4                 2          M      N     26  006   HOPK PT           01
+##  5                 2          M      S     23  017   TENT IS           06
+##  6                 2          M      S     28  23A   NAHM BY           02
+##  7                 2          M      N     26  006   GIL IS            06
+##  8                 2          M      S     27  024   CLEL IS           06
+##  9                 2          M      S     27  23B   SAND IS           04
 ## 10                 2          M      N     26  012   DUVA IS           16
 ## # ... with 1,103 more rows, and 2 more variables: longitude &lt;dbl&gt;,
 ## #   latitude &lt;dbl&gt;</code></pre>
@@ -868,17 +904,18 @@ bc %&gt;%<span class="st"> </span>
 <pre><code>## Source: local data frame [42 x 4]
 ## Groups: sector, region [?]
 ## 
+## # A tibble: 42 x 4
 ##    sector region  area     n
 ##     &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
-## 1             48  008      1
-## 2             48  028      1
-## 3             48  311      1
-## 4       N     25  001     33
-## 5       N     25  003     15
-## 6       N     25  004     44
-## 7       N     25  02E      2
-## 8       N     25  02W     34
-## 9       N     26  006     28
+##  1            48  008      1
+##  2            48  028      1
+##  3            48  311      1
+##  4      N     25  001     33
+##  5      N     25  003     15
+##  6      N     25  004     44
+##  7      N     25  02E      2
+##  8      N     25  02W     34
+##  9      N     26  006     28
 ## 10      N     26  007     23
 ## # ... with 32 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bc %&gt;%
@@ -886,17 +923,18 @@ bc %&gt;%<span class="st"> </span>
 <pre><code>## Source: local data frame [11 x 3]
 ## Groups: sector [?]
 ## 
+## # A tibble: 11 x 3
 ##    sector region     n
 ##     &lt;chr&gt;  &lt;chr&gt; &lt;int&gt;
-## 1             48     3
-## 2       N     25   128
-## 3       N     26   174
-## 4       S     22   191
-## 5       S     23   136
-## 6       S     24    93
-## 7       S     27   247
-## 8       S     28    23
-## 9       S     61    49
+##  1            48     3
+##  2      N     25   128
+##  3      N     26   174
+##  4      S     22   191
+##  5      S     23   136
+##  6      S     24    93
+##  7      S     27   247
+##  8      S     28    23
+##  9      S     61    49
 ## 10      S     62    66
 ## 11      S     AF     3</code></pre></li>
 <li><p>That looks good. It appears like we could probably color code over the whole area down to region, and then down to area within subregions.</p></li>
@@ -920,7 +958,7 @@ bc_big &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># plot the points and color them by sector</span>
 <span class="kw">ggmap</span>(bc_big) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> bc, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude, <span class="dt">color =</span> sector))</code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-93-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/bc_big-1.png" width="672" /></p>
 <ul>
 <li>Cool! That was about as easy as could be. North is in the north, south is in the south, and the three reddish points are clearly aberrant ones at the mouths of rivers.</li>
 </ul>
@@ -933,7 +971,7 @@ bc_big &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggmap</span>(bc_big) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> bc, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude, <span class="dt">color =</span> region))</code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-94-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/bc_big2-1.png" width="672" /></p>
 <ul>
 <li>Once again that was dirt easy, though at this scale with all the different regions, it is hard to resolve all the colors. In general, it gets hard to resolve more than 7 or 8 colors on a map.</li>
 </ul>
@@ -972,24 +1010,24 @@ bc_big &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class
 ## )</code></pre>
 <p>It looks like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">caps</code></pre></div>
-<pre><code>## # A tibble: 50 × 4
+<pre><code>## # A tibble: 50 x 4
 ##          state     capital      lat       long
 ##          &lt;chr&gt;       &lt;chr&gt;    &lt;dbl&gt;      &lt;dbl&gt;
-## 1      Alabama  Montgomery 32.36154  -86.27912
-## 2       Alaska      Juneau 58.30194 -134.41974
-## 3      Arizona     Phoenix 33.44846 -112.07384
-## 4     Arkansas Little Rock 34.73601  -92.33112
-## 5   California  Sacramento 38.55560 -121.46893
-## 6     Colorado      Denver 39.73917 -104.98417
-## 7  Connecticut    Hartford 41.76700  -72.67700
-## 8     Delaware       Dover 39.16192  -75.52675
-## 9      Florida Tallahassee 30.45180  -84.27277
+##  1     Alabama  Montgomery 32.36154  -86.27912
+##  2      Alaska      Juneau 58.30194 -134.41974
+##  3     Arizona     Phoenix 33.44846 -112.07384
+##  4    Arkansas Little Rock 34.73601  -92.33112
+##  5  California  Sacramento 38.55560 -121.46893
+##  6    Colorado      Denver 39.73917 -104.98417
+##  7 Connecticut    Hartford 41.76700  -72.67700
+##  8    Delaware       Dover 39.16192  -75.52675
+##  9     Florida Tallahassee 30.45180  -84.27277
 ## 10     Georgia     Atlanta 33.76000  -84.39000
 ## # ... with 40 more rows</code></pre>
 <p>You can quickly download the CSV file from <a href="https://www.dropbox.com/s/d3gehuzl4pdkntj/state_capitals.csv?dl=1">here</a>. But, if you downloaded the <code>inputs</code> directory and placed it in the right spot to run through the code above, you then already have this.</p>
-<p>Once you have that, try to put together a map that looks like this: <img src="bookdown-demo_files/figure-html/unnamed-chunk-97-1.png" width="672" /></p>
+<p>Once you have that, try to put together a map that looks like this: <img src="bookdown-demo_files/figure-html/unnamed-chunk-92-1.png" width="672" /></p>
 <p>OK, now, to display your mad dplyr skills and mapping capabilities, do the gyrations necessary to do this:</p>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-98-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-93-1.png" width="672" /></p>
 </div>
 <div id="short-assignment-of-plotting-with-ggmap" class="section level3">
 <h3><span class="header-section-number">8.4.2</span> Short assignment of plotting with ggmap()</h3>
@@ -1003,25 +1041,25 @@ bc_big &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class
 <pre><code>## [1] -157.283  -66.700</code></pre>
 <p>The data frame looks like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wiwa</code></pre></div>
-<pre><code>## # A tibble: 357 × 15
+<pre><code>## # A tibble: 357 x 15
 ##         ID Short_Name Isotope.Value        Source Species Region  Location
 ##      &lt;chr&gt;      &lt;chr&gt;         &lt;dbl&gt;         &lt;chr&gt;   &lt;chr&gt;  &lt;lgl&gt;     &lt;chr&gt;
-## 1  01N0729    wCAHU01     -94.99667 Kelly_Dec2013    WIWA     NA      Hume
-## 2  01N0730    wCAHU02    -119.67951 Kelly_Dec2013    WIWA     NA      Hume
-## 3  01N0731    wCAHU03    -102.67823 Kelly_Dec2013    WIWA     NA      Hume
-## 4  01N0732    wCAHU04    -100.38197 Kelly_Dec2013    WIWA     NA      Hume
-## 5  01N0733    wCAHU05    -102.88861 Kelly_Dec2013    WIWA     NA      Hume
-## 6  01N7414    wAKUG11    -102.90747 Kelly_Dec2013    WIWA     NA Ugashik_2
-## 7  01N7415    wAKUG12    -120.25431 Kelly_Dec2013    WIWA     NA Ugashik_2
-## 8  01N7416    wAKUG13    -116.58946 Kelly_Dec2013    WIWA     NA Ugashik_2
-## 9  01N7417    wAKUG14    -124.93382 Kelly_Dec2013    WIWA     NA Ugashik_2
+##  1 01N0729    wCAHU01     -94.99667 Kelly_Dec2013    WIWA     NA      Hume
+##  2 01N0730    wCAHU02    -119.67951 Kelly_Dec2013    WIWA     NA      Hume
+##  3 01N0731    wCAHU03    -102.67823 Kelly_Dec2013    WIWA     NA      Hume
+##  4 01N0732    wCAHU04    -100.38197 Kelly_Dec2013    WIWA     NA      Hume
+##  5 01N0733    wCAHU05    -102.88861 Kelly_Dec2013    WIWA     NA      Hume
+##  6 01N7414    wAKUG11    -102.90747 Kelly_Dec2013    WIWA     NA Ugashik_2
+##  7 01N7415    wAKUG12    -120.25431 Kelly_Dec2013    WIWA     NA Ugashik_2
+##  8 01N7416    wAKUG13    -116.58946 Kelly_Dec2013    WIWA     NA Ugashik_2
+##  9 01N7417    wAKUG14    -124.93382 Kelly_Dec2013    WIWA     NA Ugashik_2
 ## 10 01N7418    wAKUG15    -114.09978 Kelly_Dec2013    WIWA     NA Ugashik_2
 ## # ... with 347 more rows, and 8 more variables: Near_Town &lt;chr&gt;,
 ## #   State &lt;chr&gt;, Country &lt;chr&gt;, Kristina_Notes &lt;lgl&gt;, Age &lt;chr&gt;,
 ## #   lat &lt;dbl&gt;, long &lt;dbl&gt;, stage &lt;chr&gt;</code></pre>
 <p>Let’s make a google_map with some of that info on it—namely the locations of the samples colored by the State or Province that they are in.</p>
 <pre><code>## Source : https://maps.googleapis.com/maps/api/staticmap?center=49,-110&amp;zoom=3&amp;size=640x640&amp;scale=2&amp;maptype=hybrid</code></pre>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-101-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/stealth-map-1.png" width="672" /></p>
 <p>That shows one of the limitations of plotting things in unprojected latitude and longitude coordinates: Alaska gets all inflated. Next week, if everyone really wants to see how we might overcome that using the Natural Earth Data rasters, we might just be able to do so.</p>
 
 </div>

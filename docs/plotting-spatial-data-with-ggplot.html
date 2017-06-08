@@ -25,7 +25,7 @@
 <meta name="author" content="Eric C. Anderson, Kristen C. Ruegg, Tina Cheng, and the students of EEB 295">
 
 
-<meta name="date" content="2017-06-02">
+<meta name="date" content="2017-06-08">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="map-making-in-R.html">
-<link rel="next" href="references.html">
+<link rel="next" href="a-tidy-approach-to-spatial-data-simple-features.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -47,6 +47,20 @@
 
 
 
+<script src="libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<link href="libs/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-0.7.7/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<link href="libs/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
+<script src="libs/leaflet-label-0.2.2/leaflet.label.js"></script>
+<script src="libs/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
+<script src="libs/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
+<script src="libs/leaflet-binding-1.1.0/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.0.27/leaflet-providers.js"></script>
+<script src="libs/leaflet-providers-plugin-1.1.0/leaflet-providers-plugin.js"></script>
+<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
 
 
 <style type="text/css">
@@ -236,16 +250,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#point-and-vector-data-types"><i class="fa fa-check"></i><b>9.1</b> Point and Vector Data Types</a><ul>
 <li class="chapter" data-level="9.1.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#some-example-vector-data"><i class="fa fa-check"></i><b>9.1.1</b> Some example vector data</a></li>
 <li class="chapter" data-level="9.1.2" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#reading-in-vector-spatial-data"><i class="fa fa-check"></i><b>9.1.2</b> Reading in Vector Spatial Data</a></li>
-<li class="chapter" data-level="9.1.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#quick-visualization-of-our-vector-data"><i class="fa fa-check"></i><b>9.1.3</b> Quick Visualization of our Vector Data</a></li>
-<li class="chapter" data-level="9.1.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#the-structure-of-spatialdataframes"><i class="fa fa-check"></i><b>9.1.4</b> The Structure of Spatial*DataFrames</a></li>
-<li class="chapter" data-level="9.1.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#subsetting-spatialdataframes"><i class="fa fa-check"></i><b>9.1.5</b> Subsetting Spatial*DataFrames</a></li>
+<li class="chapter" data-level="9.1.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#reading-shapefiles-take-two"><i class="fa fa-check"></i><b>9.1.3</b> Reading Shapefiles Take Two</a></li>
+<li class="chapter" data-level="9.1.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#quick-visualization-of-our-vector-data"><i class="fa fa-check"></i><b>9.1.4</b> Quick Visualization of our Vector Data</a></li>
+<li class="chapter" data-level="9.1.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#the-structure-of-spatialdataframes"><i class="fa fa-check"></i><b>9.1.5</b> The Structure of Spatial*DataFrames</a></li>
+<li class="chapter" data-level="9.1.6" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#subsetting-spatialdataframes"><i class="fa fa-check"></i><b>9.1.6</b> Subsetting Spatial*DataFrames</a></li>
 </ul></li>
 <li class="chapter" data-level="9.2" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#coordinate-reference-systems"><i class="fa fa-check"></i><b>9.2</b> Coordinate Reference Systems</a></li>
 <li class="chapter" data-level="9.3" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#plotting-things-with-ggspatial"><i class="fa fa-check"></i><b>9.3</b> Plotting things with ggspatial</a><ul>
 <li class="chapter" data-level="9.3.1" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#want-a-background"><i class="fa fa-check"></i><b>9.3.1</b> Want a background?</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#spatial-raster-data"><i class="fa fa-check"></i><b>9.4</b> Spatial Raster Data</a></li>
-<li class="chapter" data-level="9.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#wrapping-up"><i class="fa fa-check"></i><b>9.5</b> Wrapping Up</a></li>
+<li class="chapter" data-level="9.4" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#simple-intersection-of-spatial-objects"><i class="fa fa-check"></i><b>9.4</b> Simple Intersection of Spatial Objects</a></li>
+<li class="chapter" data-level="9.5" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#spatial-raster-data"><i class="fa fa-check"></i><b>9.5</b> Spatial Raster Data</a></li>
+<li class="chapter" data-level="9.6" data-path="plotting-spatial-data-with-ggplot.html"><a href="plotting-spatial-data-with-ggplot.html#wrapping-up"><i class="fa fa-check"></i><b>9.6</b> Wrapping Up</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html"><i class="fa fa-check"></i><b>10</b> A Tidy Approach to Spatial Data: Simple Features</a><ul>
+<li class="chapter" data-level="10.1" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#prelims"><i class="fa fa-check"></i><b>10.1</b> Prelims</a></li>
+<li class="chapter" data-level="10.2" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#reading-spatial-data-into-sf-objects"><i class="fa fa-check"></i><b>10.2</b> Reading spatial data into sf objects</a></li>
+<li class="chapter" data-level="10.3" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#plotting-sf-objects"><i class="fa fa-check"></i><b>10.3</b> Plotting sf objects</a></li>
+<li class="chapter" data-level="10.4" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#geometric-operations"><i class="fa fa-check"></i><b>10.4</b> Geometric operations</a></li>
+<li class="chapter" data-level="10.5" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#interactive-plotting-with-leaflet-via-the-mapview-package"><i class="fa fa-check"></i><b>10.5</b> Interactive plotting with leaflet via the <code>mapview</code> package</a><ul>
+<li class="chapter" data-level="10.5.1" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#mapping-attributes"><i class="fa fa-check"></i><b>10.5.1</b> Mapping attributes</a></li>
+<li class="chapter" data-level="10.5.2" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#adding-layers"><i class="fa fa-check"></i><b>10.5.2</b> Adding layers</a></li>
+<li class="chapter" data-level="10.5.3" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#saving-maps"><i class="fa fa-check"></i><b>10.5.3</b> Saving maps</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#adding-map-tiles-from-other-sources"><i class="fa fa-check"></i><b>10.6</b> Adding map tiles from other sources</a></li>
+<li class="chapter" data-level="10.7" data-path="a-tidy-approach-to-spatial-data-simple-features.html"><a href="a-tidy-approach-to-spatial-data-simple-features.html#more-info"><i class="fa fa-check"></i><b>10.7</b> More info</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -271,8 +300,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="plotting-spatial-data-with-ggplot" class="section level1">
 <h1><span class="header-section-number">Chapter 9</span> Plotting “Spatial” Data with ggplot</h1>
 <p><strong>Note</strong> that if you, the student, wish to run all the code yourself, you should download the <code>inputs</code> directory as a zipped file by going <a href="https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip">here</a> with a web browser and then clicking the big “Download” button on the right. Once you have downloaded that, unzip it and put the whole <code>inputs</code> directory in the current working directory where you are working with R.</p>
-<p>Today we are going to take a very cursory look at R’s facilities for handling <em>spatial data</em> and ways that it can be plotted using ggplot. When we say “spatial data” we mean data that are associated with a geographical location on the earth, and typically tied to a specific coordinate system that describes their location. Why is this important? It turns out that almost all of the geographical information that you can come by on the Internet is of this type, and furthermore, it is usually stored in a fairly specialized form that will look like Greek to the newcomer. Fortunately, R has a few specialized packages that make it easy to interact with this sort of data, to read it in and write it out, and perform spatial operations.</p>
-<p>For years, these types of tasks were typically carried out with proprietary software like Esri’s <a href="https://www.arcgis.com/features/index.html">ArcGIS</a> package, where, if you go to their website they will tell you that “making and sharing beautiful maps” is “possible <em>only</em> with ArcGIS online.” However, you <em>can</em> make and share beautiful maps from similar data sets using R, which carries the advantage of being reproducible, open-source, free (as in speech), and free (as in beer). It also, is not too terribly hard to learn to deal with spatial data in R, and it seems to be getting easier all the time. So, if you already are using R for data analysis, the R route for spatial data certainly seems to be a better approach than paying Esri 500 clams a year for an ArcGIS subscription.</p>
+<p>Today we are going to take a very cursory look at R’s “old-school” facilities for handling <em>spatial data</em> and ways that it can be plotted using ggplot.<br />
+When we say “spatial data” we mean data that are associated with a geographical location on the earth, and typically tied to a specific coordinate system that describes their location. Why is this important? It turns out that almost all of the geographical information that you can come by on the Internet is of this type, and furthermore, it is usually stored in a fairly specialized form that will look like Greek to the newcomer. Fortunately, R has a few specialized packages that make it easy to interact with this sort of data, to read it in and write it out, and perform spatial operations.</p>
+<p>I say “old-school” in the previous paragraph because within the last year there has been some lovely development on a package called <code>sf</code> for handling “Simple Feature” data, and development for handling simple features in <code>ggplot2</code>. “Simple Features” is a standard for handling geospatial data in relational data bases, and, as such, it is more appropriate to tidy interactions. I would not be surprised if <code>sf</code> were to eventually supersede much of what is described here, but I had already written this before I found <code>sf</code>, so I’ll leave it in here and will have a later session on simple features.</p>
+<p>For years, geospatial tasks were typically carried out with proprietary software like Esri’s <a href="https://www.arcgis.com/features/index.html">ArcGIS</a>, where, if you go to their website they will tell you that “making and sharing beautiful maps” is “possible <em>only</em> with ArcGIS online.” However, you <em>can</em> make and share beautiful maps from similar data sets using R, which carries the advantage of being reproducible, open-source, free (as in speech), and free (as in beer). It also is not too terribly hard to learn to deal with spatial data in R, and it seems to be getting easier all the time. So, if you already are using R for data analysis, the R route for spatial data certainly seems to be a better approach than paying Esri 500 clams a year for an ArcGIS subscription.</p>
 <p>In this session we will cover only simple topics (keep in mind that your instructor is a statistical geneticist that only plays with making maps in R on the side), and we will focus almost exclusively on plotting data rather than on spatial operations (like testing if points are in polygons, or clipping, etc). The topics will be:</p>
 <ol style="list-style-type: decimal">
 <li>Vector data types</li>
@@ -298,6 +329,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##  Linking to sp version: 1.2-4</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sp)
 <span class="kw">library</span>(ggspatial)</code></pre></div>
+<p>Additionally, we will load the <code>raster</code> package. Although, as its name suggests, it is focused primarily on <code>raster</code> data, it turns out that it also provides a few convenient functions for doing operations on vector spatial data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raster)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;raster&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     select</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     extract</code></pre>
 <div id="point-and-vector-data-types" class="section level2">
 <h2><span class="header-section-number">9.1</span> Point and Vector Data Types</h2>
 <p>Geospatial <em>point</em> data is fairly straightforward—each datum can be represented as a point on the earth. There are two other main types of what are called “vector” geospatial data. These are <em>spatial lines</em> and <em>spatial polygons</em>. Spatial lines are just a series of points which, when connected together, form a line. Spatial polygons are just a series of points which, when connected together (and with the last point getting connected back to the first one) subtend an area. In addition to being tied to locations on the earth, each point, or line, or polygon is typically also associated with some other data. For example, a polygon could be the boundary of a county (like we saw in the previous lecture) in which case it could be associated with a name, an area, and a population size, etc. A line might represent a section of a stream, in which case it could be associated with the name of the river, the number of fish per mile, and its average flow, etc.</p>
@@ -354,22 +395,41 @@ stream_fail &lt;-<span class="st"> </span>rgdal::<span class="kw">readOGR</span>
 stream_no_fail &lt;-<span class="st"> </span>rgdal::<span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="kw">normalizePath</span>(<span class="st">&quot;~/Documents/git-repos/rep-res-eeb-2017/inputs/santa-cruz-county/Streams&quot;</span>), 
                               <span class="dt">layer =</span> <span class="st">&quot;Streams&quot;</span>)</code></pre></div>
 </div>
+<div id="reading-shapefiles-take-two" class="section level3">
+<h3><span class="header-section-number">9.1.3</span> Reading Shapefiles Take Two</h3>
+<p>The <code>rgdal</code> package has the capability to read many different formats. If you are just reading ESRI Shapefiles, then you can use a simpler, “convenience” function from the <code>raster</code> package:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">streams &lt;-<span class="st"> </span>raster::<span class="kw">shapefile</span>(<span class="st">&quot;inputs/santa-cruz-county/Streams/Streams.shp&quot;</span>)</code></pre></div>
+<p>By default it doesn’t print a message. Note that the way it works is you provide it the full name of the file with <code>.shp</code> extension. You still have to have all the companion files with the other extensions (.cpg, .dbf, .shx, etc.) in the same directory, though, so don’t go throwing those extra files away!</p>
+<p>Also, note that <code>shapefile</code> does proper tilde expansion:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this works!</span>
+streams &lt;-<span class="st"> </span>raster::<span class="kw">shapefile</span>(<span class="st">&quot;~/Documents/git-repos/rep-res-eeb-2017/inputs/santa-cruz-county/Streams/Streams.shp&quot;</span>)</code></pre></div>
+<p>Finally, it is worth noting that when the <code>raster</code> package is loaded, <code>Spatial</code> objects print in a nice, informative fashion:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">watersheds</code></pre></div>
+<pre><code>## class       : SpatialPolygonsDataFrame 
+## features    : 17 
+## extent      : 6032320, 6245260, 1770137, 1930908  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=lcc +lat_1=37.06666666666667 +lat_2=38.43333333333333 +lat_0=36.5 +lon_0=-120.5 +x_0=2000000 +y_0=500000.0000000002 +datum=NAD83 +units=us-ft +no_defs +ellps=GRS80 +towgs84=0,0,0 
+## variables   : 6
+## names       : OBJECTID,      NAME, COUNT_, MapKey, SHAPESTAre, SHAPESTLen 
+## min values  :        1, Ano Nuevo,      0,      A,    8236954,   17291.27 
+## max values  :        9,   Waddell,      0,      Q, 3789969221,  350671.71</code></pre>
+</div>
 <div id="quick-visualization-of-our-vector-data" class="section level3">
-<h3><span class="header-section-number">9.1.3</span> Quick Visualization of our Vector Data</h3>
+<h3><span class="header-section-number">9.1.4</span> Quick Visualization of our Vector Data</h3>
 <p>Before we start drilling down into these data sets to see how <code>Spatial{Points,Lines,Polygons}DataFrame</code>s are structured, let’s just plot them quickly. We will use the <code>ggspatial</code> package which extends <code>ggplot2</code> to spatial data with a nice syntax. Basically, that package provides a new geom called <code>geom_spatial()</code> that deals with plotting spatial points, lines, or polygons. The same function <code>geom_spatial</code> is used to plot points, lines, or polygons, It “looks at”&quot; the spatial data set it is provided to determine whether it should plot points, lines, or polygons.</p>
 <p>Here are the watershed boundaries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
 <span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> watersheds, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>() +
 <span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-110-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-108-1.png" width="672" /></p>
 <p>OK, that is pretty cool. See that these are, as we expect, polygons.</p>
 <p>Let’s do the streams:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
 <span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> streams, <span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>() +
 <span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-111-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-109-1.png" width="672" /></p>
 <p>Yep, those are lines!</p>
 <p>Finally, let’s plot the street lights, but we will put them over the top of the watersheds so that we have a little context for them.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
@@ -377,11 +437,11 @@ stream_no_fail &lt;-<span class="st"> </span>rgdal::<span class="kw">readOGR</sp
 <span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> lights, <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>() +
 <span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-112-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-110-1.png" width="672" /></p>
 <p>OK, those are points. That makes sense.</p>
 </div>
 <div id="the-structure-of-spatialdataframes" class="section level3">
-<h3><span class="header-section-number">9.1.4</span> The Structure of Spatial*DataFrames</h3>
+<h3><span class="header-section-number">9.1.5</span> The Structure of Spatial*DataFrames</h3>
 <p>When we write <code>Spatial*DataFrames</code> we mean, collecively, <code>SpatialPointsDataFrames</code>, <code>SpatialLinesDataFrames</code>, and <code>SpatialPolygonsDataFrames</code>. These are the types of objects that R uses to store spatial information. Each of these is what is called an S4 object type. S4 objects are like lists in R, but instead of having elements you access with <code>$</code>, you have information in “slots” that you access with <code>@</code>. (What?! OK, don’t worry too much, you won’t typically ever have to access these slots using <code>@</code>, but I do want to use it to talk about the underlying structure of these beasts.)</p>
 <p>First, let’s look at the slot names in these three different types of Spatial Data Frames:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># spatial points</span>
@@ -402,24 +462,24 @@ stream_no_fail &lt;-<span class="st"> </span>rgdal::<span class="kw">readOGR</sp
 <p>Then, the spatial points have <code>coords</code> while the spatial lines have <code>lines</code> and the spatial polygons have <code>polygons</code>.</p>
 <p>Let us look more closely at the <code>data</code> slot in <code>streams</code>. This is just a data frame, and so we can look at it as a tibble:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as_tibble</span>(streams@data)</code></pre></div>
-<pre><code>## # A tibble: 1,514 × 8
-##    OBJECTID       STREAM_NM   STREAMTYPE  GNIS_ID     ID ENABLED  Named
-## *    &lt;fctr&gt;          &lt;fctr&gt;       &lt;fctr&gt;   &lt;fctr&gt; &lt;fctr&gt;  &lt;fctr&gt; &lt;fctr&gt;
-## 1         1     Adams Creek INTERMITTENT       NA      0      NA    Yes
-## 2         2      Alba Creek    PERENNIAL 00218063      1      NA    Yes
-## 3         3     Amaya Creek    PERENNIAL 00218217      2      NA    Yes
-## 4         4 Ano Nuevo Creek    PERENNIAL 00254567      3      NA    Yes
-## 5         5     Aptos Creek    PERENNIAL 00254571      4      NA    Yes
-## 6         6 Archibald Creek INTERMITTENT 00218350      5      NA    Yes
-## 7         7   Baldwin Creek    PERENNIAL 00218614      6      NA    Yes
-## 8         8     Bates Creek    PERENNIAL 00218726      7      NA    Yes
-## 9         9      Bean Creek    PERENNIAL 00218782      8      NA    Yes
-## 10       10   Bennett Creek    PERENNIAL 00219040      9      NA    Yes
+<pre><code>## # A tibble: 1,514 x 8
+##    OBJECTID       STREAM_NM   STREAMTYPE  GNIS_ID    ID ENABLED Named
+##  *    &lt;chr&gt;           &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
+##  1        1     Adams Creek INTERMITTENT     &lt;NA&gt;     0    &lt;NA&gt;   Yes
+##  2        2      Alba Creek    PERENNIAL 00218063     1    &lt;NA&gt;   Yes
+##  3        3     Amaya Creek    PERENNIAL 00218217     2    &lt;NA&gt;   Yes
+##  4        4 Ano Nuevo Creek    PERENNIAL 00254567     3    &lt;NA&gt;   Yes
+##  5        5     Aptos Creek    PERENNIAL 00254571     4    &lt;NA&gt;   Yes
+##  6        6 Archibald Creek INTERMITTENT 00218350     5    &lt;NA&gt;   Yes
+##  7        7   Baldwin Creek    PERENNIAL 00218614     6    &lt;NA&gt;   Yes
+##  8        8     Bates Creek    PERENNIAL 00218726     7    &lt;NA&gt;   Yes
+##  9        9      Bean Creek    PERENNIAL 00218782     8    &lt;NA&gt;   Yes
+## 10       10   Bennett Creek    PERENNIAL 00219040     9    &lt;NA&gt;   Yes
 ## # ... with 1,504 more rows, and 1 more variables: SHAPESTLen &lt;dbl&gt;</code></pre>
 <p>And what about the <code>lines</code> slot? Well, that is a spatial data object that holds the coordinates that you would connect to make each line. This is a list of things, in which each element corresponds to a row in <code>data</code>.</p>
 </div>
 <div id="subsetting-spatialdataframes" class="section level3">
-<h3><span class="header-section-number">9.1.5</span> Subsetting Spatial*DataFrames</h3>
+<h3><span class="header-section-number">9.1.6</span> Subsetting Spatial*DataFrames</h3>
 <p>If you want to pick out only some of the features in a Spatial*DataFrame, based on the values in the <code>data</code>, you can use <code>subset</code>. It works a little like <code>filter</code> from the tidyverse.</p>
 <p>For an example, let’s see if we can keep only those stream segments that are classified as INTERMITTENT:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">intermitt &lt;-<span class="st"> </span>streams %&gt;%
@@ -435,7 +495,7 @@ stream_no_fail &lt;-<span class="st"> </span>rgdal::<span class="kw">readOGR</sp
 <span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> intermitt, <span class="dt">colour =</span> <span class="st">&quot;orange&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
 <pre><code>## Converting coordinates to lat/lon</code></pre>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-118-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-116-1.png" width="672" /></p>
 <p>Yep, those are creeks that are mostly up higher in the watersheds.</p>
 </div>
 </div>
@@ -461,12 +521,12 @@ stream_no_fail &lt;-<span class="st"> </span>rgdal::<span class="kw">readOGR</sp
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
 <span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> streams, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">colour =</span> STREAMTYPE)) +
 <span class="st">  </span><span class="kw">coord_map</span>()</code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-122-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-120-1.png" width="672" /></p>
 <p>That’s cool.</p>
 <p><strong>Exercises</strong></p>
 <ol style="list-style-type: decimal">
 <li>Look at the <code>data</code> field of <code>watersheds</code></li>
-<li>Then plot the watersheds in different colors like this: <img src="bookdown-demo_files/figure-html/unnamed-chunk-123-1.png" width="672" /></li>
+<li>Then plot the watersheds in different colors like this: <img src="bookdown-demo_files/figure-html/unnamed-chunk-121-1.png" width="672" /></li>
 </ol>
 <div id="want-a-background" class="section level3">
 <h3><span class="header-section-number">9.3.1</span> Want a background?</h3>
@@ -489,7 +549,7 @@ rosm::<span class="kw">osm.types</span>()</code></pre></div>
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <pre><code>## Converting coordinates to lat/lon</code></pre>
 <pre><code>## Zoom: 10</code></pre>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-125-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/hillshade-rosm-1.png" width="672" /></p>
 <p>Cowabunga!</p>
 <p>Using ggspatial with open street maps is a bit nicer than using <code>ggmap</code> because we are not bound to having square plots and it looks like it figures out the appropriate zoom for the backgound, etc. Behold the thin slice of shaded hillside background!</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
@@ -499,11 +559,11 @@ rosm::<span class="kw">osm.types</span>()</code></pre></div>
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <pre><code>## Converting coordinates to lat/lon</code></pre>
 <pre><code>## Zoom: 12</code></pre>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-126-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/more-rosm-1.png" width="672" /></p>
 <p>It is worth pointing out that you will very often use <code>coord_map()</code> when working with <code>ggspatial</code>, especially when using Open Street Maps layers under them.</p>
 <p>Check this out, even faceting seems to work with ggspatial.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
-<span class="st">  </span><span class="kw">geom_osm</span>(<span class="dt">type =</span> <span class="st">&quot;hillshade&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span>ggspatial::<span class="kw">geom_osm</span>(<span class="dt">type =</span> <span class="st">&quot;hillshade&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(<span class="dt">data =</span> streams, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">colour =</span> STREAMTYPE), <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
 <span class="st">  </span><span class="kw">coord_map</span>() +
 <span class="st">  </span><span class="kw">theme_void</span>() +
@@ -512,13 +572,55 @@ rosm::<span class="kw">osm.types</span>()</code></pre></div>
 <pre><code>## Zoom: 10
 ## Zoom: 10
 ## Zoom: 10</code></pre>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
-<p>These background layers are received as a type of spatial data called a <em>spatial raster</em>. You can think of rasters as digital “images”—basically regular grids of pixels.<br />
-<code>ggspatial</code> has exploited one of ggplot’s facilities for efficiently plotting images to be able to efficiently plot rasters in the background. It also provides a function, <code>geom_spraster()</code> that let’s us do the same with spatial rasters from anywhere. This is a great feature that also let’s us plot rasters that have been projected to different coordinate reference systems. Before we get into this, let’s learn a little about rasters.</p>
+<p><img src="bookdown-demo_files/figure-html/another-rosm-1.png" width="672" /></p>
 </div>
+</div>
+<div id="simple-intersection-of-spatial-objects" class="section level2">
+<h2><span class="header-section-number">9.4</span> Simple Intersection of Spatial Objects</h2>
+<p>During class time, a number of the students that work in the Scott Creek drainage wanted to somehow subset the <code>streams</code> data to include only those streams that are in the Big Creek watershed. However, there is no column in the <code>streams</code> data that gives us the watershed it is in. Fortunately, we can deal with this problem by doing a <em>geometrical intersection</em>. That is, we can find all the stream segements that are inside the Scott Creek watershed’s polygon. At its crudest level, this is done using the <code>rgeos</code> package, which interfaces with the GEOS (Geometry Engine - Open Source) library. Unfortunately, using the functions from <code>rgeos</code> it appears that the the <code>@data</code> portion of a Spatial*DataFrame get dropped or otherwise lost in the mix. That is not acceptable. Happily, Robert Hijmans has provided some nice functions in the <code>raster</code> package that behave the way we hope they might. He has a nice reference about this <a href="http://rspatial.org/spatial/rst/7-vectmanip.html">here</a>.</p>
+<p>So, what we are going to to is first make a spatial object that has the polygon representing Scott Creek:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scott_shed &lt;-<span class="st"> </span><span class="kw">subset</span>(watersheds, NAME ==<span class="st"> &quot;Scott&quot;</span>)</code></pre></div>
+<p>Then, we use <code>raster::intersect()</code> to get the streams that intersection with <code>scott_shed</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scott_streams &lt;-<span class="st"> </span>raster::<span class="kw">intersect</span>(streams, scott_shed)</code></pre></div>
+<pre><code>## Loading required namespace: rgeos</code></pre>
+<p>Note that we use name-space addressing (<code>raster::</code>) here because <code>dplyr</code> also has an <code>intersect()</code> function, so it pays to be explicit.</p>
+<p>That leaves us with 81 stream features:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scott_streams</code></pre></div>
+<pre><code>## class       : SpatialLinesDataFrame 
+## features    : 81 
+## extent      : 6047943, 6080162, 1842463, 1885660  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=lcc +lat_1=37.06666666666667 +lat_2=38.43333333333333 +lat_0=36.5 +lon_0=-120.5 +x_0=2000000 +y_0=500000.0000000002 +datum=NAD83 +units=us-ft +no_defs +ellps=GRS80 +towgs84=0,0,0 
+## variables   : 14
+## names       : OBJECTID.1,       STREAM_NM,   STREAMTYPE,  GNIS_ID,  ID, ENABLED, Named, SHAPESTLen.1, OBJECTID.2,  NAME, COUNT_, MapKey, SHAPESTAre, SHAPESTLen.2 
+## min values  :        109, Archibald Creek, INTERMITTENT, 00218350,  10,      NA,    No,     820.5738,         14, Scott,      0,      N,  831744445,     136178.8 
+## max values  :        916,    Winter Creek,        SWALE, 00234300, 915,      NA,   Yes,   56967.2062,         14, Scott,      0,      N,  831744445,     136178.8</code></pre>
+<p>It is worth noting that the attributes (<code>@data</code> columns) from the Scott Creek watersheds feature did not get joined onto the result (We will see in a later session that the <code>intersection()</code> function from <code>sf</code> works more as we would expect after living blissfully in the <code>tidyerse</code> for this last quarter).</p>
+<p>We can plot the streams, and their surrounding watershed, like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(scott_streams, <span class="kw">aes</span>(<span class="dt">colour =</span> STREAMTYPE)) +
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(scott_shed, <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) +
+<span class="st">  </span><span class="kw">coord_map</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<pre><code>## Converting coordinates to lat/lon
+## Converting coordinates to lat/lon</code></pre>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-126-1.png" width="672" /></p>
+<p>That is nice. Let’s see how it looks with an Open Street Maps hillshade background.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span>ggspatial::<span class="kw">geom_osm</span>(<span class="dt">type =</span> <span class="st">&quot;hillshade&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(scott_streams, <span class="kw">aes</span>(<span class="dt">colour =</span> STREAMTYPE)) +
+<span class="st">  </span>ggspatial::<span class="kw">geom_spatial</span>(scott_shed, <span class="dt">colour =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) +
+<span class="st">  </span><span class="kw">coord_map</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<pre><code>## Converting coordinates to lat/lon
+## Converting coordinates to lat/lon</code></pre>
+<pre><code>## Zoom: 13</code></pre>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
+<p>Some might note that this hillshade background is not as sharp and crisp as it might be. We will, in a future session take up how to make our own hillshade layers from high-resolution USGS digital elevation models.</p>
+<p>These background layers are received as a type of spatial data called a <em>spatial raster</em>. You can think of rasters as digital “images”—basically regular grids of pixels.<br />
+<code>ggspatial</code> has exploited one of ggplot’s facilities for efficiently plotting images to be able to efficiently plot rasters in the background. It also provides a function, <code>geom_spraster()</code> that let’s us do the same with spatial rasters from anywhere. This is a great feature that also let’s us plot rasters that have been projected to different coordinate reference systems. Before we get into this, we want to learn a little about rasters.</p>
 </div>
 <div id="spatial-raster-data" class="section level2">
-<h2><span class="header-section-number">9.4</span> Spatial Raster Data</h2>
+<h2><span class="header-section-number">9.5</span> Spatial Raster Data</h2>
 <p>R has a fantastic package, called <code>raster</code>, written by Robert Hijmans (who was a collaborator with Kristen when they were both at Berkeley, check <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2699.2006.01517.x/full">this</a> out!). The <code>raster</code> package provides a nice interface for dealing with spatial raster types and doing a variety of operations with them.</p>
 <p>We are going to start with an example: shaded relief of Carmel Bay avaiable through NOAA’s <a href="http://noaa.maps.arcgis.com/home/item.html?id=feb3c625dc094112bb5281c17679c769">Digital Elevation Model Global Mosaic (Color Shaded Relief)</a>. I have already downloaded it to the <code>inputs</code> directory because, to be quite honest, obtaining it through R was not as straightforward as I would have hoped. This raster has multiple layers. It is a color image stored as a multi-layer (or “band”) file. Accordingly we can use the <code>brick</code> function to read it in as a “rasterBrick”:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">carmel_bay &lt;-<span class="st"> </span>raster::<span class="kw">brick</span>(<span class="st">&quot;inputs/carmel_bay_bathy.tif&quot;</span>) </code></pre></div>
@@ -538,7 +640,7 @@ rosm::<span class="kw">osm.types</span>()</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
 <span class="st">  </span>ggspatial::<span class="kw">geom_spraster_rgb</span>(carmel_bay) +
 <span class="st">  </span><span class="kw">coord_fixed</span>()</code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-130-1.png" width="1152" /></p>
+<p><img src="bookdown-demo_files/figure-html/geom_spraster-1.png" width="1152" /></p>
 <p>That is pretty, and could conceivably make a nice background for some of Diana’s rockfish plots.</p>
 <p>There is another function in <code>ggspatial</code> called <code>annotation_spraster</code> that plots a raster, but does not change the plot boundaries. This is very useful if you have a lot of points that you wish to plot, and you want the plot boundaries to be sized to contain all your points, and you, accordingly, only want that particular piece of your background raster in the plot. Let’s see it in action by grabbing Diana’s rockfish data, but filtering it only to those points in the Stillwater Cove area.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sebastes_stillwater &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;inputs/sebastes_locations.rds&quot;</span>) %&gt;%
@@ -550,7 +652,7 @@ rosm::<span class="kw">osm.types</span>()</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sebastes_stillwater, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> LONGITUDE_M, <span class="dt">y =</span> LATITUDE_M)) +
 <span class="st">  </span><span class="kw">coord_quickmap</span>()</code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-132-1.png" width="672" /></p>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-131-1.png" width="672" /></p>
 <p>And here they are with the raster in the background:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
 <span class="st">  </span>ggspatial::<span class="kw">annotation_spraster</span>(carmel_bay, <span class="dt">interpolate =</span> <span class="ot">TRUE</span>) +
@@ -558,12 +660,12 @@ rosm::<span class="kw">osm.types</span>()</code></pre></div>
              <span class="dt">colour =</span> <span class="st">&quot;yellow&quot;</span>,
              <span class="dt">alpha =</span> <span class="fl">0.3</span>) +
 <span class="st">  </span><span class="kw">coord_fixed</span>()</code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-133-1.png" width="1152" /></p>
+<p><img src="bookdown-demo_files/figure-html/annotation-spraster-1.png" width="1152" /></p>
 <p>That is pretty cool. It might have been nice to have downloaded a higher resolution raster, which is available, but would have been quite large at the full, zoomed out scale.</p>
 <p>One very important thing to note here is that when you are using <code>ggspatial</code> you can still plot regular <code>ggplot2</code> geoms on top of it. We happened to have some points in a tibble (not, a SpatialPointsDataFrame) with Latitudes and Longitudes, so we just hucked ’em on there using <code>geom_point</code>.</p>
 </div>
 <div id="wrapping-up" class="section level2">
-<h2><span class="header-section-number">9.5</span> Wrapping Up</h2>
+<h2><span class="header-section-number">9.6</span> Wrapping Up</h2>
 <p>Well, we merely scratched the surface of handling and plotting spatial data in R. There are a lot of resources out there:</p>
 <ul>
 <li><a href="http://rspatial.org/index.html">RSpatial Book/Tutorial</a> This is an outstanding contribution from Robert Hijmans (it appears). It looks like it is still in progress, but it is quite complete and lucid.</li>
@@ -584,7 +686,7 @@ rosm::<span class="kw">osm.types</span>()</code></pre></div>
         </div>
       </div>
 <a href="map-making-in-R.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="a-tidy-approach-to-spatial-data-simple-features.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -1,0 +1,252 @@
+# A Tidy Approach to Spatial Data: Simple Features
+
+**Note** that if you, the student, wish to run all the code
+yourself, you should download the `inputs` directory as a zipped file by going [here](https://github.com/eriqande/rep-res-eeb-2017/blob/master/inputs.zip) with a web browser and
+then clicking the big "Download" button on the right.  Once you have downloaded that, 
+unzip it and put the whole `inputs` directory in the current working directory where you are
+working with R. 
+
+## Prelims
+
+If you don't already have it:
+```{r, eval=FALSE}
+install.packages("sf")
+```
+
+Also, as of June 5, 2017, this requires the development version of `ggplot2`:
+```{r, eval=FALSE}
+devtools::install_github("tidyverse/ggplot2")
+```
+
+Be warned that this seems to break some of the earlier ggmap.
+```{r}
+library(tidyverse)
+library(sf)
+library(raster)
+```
+
+## Reading spatial data into sf objects
+
+Let's just quickly put the code in to reproduce most of the stuff from the 
+previous lecture, but using `sf`.
+
+Note that there are two functions to read shapefiles: `st_read()` and `read_sf()`.  The latter seems
+preferable to me as it does not read stringsAsFactors ever.
+```{r}
+streams <- read_sf("inputs/santa-cruz-county/Streams/Streams.shp")
+watersheds <- read_sf("inputs/santa-cruz-county/Watersheds/Watersheds.shp")
+lights <- read_sf("inputs/santa-cruz-county/Street_Lights/Street_Lights.shp")
+```
+
+Have a look at one of them. Note that the whole thing is a data frame, so you can 
+directly `as_tibble()` it:
+```{r}
+as_tibble(streams)
+
+```
+
+
+
+## Plotting sf objects
+
+In ggplot this is made easy with the `geom_sf()` which knows what type of simple
+feature you have, and plots it appropriately.
+
+You also add `coord_sf()` which will deal with projections, on the fly, and also
+takes care of aspect ratios and draws a graticule.
+```{r}
+ggplot() +
+  geom_sf(mapping = aes(colour = STREAMTYPE), data = streams) +
+  coord_sf()
+```
+
+Check it out, there is a graticule.  Note that the long-lat lines are not
+perfectly square.  That is because this object is not in long-lat:
+```{r}
+st_crs(streams)
+```
+Aha! See, it is in `lcc` = lambert conic conformal.
+
+
+What happens if we try to put an open street maps on this? It fails...
+
+How about if we try to use spraster_rgb to put a raster background in there?  That is
+a little complicated.  So, instead let's have a look at interactive mapping later.
+
+But before that I want to briefly touch on geometrical intersections.
+
+## Geometric operations
+
+Just briefly, remember, we wondered last week how to find all the streams 
+that are in the Scott Creek watershed.  This can be done with the `raster` 
+package, nicely. But with the `sf` package we
+can also use `st_intersection()` to spatially intersect streams with watersheds.  When we do
+this, the cool thing is that 
+_all the columns of data associated with each get joined just as you would hope they do!!_
+
+```{r streamsheds, cache=TRUE}
+streamsheds <- st_intersection(streams, watersheds)
+```
+Those columns get joined on the basis of the stream being in the watershed.  Cool!
+
+Check it out:
+```{r}
+as_tibble(streamsheds)
+```
+
+Plot it with different colors for different watersheds to see what I mean:
+```{r, out.width = "100%"}
+ggplot(streamsheds) +
+  geom_sf(aes(colour = NAME)) +
+  coord_sf()
+```
+
+OK, now let's make some interactive maps.
+
+## Interactive plotting with leaflet via the `mapview` package
+
+This is truly mind-blowing.  The authors of the `mapview` package tell us:
+
+"`mapview` is an R package created to help researchers during their spatial data analysis workflow. It provides functions to very quickly and conveniently create interactive visualisations of spatial data. It was created to fill the gap of quick (not presentation grade) interactive plotting to examine and visually investigate both aspects of spatial data, the geometries and their attributes."
+
+As such, it appears that customization of certain things might not be easily-accessible, but it is
+so easy and still so customizable that it is really, really amazing.
+
+Get it from CRAN:
+```{r, eval=FALSE}
+install.packages("mapview")
+```
+and then be sure to load it:
+```{r}
+library(mapview)
+```
+
+The main function is `mapView` which does multiple dispatch on a huge variety of different object
+types (rasters, points, polygons, etc), including `sf` classes.  It creates an interactive web-map
+powered by [leaflet](http://leafletjs.com/), an open-source JavaScript library
+for mobile-friendly interactive maps.  
+
+Let's look at it in action:
+```{r, out.width = "100%"}
+mapView(streams)
+```
+
+Some control elements you should note:
+
+- Upper left zoom in and out "+/-"
+- Below that is the layer selector.  Choose your background and which layers to show
+- Lower right is the "fit this layer in the view" button.  Move the map, then try it.
+
+Also, mouse over some streams and click on them.  Far out!  All that information at 
+your fingertips!
+
+### Mapping attributes
+
+What if we want to map STREAMTYPE to color?  We use the `zcol` argument for this.  And we can use map.types
+to give a string that names what type of background map we want.  From the help file you see that the
+map.types can be previewed at: [http://leaflet-extras.github.io/leaflet-providers/preview/]( http://leaflet-extras.github.io/leaflet-providers/preview/).
+
+```{r}
+mapView(streams, map.type = "Esri.WorldShadedRelief", zcol = "STREAMTYPE")
+```
+
+### Adding layers
+
+This is done by using the "+" symbol, much as in ggplot.  Here we will put the watersheds down first 
+with rainbow fill colors for the different watersheds (and white perimeters), then we will
+put the streams on top of that, and finally
+we will through down some streetlights.  We will also put legends down for the watersheds and the streams.
+```{r, out.width="100%"}
+sc_map <- mapView(watersheds, 
+        map.type = "Esri.WorldShadedRelief", 
+        zcol = "NAME", 
+        col.regions = rainbow(7), 
+        color = "white",
+        legend = TRUE) +
+  mapView(streams, zcol = "STREAMTYPE", legend = TRUE) +
+  mapView(lights)
+
+sc_map
+```
+
+### Saving maps
+
+Truth by told, the bookdown format is a little narrow to allow a nice large map.
+But you can save it as a web page with `mapshot` and then size it up in your browser. For example:
+```{r, eval=FALSE}
+mapshot(sc_map, url = "/tmp/my_map.html")
+```
+Or, if you are just working in RStudio, the things render just fine
+in the preview window, and then you can zoom it as a separate page.
+
+You can also save static pdf, png, or jpg files:
+```{r, eval=FALSE}
+mapshot(sc_map, file = "/tmp/sc_map.pdf")
+```
+
+
+## Adding map tiles from other sources
+
+This [blog post](https://atriplex.info/blog/index.php/2017/06/08/adding-wms-basemaps-to-a-mapview-map/) just came up today, 
+talking about how to hack more types of map tiles from avaible WMS servers.  (From Wikipedia: 
+A Web Map Service (WMS) is a standard protocol for serving (over the Internet) georeferenced map images which a map server generates using data from a GIS database. The Open Geospatial Consortium developed the specification and first published it in 1999.)
+
+It turns out that there is a WMS for the tasty NOAA shaded color mosaic that we used for Carmel Bay last week.
+
+So, lets see if we can use [jimbob's post](https://atriplex.info/blog/index.php/2017/06/08/adding-wms-basemaps-to-a-mapview-map/)
+to plot (a sample of) Diana's rockfish data on top of those tiles.
+
+First we are going to sample 2000 fish into a simple features data frame, and then
+pretend we know the species of them
+```{r}
+# get our rockfish location data and add species pseudo data on them
+set.seed(5)
+seb <- readRDS("inputs/sebastes_locations.rds") %>%
+  filter(!is.na(LONGITUDE_M) & !is.na(LATITUDE_M)) %>%
+  filter(LONGITUDE_M < -121.75117) %>% # some of the the longitudes are missing their minus sign
+                                       # and a few others are wrong---in the Salinas Valley!
+  sample_n(2000) %>%
+  mutate(species = sample(c("kelp", "gopher", "black-and-yellow", "copper"), 2000, replace = TRUE))
+
+# make an sf object of that
+seb_sf <- st_as_sf(seb, 
+                   coords = c("LONGITUDE_M", "LATITUDE_M"),
+                   crs = (4326))  # this is a longlat coord ref system
+
+
+```
+
+Then we can make a standard leaflet map of that, coloring by (fake) species.
+```{r make-seb}
+seb_map <- mapView(seb_sf, zcol = "species", legend = TRUE)
+seb_map
+```
+
+That is pretty darn cool just like that.
+
+But now, I have dredged up the URL for the WMS for the NOAA global mosaic hillshade. And we can stick that
+into the following code:
+Experimental NOAA tiles:
+```{r seb-noaa, out.width="100%"}
+seb_map@map <- seb_map@map %>% 
+  addWMSTiles(group = "NOAA_mosaic",
+              baseUrl = "https://gis.ngdc.noaa.gov/arcgis/services/DEM_global_mosaic_hillshade/ImageServer/WMSServer?",
+              layers = "0",
+              attribution = '<a href="http://www.noaa.gov">NOAA</a>') %>%   # a link to NOAA for the map
+  mapview:::mapViewLayersControl(names = c("NOAA_mosaic"))
+
+# then print it
+seb_map
+```
+
+
+## More info
+
+This has been a whirlwind.  Interested parties should definitely read about:
+
+- [Simple Features Vignette](https://edzer.github.io/sfr/articles/sf1.html)
+- [Online vignettes for mapview](https://r-spatial.github.io/mapview/articles/index.html)
+
+For more on leaflet for R, see:
+- [Leaflet for R](https://rstudio.github.io/leaflet/)
+
