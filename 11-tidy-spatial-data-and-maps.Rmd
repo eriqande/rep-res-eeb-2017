@@ -226,7 +226,6 @@ That is pretty darn cool just like that.
 
 But now, I have dredged up the URL for the WMS for the NOAA global mosaic hillshade. And we can stick that
 into the following code:
-Experimental NOAA tiles:
 ```{r seb-noaa, out.width="100%"}
 seb_map@map <- seb_map@map %>% 
   addWMSTiles(group = "NOAA_mosaic",
